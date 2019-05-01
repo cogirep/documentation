@@ -1,0 +1,45 @@
+@startuml
+header
+<b>Full BIM / VAMP : Lot 5 Hyperviseur</b>- Modèle de composants
+end header
+
+Rectangle "Client WEB" as WebClient {
+}
+
+
+Rectangle "Front-End (Serveur) WEB" as WebServer {
+}
+
+Rectangle "Services 'Metier'" as BusinessServices {
+}
+
+
+Rectangle "Accès aux données" as DataAccess {
+}
+
+Rectangle "Stockage des données" as DataStorage {
+}
+Rectangle "Integration Tiers externes" as Integration {
+}
+
+:Utilisateur: as ACTOR <<human>>
+
+:Systemes Externes: as SYSTEM<<system>>
+:Systemes Externes - Identifiants: as SYSTEMSECU<<system>>
+
+
+ACTOR .> WebClient
+
+WebClient <..WebServer
+
+WebServer <..BusinessServices
+BusinessServices <.. DataAccess
+DataAccess <.. DataStorage
+Integration . DataAccess
+
+SYSTEMSECU <. WebServer
+SYSTEM .> Integration
+
+
+
+@enduml

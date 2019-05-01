@@ -1,0 +1,71 @@
+@startuml
+header
+<b>Full BIM / VAMP : Lot 5 Hyperviseur</b>- Composants liés aux fonctions de cartographie
+end header
+
+Rectangle "Partie 'Client' \n(web - connectée) " as Client #lightgrey {
+Rectangle "Interface Utilisateur" as CWeb001
+Rectangle "Librairie cartographique \n d'affichage" as CWeb002
+
+}
+
+
+
+Rectangle "Fournisseur Externe1 " as Prov001 #lightblue{
+
+Rectangle WMS
+Rectangle "Stockage des données" as datastore2 #white{
+
+file "Tuiles \n géographiques" as tiles
+
+
+}
+
+}
+
+
+Rectangle "Fournisseur Externe2 " as Prov002 #lightblue{
+
+
+Rectangle WFS
+
+}
+
+Rectangle "Fournisseur Externe3" as Prov003 #lightblue{
+
+
+Rectangle GeoServices
+
+}
+
+
+
+
+
+
+
+Rectangle "Partie 'Serveur' (SYSTEME)" as Serveur #lightgrey{
+
+Rectangle "Stockage des données" as datastore #white{
+database "Données métier" as data
+
+
+}
+
+
+
+}
+Rectangle "Services Externes \n **Infotraffic...**"  as Ext001 #lightblue
+
+CWeb001--CWeb002
+CWeb002---WMS
+CWeb002---WFS
+CWeb002---GeoServices
+
+WFS -- Ext001
+
+WFS -- data
+WMS -- tiles
+GeoServices -- data
+
+@enduml

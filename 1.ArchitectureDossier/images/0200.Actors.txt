@@ -1,0 +1,24 @@
+@startuml
+header
+<b>Full BIM / VAMP : Lot 5 Hyperviseur</b>- Modèle de cas d'utilisation - Acteurs
+end header
+
+Rectangle "HUMAINS" as HUMAINS  {
+
+
+
+Package "Fournisseur du Service"  as SRVPROVUSR #LightSteelBlue{
+  :Administrateur technique: as ACTOR2 <<human>>
+}
+Package "Tenant/Client du Service "  as CLIENTUSR{
+  :Administrateur 'Métier': as ACTOR3 <<human>>
+  :Administrateur "Utilisateurs": as ACTOR4 <<human>>
+  :Technicien: as ACTOR5 <<human>>
+  :Superviseur: as ACTOR6 <<human>>
+  :Direction régionale: as ACTOR7 <<human>>
+}
+:Utilisateur anonyme: as ACTOR8 <<human>>
+}
+
+
+@enduml

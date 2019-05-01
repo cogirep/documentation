@@ -1,0 +1,59 @@
+@startuml
+header
+<b>Full BIM / VAMP : Lot 5 Hyperviseur</b>- Procédure de login
+end header
+start
+
+
+
+->[**Utilisateur** : Inconnu];
+
+- Connexion à la page d'accueil \n du  **SYSTEME**
+note right
+Page d'accueil du SYSTEME
+en mode "anonyme"
+end note
+->[la redirection est \n  - soit basée sur le nom de domaine détecté dans l'**email** (à saisir) \n  - soit **forcée** vers VINCI Autoroutes;
+- Affichage de la page d'authentification \n **VINCI Autoroutes**
+
+if (\n Utilisateur authentifié ? \n l'accès au SYSTEME est autorisé\n) then
+-[#green]-> **OUI**;
+
+- Recupération paramètre \n **AUTOCREATEACCOUNT**
+
+if (\n Première connexion ?\n (Compte existant dans le **SYSTEME**)\n) then
+-[#green]-> **OUI**;
+
+if (\n **AUTOCREATEACCOUNT** \n) then
+-[#green]-> **TRUE**;
+-Création du compte utilisateur \n dans le **SYSTEME** \n avec le profil par défaut
+-Sauvegarde de l'évènement métier \n **       [1ERE CONNEXION]**
+
+else
+-[#red]-> **FALSE**;
+- Affichage d'une page d'erreur \n par le **SYSTEME**
+stop;
+endif
+
+
+else
+-[#red]-> **NON**;
+- Récupération \n du compte de l'utilisateur \n dans le **SYSTEME**
+endif
+-Sauvegarde de l'évènement métier \n **                 [LOGIN]**
+
+- Calcul du profil consolidé de l'utilisateur
+- Personnalisation de l'interface \n du **SYSTEME**
+- Affiche de la page d'accueil \n du **SYSTEME**
+
+stop
+else
+-[#red]-> **NON**;
+- Affichage d'une page d'erreur \n par le **SYSTEME**
+stop;
+endif
+
+
+
+
+@enduml

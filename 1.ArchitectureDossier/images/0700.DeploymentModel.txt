@@ -1,0 +1,60 @@
+@startuml
+header
+<b>Full BIM / VAMP : Lot 5 Hyperviseur</b>- Composants liés aux fonctions de cartographie
+end header
+@startuml
+
+
+
+Rectangle "Systemes externes " as Externe #lightgrey {
+Rectangle "Application A" as Ext001
+Rectangle "Application B" as Ext002
+Rectangle "SIG" as Ext003
+}
+
+Rectangle "Environnement" as Hyperviseur #lightgrey{
+Rectangle "FRONT" as COMPO1
+Rectangle "INTEGRATION" as COMPO2
+Rectangle "GED" as COMPO3
+Rectangle "DATAFEEDER" as COMPO4
+Rectangle "POSTGRE/POSTGIS" as COMPO5
+Rectangle "GEOSERVER" as COMPO6
+Rectangle "ENDUSERMANAGEMENT" as COMPO7
+
+}
+
+
+Rectangle "VINCI Autoroutes \n Services Authentification"  as Auth #Steelblue{
+Rectangle  "<&lock-locked>Référentiels des identités" as Auth001 #Skyblue
+
+
+}
+interface API1
+
+interface API2
+interface APIS
+Utilisateur as actor01
+
+Externe<=>Auth 
+Auth<=>Hyperviseur
+COMPO4-up-API1
+COMPO4-up-API2
+API1-up-Ext001
+API2-up-Ext002
+
+COMPO2---COMPO1
+COMPO3---COMPO1
+COMPO7---COMPO1
+COMPO6---COMPO1
+COMPO6--Ext003
+COMPO6--COMPO5
+COMPO7--COMPO5
+COMPO4---COMPO5
+COMPO2---COMPO5
+
+COMPO1-up-(APIS
+APIS-up-Externe
+COMPO1-down-actor01
+
+
+@enduml

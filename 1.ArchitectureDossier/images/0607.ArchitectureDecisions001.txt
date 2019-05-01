@@ -1,0 +1,43 @@
+@startuml
+header
+<b>Full BIM / VAMP : Lot 5 Hyperviseur</b>- Composants liés aux fonctions de cartographie
+end header
+@startuml
+
+
+
+Rectangle "Systemes externes " as Externe #lightgrey {
+Rectangle "Application A" as Ext001
+Rectangle "Application B" as Ext002
+}
+
+Rectangle "Lot05" as Hyperviseur #lightgrey{
+Rectangle "Interfaces" as Lot001
+Rectangle "Données" as Lot002
+
+}
+
+
+Rectangle "VINCI Autoroutes \n Services Authentification"  as Auth #Steelblue{
+Rectangle  "<&lock-locked>Référentiels des identités" as Auth001 #Skyblue
+Rectangle "Hyperviseur" as Lot002
+
+}
+interface API1
+
+interface API2
+Utilisateur as actor01
+
+Externe<==>Auth 
+Auth<==>Hyperviseur
+Ext001--(API1
+Ext002--API2
+API1--Lot001
+API2)--Lot002
+
+Lot001--Lot002
+
+Lot002-down-actor01
+
+
+@enduml

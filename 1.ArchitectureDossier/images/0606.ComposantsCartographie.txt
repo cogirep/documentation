@@ -1,0 +1,24 @@
+@startuml
+header
+<b>Full BIM / VAMP : Lot 5 Hyperviseur</b>- Composants liés aux fonctions de cartographie
+end header
+
+node "Client\n(web, mobile)" as Client {
+    [Afficheur\nCarte]
+}
+node "Serveur Geo Spatial" as Server {
+[Afficheur\nCarte]<--[Serveur d'exposition\ndes données géo spatiales]
+}
+database "Serveur de Persistance\nde données géo spatiales" as DBs {
+[Données géo spatiales]-up->[Serveur d'exposition\ndes données géo spatiales]
+[Fonds de carte publiques].up.>[Serveur d'exposition\ndes données géo spatiales] : "option 1"
+}
+node "Service Cartographique Externe" as Carto {
+[Afficheur\nCarte]<..[Service de fonds de carte] : "option 2"
+}
+node "Integration" as Integration {
+[Service de fonds de carte]..>[Integrateur des données\nde cartographie publiques] : "option 1"
+[Integrateur des données\nde cartographie publiques]..>[Fonds de carte publiques] : "option 1"
+}
+
+@enduml

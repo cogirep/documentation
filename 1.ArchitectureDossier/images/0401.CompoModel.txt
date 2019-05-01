@@ -1,0 +1,23 @@
+@startuml
+header
+<b>Full BIM / VAMP : Lot 5 Hyperviseur</b>- Modèle de composants
+end header
+
+left to right direction
+
+Rectangle "**Tiers Système d'Information d'Entreprise **" as Data  {
+Rectangle "Données"
+Rectangle "Integration"
+}
+
+Rectangle "**Tiers Métier**" as Server {
+Rectangle "Fonction Métier B"
+Rectangle "Fonction Métier A"
+}
+
+ Rectangle "**Tiers Client**" as Client {
+Rectangle "Client Web"
+Rectangle "Client Mobile"
+}
+
+@enduml

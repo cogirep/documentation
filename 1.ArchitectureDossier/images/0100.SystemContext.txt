@@ -1,0 +1,43 @@
+@startuml
+header
+<b>Full BIM / VAMP : Lot 5 Hyperviseur</b>- Diagramme de contexte
+end header
+
+
+
+(FULLBIM - LOT #5 **Hyperviseur** ) as SYSTEM
+
+:Administrateur technique: as ACTOR2 <<human>>
+:Administrateur 'Métier': as ACTOR3 <<human>>
+:Administrateur "Utilisateurs": as ACTOR4 <<human>>
+:Technicien: as ACTOR5 <<human>>
+:Superviseur: as ACTOR6 <<human>>
+:Direction (régionale): as ACTOR7 <<human>>
+:Utilisateur anonyme: as ACTOR8 <<human>>
+
+:FULLBIM - LOT #2 **Gestion du Patrimoine (GP)**: as SYSTEM2<<system>>
+:FULLBIM - LOT #3 **Gestion de la maintenance (GMAO)**: as SYSTEM3<<system>>
+:FULLBIM - LOT #4 **Système d'information géographique (SIG)**: as SYSTEM4<<system>>
+:FULLBIM - LOT #5 **Gestion Electronique de Documents (GED)**: as SYSTEM7<<system>>
+:VINCI Autoroutes - **Identity provider**: as SYSTEM5<<system>>
+:VINCI Autoroutes - **Analyse des données**: as SYSTEM6<<system>>
+
+
+ACTOR2  ---|>SYSTEM
+ACTOR3  --|>SYSTEM
+ACTOR4  ---|>SYSTEM
+ACTOR5  --|>SYSTEM
+ACTOR6  ---|>SYSTEM
+ACTOR7  --|>SYSTEM
+ACTOR8  ---|>SYSTEM
+
+
+SYSTEM <|--- SYSTEM2
+SYSTEM <|-- SYSTEM3
+SYSTEM <|--- SYSTEM4
+SYSTEM <|--- SYSTEM7
+SYSTEM <|-- SYSTEM5
+SYSTEM ... SYSTEM6
+
+
+@enduml

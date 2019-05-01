@@ -1,0 +1,64 @@
+@startuml
+header
+<b>Full BIM / VAMP : Lot 5 Hyperviseur</b>- Gestion des interfaces
+end header
+
+
+folder  LOTA[
+<b>Owns:</b>LOTA-Data
+___
+Identifier : alpha
+---
+<b>Value:</b>  A-1
+<b>Value:</b>  A-2
+...
+]
+
+legend
+This diagram represents 3 components (LOT A LOT B LOT5)
+in interaction
+1 record is implemented for each components.
+The record in LOT 5 contains
+  - The minimal dataset coming from external component (A et B)
+  - The different ids to the parent record (in order to retrieve details if /when required)
+  - THe data generated directly in the LOT5
+endlegend
+
+folder HYPERVISEUR [
+<b>Owns:</b>HYPERVISEUR-Data
+___
+Identifier : gamma
+---
+<b>Value:</b> alpha
+<b>Value:</b>  beta
+<b>Value:</b>  HYPERVISEUR-1
+<b>Value:</b>  HYPERVISEUR-2
+<b>Value:</b> B-1
+<b>Value:</b> A-2
+...
+]
+
+folder  LOTB[
+<b>Owns:</b>LOTB-Data
+___
+Identifier : beta
+---
+<b>Value:</b> B-1
+<b>Value:</b>  B-2
+...
+]
+
+HYPERVISEUR -> LOTA:Récuperation du détail (UTILISATEUR)
+LOTB -> HYPERVISEUR :Récuperation des identifiants
+
+HYPERVISEUR <- LOTA:Récuperation de l'identifiant (1 FOIS)
+LOTB <- HYPERVISEUR :Récuperation du détail (UTILISATEUR)
+
+
+
+
+
+
+
+
+@enduml
