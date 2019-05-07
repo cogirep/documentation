@@ -1,0 +1,28 @@
+@startuml
+header
+<b>Full BIM / VAMP : Lot 5 Hyperviseur</b>- Modèle de cas d'utilisation - Acteurs
+end header
+
+
+
+
+Rectangle "SOLUTIONS" as SYSTEMES  {
+    Package "Fournisseur du Service"  as SRVPROVUSR #LightSteelBlue{
+ :BEYOND/Sixense - **Identity provider**: as SYSTEM5 <<system>>
+}
+
+Package "Tenant/Client du Service "  as CLIENTSYS{
+ :CUSTOMER - **Identity provider**: as SYSTEM2<<system>>
+
+:CUSTOMER - **Data and Service provider**: as SYSTEM3<<system>>
+
+:CUSTOMER - **Data and Service Consumer**: as SYSTEM4<<system>>
+
+}
+
+
+}
+legend
+**Question** : Où cont sourcé les administrateur de la plateforme ?
+end legend
+@enduml

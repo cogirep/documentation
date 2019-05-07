@@ -14,4 +14,4 @@
 - [Liste des logiciels](./0900.COTSList.md)
 - [Prototype](./1000.Prototype.md)
 
-[//]: # (Le fichier est un .markdown afin de permettre le script  d'export en fichier Word dont la cible est -Files: *.mdd)
+[//]: # (Le fichier est un .markdown afin de permettre le script  d'export en fichier Word dont la cible est -Files: *.md)
