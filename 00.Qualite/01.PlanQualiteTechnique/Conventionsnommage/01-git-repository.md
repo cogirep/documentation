@@ -4,9 +4,15 @@
 
 ### Nom
 
-La convention de nommage des dépots de code doit correspondre à la convention suivante
+Le nommage des dépots de code doit correspondre à la convention suivante
 
-platform-composant-nom
+**platform-module-component**
+
+où 
+**platform**: Correspond à l'acronyme de la plate-forme
+**module**: Correspond au module de la plate-forme
+**component**: Correspond au nom de l'objet
+
 
 Les contraintes syntaxiques de l'identifiant sont :
 
@@ -24,6 +30,8 @@ Acronymes autorisés :
 |Categorie|**Acronyme**|Description|
 |---|:---:|---|
 |platform|byd|Plateforme Beyond|
-|composant|all|Commun à tous les composants de la plateforme |
-|composant|df|Datafactory|
-|composant|rea|reality|
+|module|all|Commun à tous les composants de la plateforme |
+|module|df|Datafactory|
+|module|rea|reality|
+|component|datamodel|Le modèle de données|
+|component|XXX||
