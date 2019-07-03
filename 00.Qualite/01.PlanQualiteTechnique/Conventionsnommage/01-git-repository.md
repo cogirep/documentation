@@ -24,4 +24,6 @@ Acronymes autorisés :
 |Categorie|**Acronyme**|Description|
 |---|:---:|---|
 |platform|byd|Plateforme Beyond|
-|platform|byd|Plateforme Beyond|
+|composant|all|Commun à tous les composants de la plateforme |
+|composant|df|Datafactory|
+|composant|rea|reality|
