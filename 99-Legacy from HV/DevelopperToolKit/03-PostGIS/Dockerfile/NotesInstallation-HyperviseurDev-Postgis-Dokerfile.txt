@@ -1,0 +1,5 @@
+. connect.sh
+cd Dockerfile
+. build.sh
+docker tag sixense/postgis:10.0-2.4 registry.eu-de.bluemix.net/hyperviseurnspc/postgis:10.0-2.4
+docker push registry.eu-de.bluemix.net/hyperviseurnspc/postgis:10.0-2.4

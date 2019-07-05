@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    name: sonarq-service
+  name: sonarq-service
+spec:
+  type: NodePort
+  ports:
+    - port: 9000
+      targetPort: 9000
+      name: sonarport
+  selector:
+    name: sonarqube

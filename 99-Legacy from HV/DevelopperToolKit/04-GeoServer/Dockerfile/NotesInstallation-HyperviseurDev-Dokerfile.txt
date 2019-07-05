@@ -1,0 +1,11 @@
+. connect.sh
+cd Dockerfile
+. build.sh
+docker tag sixense/geoserver:2.14.0 registry.eu-de.bluemix.net/hyperviseurnspc/geoserver:2.14.0
+docker push registry.eu-de.bluemix.net/hyperviseurnspc/geoserver:2.14.0
+
+
+*** TODO ***
+Dans Dockerfile / ENV GEOSERVER_OPTS
+add : -Dgeoserver.xframe.policy=ALLOW-FROM [uri]
+remove :  -Dgeoserver.xframe.shouldSetPolicy=false

@@ -1,0 +1,18 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata :
+  name: hyp-app-geo-ingressdev
+  namespace: hypnspdev
+spec:
+  tls:
+  - hosts:
+    - dev.geoserver.hyperviseurdevint.par01.containers.appdomain.cloud
+    secretName: hyperviseurdevint
+  rules:
+  - host: dev.geoserver.hyperviseurdevint.par01.containers.appdomain.cloud
+    http:
+      paths:
+      - path: /geoserver
+        backend:
+          serviceName: hyp-app-geo-service
+          servicePort: 8080

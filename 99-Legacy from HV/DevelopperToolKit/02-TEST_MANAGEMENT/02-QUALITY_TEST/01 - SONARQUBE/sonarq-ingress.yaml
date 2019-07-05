@@ -1,0 +1,17 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata :
+  name: sonarq-ingress
+spec:
+  tls:
+  - hosts:
+    - sonarq.eu-de.containers.appdomain.cloud
+    secretName: bluemix-default-secret
+  rules:
+  - host: sonarq.eu-de.containers.appdomain.cloud
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: sonarq-service
+          servicePort: 9000

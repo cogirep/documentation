@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sonarq-config
+data:
+  CLOUD_ENV: DEV
+  DB_URL: jdbc:postgresql://sl-eu-de-1-portal.9.dblayer.com:17091/sonarq

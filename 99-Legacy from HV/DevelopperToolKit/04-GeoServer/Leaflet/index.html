@@ -1,0 +1,343 @@
+<html>
+
+<head>
+    <title>A Leaflet map - Sixence</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css" integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ=="
+        crossorigin="">
+    <script src="https://unpkg.com/leaflet@1.3.1/dist/leaflet.js" integrity="sha512-/Nsx9X4HebavoBvEBuyp3I7od5tA0UzAxs+j83KgC8PU0kgB4XiK4Lfe4y4cgBtaRJQEIFCW+oC506aPT2L1zw=="
+        crossorigin=""></script>
+    <script src="https://unpkg.com/esri-leaflet/dist/esri-leaflet.js"></script>
+    <script src="https://unpkg.com/proj4@2.5.0/dist/proj4.js"></script>
+    <script src="https://unpkg.com/proj4leaflet@1.0.2/src/proj4leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet.wms@0.2.0/dist/leaflet.wms.js"></script>
+    <script src="https://unpkg.com/jquery@3.3.1/dist/jquery.js"></script>
+    <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
+    <script src="https://rawgit.com/mylen/leaflet.TileLayer.WMTS/master/leaflet-tilelayer-wmts.js"></script>
+    <script src="https://cdn.osmbuildings.org/classic/0.2.2b/OSMBuildings-Leaflet.js"></script>
+    <style>
+        #map {
+            height: 100%
+        }
+    </style>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
+</head>
+
+<body>
+
+    <div id="map"></div>
+
+    <script>
+        // initialize the map
+        var map = L.map('map').setView([47.057574, -0.881817], 10);
+
+        proj4.defs("urn:ogc:def:crs:EPSG::2154",
+            "+proj=lcc +lat_1=49 +lat_2=44 +lat_0=46.5 +lon_0=3 +x_0=700000 +y_0=6600000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"
+        );
+
+        // layer for dynamically drawing
+        var graphicLayer;
+
+        // Highlight style for line and polygon
+        var highLightStyle = {
+            "color": "#ff7800",
+            "weight": 8,
+            "opacity": 0.65
+        };
+
+        // layer IGN
+        var ign = L.tileLayer.wms(
+            'http://sig-va.dev.naomis.fr/arcgis/services/Vinci/FondDePlanRaster/MapServer/WMSServer', {
+                attribution: 'Map data © IGN',
+                id: 'IGN',
+                layers: '1,2,3,4,5',
+                format: 'image/png'
+            })
+
+        // layer orthophoto
+        var ortho = L.tileLayer.wms(
+            'http://sig-va.dev.naomis.fr/arcgis/services/Vinci/BDOrtho41/MapServer/WMSServer', {
+                attribution: 'Map data ©  IGN',
+                id: 'ORTHO',
+                layers: '0',
+                format: 'image/png'
+            })
+
+        // layer orthophoto wmts
+        var orthowmts = new L.TileLayer.WMTS(
+            "https://sig-va.dev.naomis.fr:6443/arcgis/rest/services/Vinci/BdOrtho/MapServer/WMTS/1.0.0/", {
+                layer: "0",
+                style: "normal",
+                tilematrixSet: "PM",
+                format: "image/jpeg",
+                attribution: "Map data © Vinci Autoroute"
+            });
+
+        // layer référentiel objet
+        var refcom = L.tileLayer.wms(
+            'http://sig-va.dev.naomis.fr/arcgis/services/Vinci/ReferentielCommunV2/MapServer/WMSServer', {
+                attribution: 'Map data © Vinci Autoroute',
+                id: 'REFCOM',
+                layers: 'Autoroutes',
+                format: 'image/png',
+                transparent: 'true'
+            })
+
+        // layer référentiel objet simplifié
+        var refcomsim = L.tileLayer.wms(
+            'http://sig-va.dev.naomis.fr/arcgis/services/Vinci/ReferentielCommunSimplify2K/MapServer/WMSServer', {
+                attribution: 'Map data © Vinci Autoroute',
+                id: 'REFCOMSIM',
+                layers: '0',
+                format: 'image/png',
+                transparent: 'true'
+            });
+
+        //var osmb = new OSMBuildings(map).load();
+
+        // load ESRI tile layer
+        var esri = L.esri.basemapLayer("Gray");
+
+        // load OSM tile layer
+        var osm = L.tileLayer(
+            'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 18,
+                attribution: 'Map data © <a href="https://openstreetmap.org">OpenStreetMap</a> contributors',
+                id: 'OSM'
+            }
+        ).addTo(map);
+
+        // define WMS Sixense geoserver Layer
+        var customSource = L.WMS.Source.extend({
+            // customize the ajax call (jsonp for cross origin)
+            'ajax': function (url, callback) {
+                $.ajax(url, {
+                    'context': this,
+                    crossDomain: true,
+                    dataType: 'jsonp',
+                    jsonpCallback: 'getJson',
+                    'success': function (result) {
+                        callback.call(this, result);
+                    }
+                });
+            },
+            // customize popin content
+            'showFeatureInfo': function (latlng, info) {
+                if (!this._map) {
+                    return
+                }
+                if (info.numberReturned != 0) {
+
+                    if (graphicLayer)
+                        map.removeLayer(graphicLayer);
+                    // add graphic layer 
+                    selectedFeature = info.features[0];
+                    selectedFeature.crs = info.crs;
+                    graphicLayer = L.Proj.geoJson(selectedFeature, {
+                        style: highLightStyle
+                    });
+
+                    map.fitBounds(graphicLayer.getBounds());
+
+                    graphicLayer.addTo(map);
+
+                    //this._map.openPopup(JSON.stringify(info), latlng)
+                    this._map.openPopup(this.formatInfo(info, latlng), latlng)
+                }
+            },
+            // custome format function
+            'formatInfo': function (json, latlng) {
+                // création des infos à afficher
+                var html = "";
+                json.features.forEach(function (element) {
+                    html += getHTML(element, latlng.lat, latlng.lng);
+                });
+                return html;
+            }
+        });
+
+        // HTML formatter
+        getHTML = function (element, lat, lng) {
+            // conversion des lat/long (WGS84) vers le lambert 93 (projection officielle française)
+            var coords2154 = proj4('WGS84',
+                'urn:ogc:def:crs:EPSG::2154',
+                [lng, lat]
+            );
+
+            return "<h1>" + element.id + "</h1><br>" +
+                "<p><b>WGS94</b> : " + lat + " " + lng +
+                "<p><b>Lamber 93</b> : " + coords2154 +
+                "</p><p><b>Centre d'entretien</b> : " + element.properties.CENTRE_ENTRETIEN +
+                "</p><p><b>Gestionnaire</b> : " + element.properties.GEST +
+                "</p><p><b>District</b> : " + element.properties.DISTRICT +
+                (map.getZoom() >= 13 ?
+                    "</p><p><a target='_blank' href='https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=" +
+                    lat + "," + lng +
+                    "&heading=13&pitch=5&fov=80'>StreetView</a>" : "") +
+                "</p><div title='" + JSON.stringify(element) + "'>(+)</div>";
+        };
+
+        // load Tile mode
+        var sixense = new customSource(
+            "http://geoserver.lot05-sandbox.par01.containers.appdomain.cloud/geoserver/hyperviseur/wms", {
+                'transparent': true,
+                'tiled': true,
+                'format': 'image/png',
+                "info_format": "text/javascript",
+                "format_options": 'callback: getJson',
+                'attribution': 'Vector Data © Vinci Autoroute'
+                //'identify': false
+            });
+
+        // explain which layer we want to work with
+        var cloture = sixense.getLayer("hyperviseur:AssetCategoryClotures");
+        var avaloire = sixense.getLayer("hyperviseur:AssetCategoryPortiques");
+        var ouvrages_art = sixense.getLayer("hyperviseur:AssetCategoryOuvragesFranchissement");
+        var troncon = sixense.getLayer("sixense:TRONCON");
+        var tpc = sixense.getLayer("sixense:TPC");
+
+        // add the layer to the map
+        cloture.addTo(map);
+        
+
+        // Add an overlay layer (i.e. only one image and not several tiles)
+        var avaloireInterpol = L.WMS.overlay(
+            "http://geoserver.lot05-sandbox.par01.containers.appdomain.cloud/geoserver/sixense/wms", {
+                'transparent': true,
+                'format': 'image/png',
+                'layers': 'sixense:AVALOIRESINTERPOL'
+            }).addTo(map);
+
+        // create the parameters for clustering
+        var markers = L.markerClusterGroup();
+        var avaloireGeoJsonLayer = new L.GeoJSON();
+        var geoJsonUrl =
+            'http://geoserver.lot05-sandbox.par01.containers.appdomain.cloud/geoserver/sixense/wfs';
+        var defaultParameters = {
+            service: 'WFS',
+            version: '1.0.0',
+            request: 'GetFeature',
+            typeName: 'sixense:AVALOIRES',
+            maxFeatures: 120000,
+            srsName: "EPSG:4326",
+            outputFormat: 'text/javascript'
+        };
+
+        // create the refresh function for the WFS layers
+        requestWFS = function () {
+            var parameters = L.Util.extend(defaultParameters, {
+                // only retieve the assets included in the viewport
+                cql_filter: "bbox(sixense:geom," + map.getBounds().toBBoxString() + ",'EPSG:4326')",
+            });
+
+            $.ajax({
+                url: geoJsonUrl + L.Util.getParamString(parameters),
+                dataType: 'jsonp',
+                jsonpCallback: 'parseResponse',
+                success: function (data) {
+                    var geoJsonLayer = L.geoJson(data, {
+                        onEachFeature: function (feature, layer) {
+                            // dispaly the popin content
+                            layer.bindPopup(getHTML(feature, feature.geometry.coordinates[
+                                1], feature.geometry.coordinates[0]));
+                        }
+                    });
+                    // reset the marker layer
+                    markers.clearLayers();
+                    // add the new assets
+                    markers.addLayer(geoJsonLayer);
+                    // add layer to the map
+                    map.addLayer(markers);
+                }
+            });
+        };
+
+        // laod the first WFS layers
+        requestWFS();
+
+        // add map event
+        map.on('moveend', function (e) {
+            // force to refresh the layer when map viewport change
+            requestWFS();
+        });
+        $("#map").on('dragenter', function (e) {
+            e.stopPropagation();
+            e.preventDefault();
+            //m.scrollWheelZoom.disable();
+        });
+        $("#map").on('dragover', function (e) {
+            e.stopPropagation();
+            e.preventDefault();
+        });
+        $("#map").on('drop', function (e) {
+            if (e.originalEvent.dataTransfer && e.originalEvent.dataTransfer.files.length) {
+                e.preventDefault();
+                e.stopPropagation();
+                var geojsonMarkerOptions = {
+                    radius: 8,
+                    fillColor: "#ff7800",
+                    color: "#000",
+                    weight: 1,
+                    opacity: 1,
+                    fillOpacity: 0.8
+                };
+                /*UPLOAD FILES HERE*/
+                var reader = new FileReader();
+                reader.onload = function () {
+                    var tmpGeoJsonLayer = L.geoJson(JSON.parse(reader.result), {
+                        onEachFeature: function (feature, layer) {
+                            // dispaly the popin content
+                            layer.bindPopup(getHTML(feature, feature.geometry.coordinates[
+                                1], feature.geometry.coordinates[0]));
+                        },
+                        pointToLayer: function (feature, latlng) {
+                            return L.circleMarker(latlng, geojsonMarkerOptions);
+                        }
+                    });
+                    map.addLayer(tmpGeoJsonLayer);
+                    map.fitBounds(tmpGeoJsonLayer.getBounds());
+
+                    // remove the current control panel
+                    map.removeControl(baseControl);
+                    // renew 
+                    overlayMaps = {
+                        "Clôtures": cloture,
+                        "Clôtures Grande Echelle": cloture_ge,
+                        "Avaloires": avaloire,
+                        "Avaloires Interpolation": avaloireInterpol,
+                        "Ouvrages d'art": ouvrages_art,
+                        "Cluster Marker Avaloire": markers,
+                        "extras": tmpGeoJsonLayer
+                    };
+                    baseControl = L.control.layers(baseMaps, overlayMaps).addTo(map);
+                };
+                reader.readAsText(e.originalEvent.dataTransfer.files[0]);
+            }
+        });
+
+        // create the control layers
+        var baseMaps = {
+            "ESRI": esri,
+            "IGN": ign,
+            "ORTHO": ortho,
+            "BD ORTHO": orthowmts,
+            "OSM": osm
+        };
+
+        var overlayMaps = {
+            "Clôtures": cloture,
+            "Avaloires": avaloire,
+            "Avaloires Interpolation": avaloireInterpol,
+            "Ouvrages d'art": ouvrages_art,
+            "troncon (shape)": troncon,
+            "tpc (shape)": tpc,
+            "Référentiel commun": refcom,
+            "Réf commun simplifié": refcomsim,
+            "Cluster Marker Avaloire": markers
+        };
+
+        var baseControl = L.control.layers(baseMaps, overlayMaps).addTo(map);
+    </script>
+</body>
+
+</html>

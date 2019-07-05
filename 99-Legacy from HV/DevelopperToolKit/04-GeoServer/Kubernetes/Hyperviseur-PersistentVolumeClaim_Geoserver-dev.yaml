@@ -1,0 +1,11 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: hyp-app-geo-pvc-dev
+spec:
+  storageClassName: ibmc-file-retain-bronze
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 20Gi

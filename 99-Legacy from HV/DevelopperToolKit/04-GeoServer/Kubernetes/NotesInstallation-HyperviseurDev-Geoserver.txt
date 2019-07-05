@@ -1,0 +1,25 @@
+# Notes d'installation du cluster Kubernetes pour l'Hyperviseur Geoserver en environnement DEV
+     kubectl create -f Hyperviseur-Ingress_Geoserver-dev.yaml -n hypnspdev
+     kubectl create -f Hyperviseur-Service_Geoserver.yaml -n hypnspdev
+     kubectl create -f Hyperviseur-PersistentVolumeClaim_Geoserver-dev.yaml -n hypnspdev
+     kubectl create -f Hyperviseur-Deployment_Geoserver.yaml -n hypnspdev
+
+# RESOLUTION 1 *****
+# No cloud provider IPs are available to fulfill the load balancer service request. Add a portable subnet to the cluster and try again
+# Get Cluster name
+ibmcloud cs clusters
+# Get Subnet
+ibmcloud cs subnets
+# Add VLANs
+ibmcloud cs cluster-subnet-add --cluster {cluster-name} --subnet-id {subnet-id} --size {8|16|32|64}
+
+# TIPS 1 *****
+# Access to bash
+# Get pods name
+kubectl get pods -n hypnspdev
+# Open bash
+kubectl exec -it {pod-name} -n {namespace} -- /bin/bash
+
+# TIPS 2 *****
+# Remove Deployment
+kubectl delete -f Hyperviseur-Deployment_Geoserver.yaml -n hypnspdev

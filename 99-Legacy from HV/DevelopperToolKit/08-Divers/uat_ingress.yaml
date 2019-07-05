@@ -1,0 +1,35 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: lot05-datafeeder-ingress
+  namespace: fullbim-hyperviseur
+  annotations:
+   ingress.bluemix.net/redirect-to-https: "True"
+   ingress.bluemix.net/mutual-auth: "secretName=apiconnect-secret port=443"
+    #Specific rewrite for geoserver (comment otherwise)
+   #ingress.bluemix.net/rewrite-path: "serviceName=lot05-geoserver-service rewrite=/geoserver"
+spec:
+  tls:
+  - hosts:
+    - api.lot05-uat.eu-de.containers.appdomain.cloud
+    secretName: lot05-uat
+  - hosts:
+    - uat-api-hyperviseur.sixense-digitalsite.com
+    secretName: sixense-secret
+ 
+  rules:
+    - host: uat-api-hyperviseur.sixense-digitalsite.com
+      http:
+        paths:
+        - path: /
+          backend:
+            serviceName: lot05-datafeeder-service
+            servicePort: 3000
+    - host: api.lot05-uat.eu-de.containers.appdomain.cloud
+      http:
+        paths:
+        - path: /
+          backend:
+            serviceName: lot05-datafeeder-service
+            servicePort: 3000
+ 

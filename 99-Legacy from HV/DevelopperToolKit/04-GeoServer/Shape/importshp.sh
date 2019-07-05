@@ -1,0 +1,1 @@
+curl -u admin:G5%s1C -v -XPUT -H 'Content-type: application/zip' --data-binary @bassins.zip http://dev.geoserver.hyperviseurdevint.par01.containers.appdomain.cloud/geoserver/rest/workspaces/sixense/datastores/bassins/file.shp
