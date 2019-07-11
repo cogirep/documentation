@@ -6,13 +6,12 @@
 
 Le nommage des dépots de code doit correspondre à la convention suivante
 
-**platform-module-component**
+>**platform-module-suffixe**
 
-où 
+où
 **platform**: Correspond à l'acronyme de la plate-forme
 **module**: Correspond au module de la plate-forme
 **suffixe**: Suffixe libre permettant un qualification fine de l'objet.
-
 
 Les contraintes syntaxiques de l'identifiant sont :
 

@@ -6,13 +6,12 @@
 
 Le nommage des base de données doit correspondre à la convention suivante
 
-**platform-module-component**
+>**platform-module-component**
 
-où 
+où
 **platform**: Correspond à l'acronyme de la plate-forme
 **module**: Correspond au module de la plate-forme
 **component**: Correspond au nom de l'objet
-
 
 Les contraintes syntaxiques de l'identifiant sont :
 

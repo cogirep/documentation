@@ -6,7 +6,7 @@
 
 Le nommage des dépots de code doit correspondre à la convention suivante
 
-**platform-module-component**
+>**platform-module-component**
 
 où
 **platform**: Correspond à l'acronyme de la plate-forme
