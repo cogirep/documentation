@@ -2,17 +2,17 @@
 
 ## Docker containers
 
-### Nom
+### Noms
 
 Le nommage des conteneurs docker doit correspondre à la convention suivante
 
-**platform-module-component**
+>**platform-module-component**
 
-où 
-**platform**: Correspond à l'acronyme de la plate-forme
-**module**: Correspond au module de la plate-forme
-**component**: Correspond au nom de l'objet
+où
 
+- **platform**: Correspond à l'acronyme de la plate-forme
+- **module**: Correspond au module de la plate-forme
+- **component**: Correspond au nom de l'objet
 
 Les contraintes syntaxiques de l'identifiant sont :
 
@@ -23,7 +23,7 @@ Les contraintes syntaxiques de l'identifiant sont :
 - Les 3 éléments sont requis (platform-composant-nom) et ne peuvent être nuls ni ne contenir de caractère - (minus)
 
 Exemple:
-**byd-all-activitytracker**: est le conteneur contenant le module de suivi des utilisateurs
+**byd-df-datafeeder**: est le conteneur contenant le module d'ingestion des données pour la plateforme
 
 Acronymes autorisés :
 
@@ -33,5 +33,14 @@ Acronymes autorisés :
 |module|all|Commun à tous les composants de la plateforme |
 |module|df|Datafactory|
 |module|rea|reality|
-|component|activitytracker|Le composant de suivi de l'activité des utilisateurs|
 |component|XXX||
+
+## Docker containers Registry
+
+### Namespace
+
+Les espaces de nommage du registre de conteneur devront être alignés sur les noms des clusters afin de permettre un segmentation des conteneurs montés sur les plateformes.
+
+### Repository
+
+Un dépot de conteneur sera créé par composant.

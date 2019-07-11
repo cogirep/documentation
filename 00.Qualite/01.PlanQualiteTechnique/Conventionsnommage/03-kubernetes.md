@@ -8,17 +8,16 @@
 |---|:---:|---|
 |2019-07|BROUILLON|A valider par les équipes de la Direction Technique|
 
-
 ### Nom
 
 Le nommage des clusters orchestrés Kubernetes doit correspondre à la convention suivante
 
-**platform-environment**
+>**platform-environment**
 
-où 
-**platform**: Correspond à l'acronyme de la plate-forme
-**environment**: Correspond à l'environnement ou au type d'environnements ciblé par le cluster.
+où
 
+- **platform**: Correspond à l'acronyme de la plate-forme
+- **environment**: Correspond à l'environnement ou au type d'environnements ciblé par le cluster.
 
 Les contraintes syntaxiques de l'identifiant sont :
 
@@ -49,5 +48,6 @@ Acronymes autorisés :
 |environnement|productive|Environnements productifs|
 
 ## Objets Kubernetes
+
 Les conventions suivantes seront appliquées
 https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
