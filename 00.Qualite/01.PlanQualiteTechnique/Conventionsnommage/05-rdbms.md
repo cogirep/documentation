@@ -1,10 +1,10 @@
 # Convention de nommage
 
-## Dépôts de code
+## Base de données relationnel
 
 ### Nom
 
-Le nommage des dépots de code doit correspondre à la convention suivante
+Le nommage des base de données doit correspondre à la convention suivante
 
 **platform-module-component**
 
@@ -20,10 +20,10 @@ Les contraintes syntaxiques de l'identifiant sont :
 - Aucun caractère spécial
 - La casse des caractères est en minuscule
 - Le caractère de séparation des éléments de l'identifiant est - (minus)
-- Les 3 éléments sont requis (platform-composant-nom) et ne peuvent être nuls ni ne contenir de caractère - (minus)
+- Les 3 éléments sont requis (platform-module-component) et ne peuvent être nuls ni ne contenir de caractère - (minus)
 
 Exemple:
-**byd-df-datamodel**: est le dépôt de code du modèle de données de la datafactory
+**byd-df-idcard**: est la base de données contenant les id-card de la plateforme dans la datafactory
 
 Acronymes autorisés :
 

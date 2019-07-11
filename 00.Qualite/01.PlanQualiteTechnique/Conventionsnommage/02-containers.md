@@ -20,7 +20,7 @@ Les contraintes syntaxiques de l'identifiant sont :
 - Aucun caractère spécial
 - La casse des caractères est en minuscule
 - Le caractère de séparation des éléments de l'identifiant est - (minus)
-- Les 3 éléments sont requis (platform-composant-nom) et ne peuvent être nuls ni ne contenir de caractère - (minus)
+- Les 3 éléments sont requis (platform-module-component) et ne peuvent être nuls ni ne contenir de caractère - (minus)
 
 Exemple:
 **byd-df-datafeeder**: est le conteneur contenant le module d'ingestion des données pour la plateforme
