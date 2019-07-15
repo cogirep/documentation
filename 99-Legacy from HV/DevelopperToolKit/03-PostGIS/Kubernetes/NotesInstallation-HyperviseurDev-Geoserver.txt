@@ -1,5 +1,0 @@
-# Notes d'installation du cluster Kubernetes pour l'Hyperviseur Geoserver en environnement DEV
-     kubectl create -f Hyperviseur-Ingress_Postgis-dev.yaml -n hypnspdev
-     kubectl create -f Hyperviseur-Service_Postgis.yaml -n hypnspdev
-     kubectl create -f Hyperviseur-PersistentVolumeClaim_Postgis-dev.yaml -n hypnspdev
-     kubectl create -f Hyperviseur-Deployment_Postgis.yaml -n hypnspdev
