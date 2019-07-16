@@ -1,0 +1,43 @@
+@startuml
+header
+<b>BEYOND Platform / Data Factory </b> - Diagramme de contexte
+end header
+
+
+
+
+Rectangle "BEYOND" as SYSTEMES #LightSteelBlue  {
+
+Rectangle "PLATFORM"  as byd-platform #White {
+ Rectangle "..."  as byd-plf-app5 #LightBlue{ 
+}
+Rectangle "Data Factory Manager"  as byd-plf-app1 #LightBlue{
+  }
+Rectangle "Asset"  as byd-plf-app2 #LightBlue{
+
+ }
+Rectangle "Monitoring"  as byd-plf-app3 #LightBlue{ 
+}
+Rectangle "Reality"  as byd-plf-app4 #LightBlue{ 
+}
+
+ }
+    Rectangle "DATA FACTORY"  as byd-df #White {
+      Rectangle "..."  as byd-df-srv1 #LightBlue{
+
+ }    
+ Rectangle "Acquisition"  as byd-df-srv2 #LightBlue{
+
+ }
+ Rectangle "Curation"  as byd-df-srv3 #LightBlue{
+
+ }   
+ Rectangle "Exposition"  as byd-df-srv4 #LightBlue{
+
+ }
+
+    }
+}
+
+
+@enduml

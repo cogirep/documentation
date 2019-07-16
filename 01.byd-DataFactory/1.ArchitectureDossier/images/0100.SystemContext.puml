@@ -1,6 +1,6 @@
 @startuml
 header
-<b>Full BIM / VAMP : Lot 5 Hyperviseur</b>- Diagramme de contexte
+<b>BEYOND Platform / Data Factory </b> - Diagramme de contexte
 end header
 
 (BEYOND - **Platform** ) as SYSTEM
