@@ -1,0 +1,102 @@
+########################################################
+########################################################
+##         BEYOND ATOMIC DATA EXPOSITION              ##
+########################################################
+########################################################
+
+swagger:                  "2.0"
+info:
+  description:            "This API aims at exposing the atomic data stored in the datafactory"
+  version:                "0.0.1"
+  title:                  "BEYOND - Data Exposittion"
+  
+host:                     F.Q.D.N_to-be-added
+basePath:                 "/v1"
+schemes:
+  - https
+
+########################################################
+tags:
+- name:                   "Atom"
+  description:            The detail of an atomic object
+  
+########################################################
+paths:
+#---------------------------------#
+  '/atoms/id-card':
+    get:
+      tags:
+      - Highways
+      summary:            Retrieve all lanes between 2 PR for a given direction
+      description:        List, for a given highway, all the statuses of the lanes along the PR.
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: "highway-code"
+        in: "query"
+        required: true
+        uniqueItems: true
+        type: "string"
+        description:      The codification of the road to request (alphanumerical code)
+     
+      responses:
+        '200':
+          description:    Successful operation
+          schema:
+            $ref:         '#/definitions/output'
+        '404':
+          description:    Not found
+          schema:
+            $ref:         '#/definitions/api-response'
+        '405':
+          description:    Invalid input
+          schema:
+            $ref:         '#/definitions/api-response'
+        default:
+          description:    Error
+          schema:
+            $ref:         '#/definitions/api-response'
+########################################################
+definitions:
+
+#---------------------------------#
+  output:
+    type:                 object
+    required:
+      -  "highway-code"
+    additionalProperties: false
+    properties:
+      highway-code:
+        type:             string
+        description:      The codification of the road to request (alphanumerical code)
+        example:          "A8"
+      direction:
+        type: "number"
+        description:      The direction
+
+ 
+#---------------------------------#
+  api-response:
+    type:                 "object"
+    required:
+          -  "code"
+          -  "type"
+    additionalProperties: false
+    properties:
+      code:
+        type:             "integer"
+        format:           "int32"
+        example:          404
+        description:      The HTTP code associated to the reponse
+      type:
+        type:             "string"
+        enum:             [ERROR]
+        example:
+        description:      The returned error identifier
+      message:
+        type:             "string"
+        example:          The requested atom has not bee found
+        description:      The returned message
+########################################################
