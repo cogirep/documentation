@@ -1,6 +1,6 @@
 # Convention de nommage
 
-@TODO : Developper toolkit
+TODO : Developper toolkit
 
 ## images
 
