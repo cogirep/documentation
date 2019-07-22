@@ -10,7 +10,7 @@ end header
 :Utilisateur anonyme: as ACTOR5 <<human>>
 :Administrateur 'Métier': as ACTOR3 <<human>>
 
-:CUSTOMER - **Data and Service providers**: as SYSTEM3<<system>>
+:CUSTOMER - **Data and Service Providers**: as SYSTEM3<<system>>
 :CUSTOMER - **Data and Service Consumers**: as SYSTEM4<<system>>
 :** BEYOND - APPS**: as SYSTEM5 <<system>>
 

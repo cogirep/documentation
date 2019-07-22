@@ -11,8 +11,7 @@ Package "Fournisseur du Service"  as SRVPROVUSR #LightSteelBlue{
  :Administrateur technique: as ACTOR2 <<human>>
 }
 Package "Tenant/Client du Service "  as CLIENTUSR{
-  :Administrateur 'Métier': as ACTOR3 <<human>>
-:Administrateur "Utilisateurs": as ACTOR4 <<human>>
+:Administrateur 'Métier': as ACTOR3 <<human>>
 :Utilisateur final: as ACTOR5 <<human>> 
 }
 :Utilisateur anonyme: as ACTOR6 <<human>>

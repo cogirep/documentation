@@ -1,0 +1,31 @@
+@startuml
+header
+<b>BEYOND Platform / Data Factory </b> - Diagramme de contexte
+end header
+
+title
+POST **/File** : Envoi d'un fichier à la datafcatory 
+	
+end title
+
+
+start
+->  **Hypothèse:** \n  - Utilisateur \n  - Profil;
+if ( \n Recupération des autorisations d'UPLOAD?\n) then
+-[#red]-> NOK ;
+-Retour du code erreur  \n **[COMMAND_VERIFICATION_ERROR-NOCOMPLIANT]**
+-Sauvegarde de l'évènement métier \n **[COMMAND_VERIFICATION_ERROR-NOCOMPLIANT]**
+stop
+elseif (\n Appel de la séquence de \n vérification **TRANSACTION VALIDATION**. Retour ?\n) then
+-[#red]-> **ERROR**;
+stop
+else (OUI)
+:Ajout de la commande dans \nla file d'attente **All-Commands_Queue**;
+:Retour du code   \n **[COMMAND_SENDING_SUCCESS]**;
+:Sauvegarde de l'évènement métier \n **[COMMAND_SENDING_SUCCESS]**;
+
+stop
+endif
+
+
+@enduml

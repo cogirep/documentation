@@ -1,0 +1,12 @@
+@startuml
+header
+<b>BEYOND Platform </b>- Modèle de cas d'utilisation - Acteurs
+end header
+
+:Utilisateur final: as ACTOR5 <<human>> 
+
+
+ACTOR5 -->(**UPLOAD** a file )
+
+
+@enduml

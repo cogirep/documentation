@@ -7,22 +7,21 @@ end header
 
 
 Rectangle "SOLUTIONS" as SYSTEMES  {
-    Package "Fournisseur du Service"  as SRVPROVUSR #LightSteelBlue{
- :BEYOND/Sixense - **Identity provider**: as SYSTEM5 <<system>>
+    
+Package "Fournisseur du Service"  as SRVPROVUSR #LightSteelBlue{
+:** BEYOND - APPS**/BEYOND Manager: as SYSTEM6 <<system>>
 }
 
 Package "Tenant/Client du Service "  as CLIENTSYS{
- :CUSTOMER - **Identity provider**: as SYSTEM2<<system>>
+ 
+:** BEYOND - APPS**: as SYSTEM5 <<system>>
+:CUSTOMER - **Data and Service Providers**: as SYSTEM3<<system>>
 
-:CUSTOMER - **Data and Service provider**: as SYSTEM3<<system>>
+:CUSTOMER - **Data and Service Consumers**: as SYSTEM4<<system>>
 
-:CUSTOMER - **Data and Service Consumer**: as SYSTEM4<<system>>
+}
+
 
 }
 
-
-}
-legend
-**Question** : Où cont sourcé les administrateur de la plateforme ?
-end legend
 @enduml
