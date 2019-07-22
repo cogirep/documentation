@@ -1,31 +1,66 @@
 @startuml
 header
-<b>BEYOND Platform / Data Factory </b> - Diagramme de contexte
+    <b>BEYOND Platform / Data Factory </b> - Diagramme de contexte
 end header
 
 title
-POST **/File** : Envoi d'un fichier à la datafcatory 
-	
+POST **/File** : Envoi d'un fichier de type "TYPE001" à la datafactory
+
 end title
 
-
 start
-->  **Hypothèse:** \n  - Utilisateur \n  - Profil;
-if ( \n Recupération des autorisations d'UPLOAD?\n) then
+->  **Hypothèse:** \n  - Utilisateur authentifié \n  - Profil Utilisateur BEYOND:  \n    - [DATA-UPLOAD]\n    - [DATA-TYPE001];\n  - Profil BEYOND Data Factory Mgr:  \n    - [DATA-TYPE001]: Fichiers autorisés : Fichier .LAS - Correspond à un traitement (Optionnel);
+-Ouverture de l'interface \n d'upload de fichier dans DFM \n\n Seuls les fichiers paramétrés dans \n **[DATA-TYPE001]** peuvent être remontés \n
+-Saisie des paramètre de l'ID-CARD \n - Annotations \n - Langue \n - Propriétaire (calculé) \n - Date d'expiration(optionnel)
+-Sélection d'**UN** fichier sur le poste de l'utilisateur
+
+if ( \n Vérification du type de fichier (MIME/Type) \n en reposant sur la configuration [DATA-TYPE001]?\n) then
 -[#red]-> NOK ;
--Retour du code erreur  \n **[COMMAND_VERIFICATION_ERROR-NOCOMPLIANT]**
--Sauvegarde de l'évènement métier \n **[COMMAND_VERIFICATION_ERROR-NOCOMPLIANT]**
+-Retour du code erreur  \n **[DF_FILE_MANUAL-UPLOAD_ERROR-INVALIDFORMAT]**
+-Sauvegarde de l'évènement métier \n **[DF_FILE_MANUAL-UPLOAD_ERROR-INVALIDFORMAT]**
 stop
-elseif (\n Appel de la séquence de \n vérification **TRANSACTION VALIDATION**. Retour ?\n) then
+elseif (\n Verification de la taille de fichier\n en reposant sur la configuration [DATA-TYPE001]?\n) then
 -[#red]-> **ERROR**;
+-Retour du code erreur  \n **[DF_FILE_MANUAL-UPLOAD_ERROR-INVALIDSIZE]**
+-Sauvegarde de l'évènement métier \n **[DF_FILE_MANUAL-UPLOAD_ERROR-INVALIDSIZE]**
 stop
 else (OUI)
-:Ajout de la commande dans \nla file d'attente **All-Commands_Queue**;
-:Retour du code   \n **[COMMAND_SENDING_SUCCESS]**;
-:Sauvegarde de l'évènement métier \n **[COMMAND_SENDING_SUCCESS]**;
+-Calcul du hachage (SHA-3) : **[HASH-VALUE]**
+if ( \n Recherche d'un fichier dans DF \n correspondant à **[HASH-VALUE]**  \n) then
+-[#red]-> EXISTE ;
+-Retour du code erreur  \n **[DF_FILE_MANUAL-UPLOAD_ERROR-ALREADYEXIST]**
+-Sauvegarde de l'évènement métier \n **[DF_FILE_MANUAL-UPLOAD_ERROR-ALREADYEXIST]**
+Stop
+else (INCONNU)
+:Stockage du fichier;
+partition CreationIDCard {
+    -Génération du BEYONDID : [BYD001];
+    -Création de l'ID-Card \n Annotation\n Propriétaire \n ...;
+    -Sauvegarde de l'évènement métier \n **[DF_FILE_MANUAL-UPLOAD_SUCCESS]**
+
+}
+
+if ( \n Un traitement est il associé a [DATA-TYPE001]  \n) then
+-[#red]-> NON ;
+Stop
+else (OUI)
+-Inscription dans \n la file d'attente des transformations [DATA-TYPE001] \n du BEYONDID [BYD001]
+-Sauvegarde de l'évènement métier \n **[DF_FILE_PROCESS-ENROLLMENT_SUCCESS]**
+endif
+
 
 stop
 endif
 
+endif
+
+legend 
+**Légende**
+
+**Sauvegarde de l'évènement métier** : Permet le suivi de l'activité des utilisateurs
+**Retour du code erreur** : Permet la remontée d'un message d'erreur (localisée) à l'utilisateur.
+
+
+endlegend
 
 @enduml
