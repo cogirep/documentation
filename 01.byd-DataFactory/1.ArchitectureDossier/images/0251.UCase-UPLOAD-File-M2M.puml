@@ -16,12 +16,12 @@ start
 
 if ( \n Vérification du type de fichier (MIME/Type) \n en reposant sur la configuration [DATA-TYPE001]?\n) then
 -[#red]-> NOK ;
--Retour du code erreur  \n **[DF_FILE_MANUAL-UPLOAD_ERROR-INVALIDFORMAT]**
+-Retour du code erreur  \n **[DF_FILE_CHECK_ERROR-INVALIDFORMAT]**
 -Sauvegarde de l'évènement métier \n **[DF_FILE_MANUAL-UPLOAD_ERROR-INVALIDFORMAT]**
 stop
 elseif (\n Verification de la taille de fichier\n en reposant sur la configuration [DATA-TYPE001]?\n) then
 -[#red]-> **ERROR**;
--Retour du code erreur  \n **[DF_FILE_MANUAL-UPLOAD_ERROR-INVALIDSIZE]**
+-Retour du code erreur  \n **[DF_FILE_CHECK_ERROR-INVALIDSIZE]**
 -Sauvegarde de l'évènement métier \n **[DF_FILE_MANUAL-UPLOAD_ERROR-INVALIDSIZE]**
 stop
 else (OUI)

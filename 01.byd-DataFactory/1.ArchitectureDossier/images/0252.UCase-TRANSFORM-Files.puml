@@ -1,0 +1,71 @@
+
+@startuml
+header
+    <b>BEYOND Platform / Data Factory </b> - Cas d'usage
+end header
+title
+Transformation d'un fichier de type "TYPE001" 
+end title
+
+start
+->  **Hypothèse:** \n  - Un commande de traitement vient d'être insérée dans la file d'attente lié au traitement "TYPE001" \n  - Un déclencheur est activé \n  - L'ordre de traitement s'applique à l'objet avec le BEYONDID [BYD001];
+-Récupération  de l'ordre de traitement \n Calcul d'un identifiant unique d'éxécution :[ID-Exec001] 
+-Sauvegarde de l'évènement métier \n **[DF_FILE_PROCESS-IGNITION_SUCCESS]** pour [ID-Exec001]
+
+
+if ( \n Type de traitement \n renseigné dans l'ordre \n **[DATA-TYPE001]** ? \n) then
+-[#green]->\n OUI ;
+
+partition "Transfo 3DLAS2CESIUM" {
+if ( \n Récupération du fichier à traiter ? \n BEYONDID :**[BYD001]**\n) then
+-[#green]->\n OUI ;
+:Lancement du traitement 3DLAS2CESIUM \n sur le fichier BEYONDID :**[BYD001]** \n\n Contrôles préliminaires: \n Vérification du type de fichier (MIME/Type) \n Vérification de la taille de fichier\n |
+
+if ( \n Retour du traitement  **[DATA-TYPE001]** \n sur fichier  BEYONDID :**[BYD001]**\n) then
+-[#green]->\n OK ;
+partition CreationIDCard {
+    -Génération du BEYONDID : [BYD002];
+    -Création de l'ID-Card \n Annotation\n Propriétaire \n ...;
+    :**OPTIONAL** Création d'une association \n RAW: **[BYD001]**/TRUST: **[BYD002]**|
+}
+-Sauvegarde des fichiers transformés \n sur le Cloud Object Storage \n Bucket (**[BYD002]**)
+-Sauvegarde de l'évènement métier \n **[DF_FILE_PROCESS_SUCCESS]** \n pour [ID-Exec001]
+Stop
+else 
+-Sauvegarde de l'évènement métier \n **[DF_FILE_PROCESS_ERROR]** \n pour [ID-Exec001]
+Stop
+endif
+
+else(NON)
+-Sauvegarde de l'évènement métier \n **[DF_FILE_PROCESS_ERROR-NOOBJECTFOUND]** \n pour [ID-Exec001]
+Stop
+endif
+
+}
+elseif (\n Type de traitement \n renseigné dans l'ordre \n **[DATA-TYPEXYZ]...** ? \n) then
+-[#green]->\n OUI ;
+:Application des traitements \n associés au type|
+stop
+else(\n INTROUVABLE)
+-Sauvegarde de l'évènement métier \n **[DF_FILE_PROCESS_ERROR-NOTAVAILABLE]** \n pour [ID-Exec001]
+stop
+endif
+
+
+legend 
+**Légende**
+
+-[DATA-TYPE001] Cette transformation correspond à la transformation de fichier .LAS en Tiling Cesium
+
+- [DF_FILE_PROCESS_ERROR] : Est un code retour générique d’erreur, le détail de l’erreur est passé dans le corps de l’évènement journalisé. 
+
+- l'identifiant unique d'exécution :[ID-Exec001], 
+basé sur un calcul de hash permettra, 
+s'il est renseigné dans le corps des évènements "métier" journalisés 
+de suivre l’exécution d'un processus. 
+En particulier, il permettra dans le cadre de la monétisation à l'usage 
+de calculer précisemment le temps d'éxécution d'un traitement 
+
+endlegend
+
+@enduml
