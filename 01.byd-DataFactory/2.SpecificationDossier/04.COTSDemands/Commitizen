@@ -18,7 +18,7 @@ Commitizen offre plusieurs options lors de la rédaction du commit :
 
 Exemple de message de commit formaté par Commitizen :
 
-fix(AppComponent): fix labels
+fix(AppComponent): fix labels 
 <em>description longue<em>
 
 Commitizen n'impacte en rien le code source mais améliore la compréhension des tâches et des commits.
