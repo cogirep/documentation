@@ -9,6 +9,7 @@ Problèmatique à résoudre : Harmonisation de l'écriture des commits afin d'am
 La mise en place de Commitizen permettrait de standardiser la rédaction des messages de commits par les développeurs. Ainsi la personne en charge de valider les PR (Pull request) des développeurs aura plus d'informations concernant ce qui a été fait dans les commits et les impacts du code.
 
 Commitizen offre plusieurs options lors de la rédaction du commit :
+
 - Le type de changement (feature / style / fix ....)
 - Le(s) composants impactés par les changements
 - Une courte description 
@@ -19,7 +20,7 @@ Commitizen offre plusieurs options lors de la rédaction du commit :
 Exemple de message de commit formaté par Commitizen :
 
 fix(AppComponent): fix labels 
-<em>description longue<em>
+<em>description longue</em>
 
 Commitizen n'impacte en rien le code source mais améliore la compréhension des tâches et des commits.
 
@@ -28,8 +29,8 @@ Commitizen n'impacte en rien le code source mais améliore la compréhension des
 - **Librairie** : Commitizen
 - **Version** : 4.0.3
 - **Age (y)** : 4
-- **Date de derniÃ¨re mise Ã  jour** : 20 juillet 2019 
-- **Nombre de tÃ©lÃ©chargements hebdomadaires** : 100 000
+- **Date de dernière mise à jour** : 20 juillet 2019 
+- **Nombre de téléchargements hebdomadaires** : 100 000
 - **License** : MIT
 
 ### Suivi de la demande
