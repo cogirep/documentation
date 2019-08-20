@@ -1,4 +1,4 @@
-﻿﻿﻿# Liste des .env
+﻿﻿﻿﻿# Liste des .env
 ### La liste des .env pour les micros services
 > **Note:** *Chaque micro service doit avoir un .env à la racine du projet pour être fonctionnel*
 
@@ -12,8 +12,8 @@
 	POSTGRES_PORT=5432
 	POSTGRES_BASE=beyond
 	POSTGRES_SCHEMA=beyond
-	POSTGRES_USER=postgres (par default)
-	POSTGRES_PASS=admin (par default)
+	POSTGRES_USER=postgres (par défaut)
+	POSTGRES_PASS=admin (par défaut)
 	APPIDTENANTID=5af721c2-4495-4ad9-bd56-f2253c148329
 -----
 **byd-all-user:**
@@ -23,7 +23,7 @@
 	POSTGRES_PORT=5432
 	POSTGRES_BASE=beyond
 	POSTGRES_SCHEMA=beyond
-	POSTGRES_USER=postgres (par default)
-	POSTGRES_PASS=admin (par default)
+	POSTGRES_USER=postgres (par défaut)
+	POSTGRES_PASS=admin (par défaut)
 	APPIDTENANTID=5af721c2-4495-4ad9-bd56-f2253c148329
 
