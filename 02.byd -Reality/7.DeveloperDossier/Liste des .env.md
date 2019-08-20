@@ -1,4 +1,4 @@
-﻿﻿﻿﻿# Liste des .env
+﻿﻿﻿﻿﻿# Liste des .env
 ### La liste des .env pour les micros services
 > **Note:**
 > *Dans le cas D'une BDD Local*
@@ -6,7 +6,7 @@
 >
 > >Les champs "POSTGRES_USER" et "POSTGRES_PASS" dépendent de ceux que vous avez renseigné à l’installation de postgres
 >
-> le champs "POSTGRES_BASE" dépend du nom que vous avez donné a votre BDD
+> >le champs "POSTGRES_BASE" dépend du nom que vous avez donné a votre BDD
 
 -----
 **byd-all-sso:**
