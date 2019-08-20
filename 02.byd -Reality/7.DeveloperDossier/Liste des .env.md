@@ -1,6 +1,7 @@
-﻿﻿# Liste des .env
+﻿﻿﻿# Liste des .env
 ### La liste des .env pour les micros services
-> **Note:** Chaque micro service doit avoir un .env à la racine du projet pour être fonctionnel
+> **Note:** *Chaque micro service doit avoir un .env à la racine du projet pour être fonctionnel*
+
 -----
 **byd-all-sso:**
 
