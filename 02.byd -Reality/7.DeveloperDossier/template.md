@@ -1,4 +1,4 @@
-﻿### Documentation Templates-Controllers backend
+﻿﻿### Documentation Templates-Controllers backend
 
 > **Note:** 
 > Les templates ont pour but de simplifier le développement d'appel simple et d'éviter la duplication du code.
@@ -9,9 +9,15 @@
 > >Les templates sont à utilisé dans les cas simple et non spécifique , les développements spécifique seront à faire dans un autre controller (celui de l'objet en question).
 > 
 > >le service qui accompagne le template doit respecté des règles de nommage afin de pouvoir fonctionné avec celui ci.
+
+
 -----
+
 -----
+
 -----
+
+
 ### listes des templates disponible avec implémentation.
 
 **getOne:**
@@ -61,9 +67,14 @@ Pour le bon fonctionnement du template getOne, le service doit contenir la fonct
 	     }  
       });
 
+
+
 -----
+
 -----
+
 -----
+
 
 **get:**
 
@@ -177,9 +188,13 @@ exemple de service de pagination:
       }  
     };
 
+
 -----
+
 -----
+
 -----
+
 
 **create:**
 
@@ -327,8 +342,11 @@ exemple:
       }  
     };
 
+
 -----
+
 -----
+
 -----
 
 **update:**
