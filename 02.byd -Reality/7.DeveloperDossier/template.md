@@ -1,4 +1,4 @@
-﻿﻿### Documentation Templates-Controllers backend
+﻿﻿﻿### Documentation Templates-Controllers backend
 
 > **Note:** 
 > Les templates ont pour but de simplifier le développement d'appel simple et d'éviter la duplication du code.
@@ -250,7 +250,7 @@ Pour le bon fonctionnement du template create , le service doit contenir les fon
 
 Retour du service:
 
-=> dans le cas d’une erreur
+=> dans le cas d’un succès
 
 ```
 {
@@ -258,7 +258,7 @@ Retour du service:
 }
 ```
 
-=> dans le cas d’un succès
+=> dans le cas d’une erreur
 
 ```
 {
@@ -406,7 +406,7 @@ Pour le bon fonctionnement du template create , le service doit contenir les fon
 
 Retour du service:
 
-=> dans le cas d’une erreur
+=> dans le cas d’une succès
 
 ```
 {
@@ -414,7 +414,7 @@ Retour du service:
 }
 ```
 
-=> dans le cas d’un succès
+=> dans le cas d’une erreur
 
 ```
 {
