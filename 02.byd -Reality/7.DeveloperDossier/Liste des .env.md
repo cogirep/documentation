@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿﻿﻿# Liste des .env
+﻿﻿﻿﻿﻿﻿﻿﻿﻿# Liste des .env
 ### La listes des .env pour les micros services
 > **Note:** 
 > Chaque micros services doit avoir un .env à la racine du projet pour être fonctionnelle 
@@ -23,7 +23,7 @@
 	POSTGRES_SCHEMA=beyond
 	POSTGRES_USER=postgres (par défaut)
 	POSTGRES_PASS=admin (par défaut)
-	APPIDTENANTID=5af721c2-4495-4ad9-bd56-f2253c148329
+	APPIDTENANTID=afe69514-2c70-4db4-aa79-58eb1a4f1546
 -----
 **byd-all-user:**
 
@@ -34,5 +34,8 @@
 	POSTGRES_SCHEMA=beyond
 	POSTGRES_USER=postgres (par défaut)
 	POSTGRES_PASS=admin (par défaut)
-	APPIDTENANTID=5af721c2-4495-4ad9-bd56-f2253c148329
-
+	APPIDTENANTID=afe69514-2c70-4db4-aa79-58eb1a4f1546
+	MJ_APIKEY_PUBLIC=(attente clés du client)
+	MJ_APIKEY_PRIVATE=(attente clés du client)
+	APPIDAPIKEY=2MzgKPuEqiWAaGGlUr5dDvmWWL5oJohrK3x2CiqjHS8l
+	IBMCLOUDURL=https://iam.cloud.ibm.com/
