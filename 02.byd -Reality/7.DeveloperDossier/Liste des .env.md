@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿# Liste des .env
+﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿# Liste des .env
 ### La listes des .env pour les micros services (et pour le frontend)
 > **Note:** 
 > Chaque micros services doit avoir un .env à la racine du projet pour être fonctionnelle 
@@ -40,7 +40,7 @@
 	APPIDAPIKEY=2MzgKPuEqiWAaGGlUr5dDvmWWL5oJohrK3x2CiqjHS8l
 	IBMCLOUDURL=https://iam.cloud.ibm.com/
 ----
-**byd-rea-frontend
+**byd-rea-frontend**
 
 Le baseApiUrl est configuré avec le bouchon de DF qui contient les données à afficher sur la carte.
 permissionApiUrl correspond au micro service byd-all-user
