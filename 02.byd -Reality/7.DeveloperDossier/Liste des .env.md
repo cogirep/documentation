@@ -1,5 +1,5 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿# Liste des .env
-### La listes des .env pour les micros services
+﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿# Liste des .env
+### La listes des .env pour les micros services (et pour le frontend)
 > **Note:** 
 > Chaque micros services doit avoir un .env à la racine du projet pour être fonctionnelle 
 > 
@@ -39,3 +39,18 @@
 	MJ_APIKEY_PRIVATE=(attente clés du client)
 	APPIDAPIKEY=2MzgKPuEqiWAaGGlUr5dDvmWWL5oJohrK3x2CiqjHS8l
 	IBMCLOUDURL=https://iam.cloud.ibm.com/
+----
+**byd-rea-frontend**
+
+Le baseApiUrl est configuré avec le bouchon de DF qui contient les données à afficher sur la carte.
+permissionApiUrl correspond au micro service byd-all-user
+ssoUrl correspond au micro service byd-all-sso
+
+	export const environment = {
+	  production: false,
+	  baseApiUrl : 'https://idcard.beyond-sandbox.par01.containers.appdomain.cloud/',  
+	  permissionApiUrl: 'http://localhost:3000/',
+	  apiVersion : 'api/v0/',
+	  permissionApiVersion: 'api/v1',
+	  ssoUrl: 'http://localhost:2999/'
+	};
