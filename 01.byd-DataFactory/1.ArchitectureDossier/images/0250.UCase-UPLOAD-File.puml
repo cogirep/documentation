@@ -26,13 +26,7 @@ elseif (\n Vérification de la taille de fichier\n en reposant sur la configurat
 stop
 else (OUI)
 -Calcul du hachage (SHA-3) : **[HASH-VALUE]**
-if ( \n Recherche d'un fichier dans DF \n correspondant à **[HASH-VALUE]**  \n) then
--[#red]-> EXISTE ;
--Retour du code erreur  \n **[DF_FILE_MANUAL-UPLOAD_ERROR-ALREADYEXIST]**
--Sauvegarde de l'évènement métier \n **[DF_FILE_MANUAL-UPLOAD_ERROR-ALREADYEXIST]**
-Stop
-else (INCONNU)
-:Stockage du fichier;
+-Stockage du fichier
 partition CreationIDCard {
     -Génération du BEYONDID : [BYD001];
     -Création de l'ID-Card \n Annotation\n Propriétaire \n ...;
@@ -48,11 +42,9 @@ else (OUI)
 -Sauvegarde de l'évènement métier \n **[DF_FILE_PROCESS-ENROLLMENT_SUCCESS]**
 endif
 
-
 stop
 endif
 
-endif
 
 legend 
 **Légende**
