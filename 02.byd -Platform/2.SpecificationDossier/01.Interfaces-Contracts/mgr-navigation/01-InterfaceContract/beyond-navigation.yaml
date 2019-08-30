@@ -1,0 +1,146 @@
+################################################################################
+################################################################################
+##                       BEYOND    -  BYD MANAGER                             ##
+################################################################################
+################################################################################
+# Remark :                       Swagger 2.0 to ensure compliance with API Connect
+swagger :                        "2.0"
+info:
+  description:                   "Allow to generate the content of the different navigation menus"
+  version:                       "0.0.1"
+  title:                         "BEYOND Navigation menus"
+
+host:                            "TBD"
+consumes:
+  - "application/json"
+produces:
+  - "application/json"
+basePath:                        "/api/v1/"
+schemes:
+  - "https"
+################################################################################
+tags:
+  - name:                          "Navigation"
+    description:                   "The navigation menu items"
+
+################################################################################
+paths:
+  #------------------------------------------------------------------------------#
+  '/navigation/menus/{languageCode}':
+    get:
+      tags:
+        - "Navigation"
+      summary:                   "Get all the navigation menus (burger menu, footer-menu)"
+      description:               "This service allow a tier to get the navigation structure of BEYOND."
+      parameters:
+        - name: "languageCode"
+          in: "path"
+          description: "The language acronym"
+          type: "string"
+          required: true
+  
+      responses:
+        '201':
+          description:           "Response successfully provided."
+          schema:
+            $ref:                "#/definitions/menuList"
+        default:
+          description:           "Unexpected error"
+          schema:
+            $ref:                "#/definitions/error"
+  
+  #------------------------------------------------------------------------------#
+
+################################################################################
+definitions:
+  #------------------------------------------------------------------------------#
+   menuList:
+        type:                              array
+        uniqueItems:                       true
+        items:
+          $ref:                         '#/definitions/menu'
+        minItems:                          1
+        
+   menu:
+    type:                              "object"
+    properties:
+      name:
+        type:                    "string"
+        example:                 "burger-menu,bottom-menu"
+      entryList:
+        $ref:                     "#/definitions/entryList"
+        
+   entryList:
+        type:                              array
+        uniqueItems:                       true
+        items:
+          $ref:                         '#/definitions/entry'
+        minItems:                          1
+        
+   entry:
+    type:                        "object"
+    required:
+      -  "identifier"
+      -  "label"
+    properties:
+      identifier:
+        type:                    "string"
+        example:                 "sw2273"
+      label:
+        type:                    "string"
+        example:                 "Administration"
+      type:
+        type:                    "string"
+        example:                 "text,separation line"
+      url:
+        type:                    "string"
+        example:                 "http://THE URL/"
+      order:
+        type:                    "integer"
+        example:                 1
+      iconcode:
+        type:                    "string"
+        example:                 "nav-administration"
+      language:
+        type:                    "string"
+        example:                 "fr"
+      status:
+        type:                    "string"
+        example:                 "active"
+      tooltip:
+        type:                    "string"
+        example:                 "Access to the administration panel"
+      allowedToPermissionList:
+        $ref:                     "#/definitions/permissionList"
+
+   permissionList:
+        type:                              array
+        uniqueItems:                       true
+        items:
+          $ref:                         '#/definitions/profile'
+   
+   profile:
+    type:                        "object"
+    required:
+      -  "permissioncode"
+    properties:
+      permissioncode:
+        type:                    "string"
+        example:                 "[ADMINISTRATION]"
+
+        
+   error:
+    type: object
+    properties:
+      code:
+        type: string
+      message:
+        type: string
+    required:
+      - code
+      - message        
+        
+        
+
+    
+############################  END OF THE DOCUMENT  #############################
