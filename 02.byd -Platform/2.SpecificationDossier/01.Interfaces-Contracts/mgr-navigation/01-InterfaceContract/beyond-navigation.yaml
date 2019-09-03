@@ -6,7 +6,7 @@
 # Remark :                       Swagger 2.0 to ensure compliance with API Connect
 swagger :                        "2.0"
 info:
-  description:                   "Allow to generate the content of the different navigation menus - Only the elements accessible to the user (permission granted) are returned"
+  description:                   "Allow to generate the content of the different navigation menus - **Only the elements accessible to the user (permission granted) are returned**"
   version:                       "0.0.1"
   title:                         "BEYOND Navigation menus"
 
@@ -81,7 +81,6 @@ definitions:
     type:                        "object"
     required:
       -  "identifier"
-      -  "label"
     properties:
       identifier:
         type:                    "string"
@@ -110,25 +109,6 @@ definitions:
       tooltip:
         type:                    "string"
         example:                 "Access to the administration panel"
-      allowedToPermissionList:
-        $ref:                     "#/definitions/permissionList"
-
-   permissionList:
-        type:                              array
-        uniqueItems:                       true
-        items:
-          $ref:                         '#/definitions/profile'
-   
-   profile:
-    type:                        "object"
-    required:
-      -  "permissioncode"
-    properties:
-      permissioncode:
-        type:                    "string"
-        example:                 "[ADMINISTRATION]"
-
-        
    error:
     type: object
     properties:
@@ -139,8 +119,5 @@ definitions:
     required:
       - code
       - message        
-        
-        
-
     
 ############################  END OF THE DOCUMENT  #############################
