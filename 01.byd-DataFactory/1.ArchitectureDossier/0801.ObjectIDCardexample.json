@@ -1,0 +1,69 @@
+{
+	"objectID":"ABC",//MongoID
+	"revisionID":"XYZ",//versionID
+	"createdAt":"2019-09-15T15:53:01",//object Timestamp
+	"beyondID":"IOP",//UID
+	"ownerID":"QSD",//ID
+	"createdBy":"WXC",//ID
+	"startValidityDate":"2019-05-02T00:00:00",//Data qualification
+	"endValidityDate":"2019-07-11T23:59:59",//Data qualification
+	"status":"VBN",//ID
+	"languageCode":"FR",
+	"labels":
+    [{
+    	"languageCode": "FR",
+    	"label": "La Tour Eiffel"
+    },
+    {
+    	"languageCode": "EN",
+    	"label": "The Eiffel Tower"
+    }],
+	"annotations":
+	{
+    	"public" :
+    	[{
+            "annotationID": "ASX"//tagID
+        },
+    	{
+            "annotationID": "BSY"//tagID
+        },
+    	{
+            "annotationID": "CSZ"//tagID
+        }],
+        "private" :
+    	[
+    		"maTourPréférée",
+    		"monProjetDFR",
+    		"monProspect",
+    		"sonRêve",
+    		"idéeVoyageJeanPierre"
+    	]
+	},
+	"file":
+	{
+		"filePath": "byd-file-repo/file",//bucketID
+		"fileHash": "HFO762LKF08628BZCN0376EU",
+		"fileHashMethod": "SHA3"
+	},
+	"location":
+	{
+		"geometry": 
+		{
+			"type": "FeatureCollection",
+			"features": 
+			[{
+				"type": "Feature",
+				"geometry":
+				{
+					"type": "Point",
+			    	"coordinates": [48, 2]
+				},
+				"properties":
+				{
+			    	"hauteurM": "12"
+				}
+			}]
+		},
+		"projection": "EPSG:4326",
+	}
+}

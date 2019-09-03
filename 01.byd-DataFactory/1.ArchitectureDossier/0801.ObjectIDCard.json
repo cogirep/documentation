@@ -1,0 +1,133 @@
+{
+	"type":"object",
+	"$schema": "http://json-schema.org/draft-03/schema",
+	"properties":
+	{
+		"objectID":
+		{
+			"type":"string",
+			"ipsum": "id",
+			"required": true,
+			"description" : "Identifiant technique de l'objet (assimilable  à une clé primaire)"
+		},
+		"revisionID":
+		{
+			"type":"string",
+			"required": true,
+			"description" : "Identifiant secondaire permettant de déterminer une version d'un objet a des fins de tracabilité"
+
+		},
+		"createdAt":
+		{
+			"type":"date",
+			"required": true,
+			"description" : "Date de création technique dans le référentiel (ISO 8601 - Zulu). Permet de récupérer la revision la plus récente"
+
+		},
+		"beyondID":
+		{
+			"type":"string",
+			"required": true,
+			"description" : "Identifiant BEYOND (fonctionnel de l'objet) de type UUID v4"
+		},
+		"ownerID":
+		{
+			"type":"string",
+			"required": true,
+			"description" : "Identifiant du tenant propriétaire de la donnée"
+		},
+		"createdBy":
+		{
+			"type":"string",
+			"required": true,
+			"description" : "Identifiant technique (pas email) de l'utilisateur (GDRP)"
+			
+		},
+		"startValidityDate":
+		{
+			"type":"date",
+			"description" : "Début de date de validité de l'objet (ISO 8601)"
+			
+		},
+		"endValidityDate":
+		{
+			"type":"date",
+			"description" : "Fin de date de validité (expiration) de l'objet (ISO 8601)"
+		
+		},
+		"status":
+		{
+			"type":"string",
+			"required": true,
+			"description": "Identifiant du status du document"
+		},
+		"languageCode":
+		{
+			"type":"string",
+			"description": "Code de la langue du document (ISO 3166)"
+	
+		},
+		"labels":
+		{
+			"type":"array",
+			"items":
+            {
+                "type":"object",
+                "required":true,
+                "minItems": 1,
+                "properties":
+                {
+                	"languageCode": {"type":"string", "required": true},//ISO 3166
+                	"label": {"type":"string", "required": true}
+                }
+            }
+		},
+		"annotations":
+		{
+			"type":"object",
+            "properties":
+            {
+            	"public" :
+            	{
+					"type":"array",
+					"items":
+		            {
+		                "type":"object",
+		                "properties":
+		                {
+		                	"annotationID": {"type":"string", "required": true}
+		                }
+		            }
+		        },
+		        "private" :
+            	{
+					"type":"array",
+					"items":
+		            {
+		                "type":"object",
+		                "properties":
+		                {
+		                	"annotation": {"type":"string", "required": true}
+		                }
+		            }
+		        }
+		    }
+		},
+		"file":
+		{
+			"type": "object",
+			"properties": 
+			{
+				"filePath": {"type":"string", "required": true},//COS url (bucket id)
+				"fileHash": {"type":"string", "required": true},
+				"fileHashMethod": {"type":"string", "required": true}//ou objet avec référence paramètre ?
+			}
+
+		},
+		"location":
+		{
+			"geometry": {"type":"geoJSON"},
+			"projection": {"type": "string"},
+		}
+	}
+}
