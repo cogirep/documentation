@@ -1,12 +1,12 @@
 {
 	"objectID":"ABC",//MongoID
 	"revisionID":"XYZ",//versionID
-	"createdAt":"2019-09-15T15:53:01",//object Timestamp
+	"createdAt":"2019-09-15T15:53:01Z",//object Timestamp
 	"beyondID":"IOP",//UID
 	"ownerID":"QSD",//ID
 	"createdBy":"WXC",//ID
-	"startValidityDate":"2019-05-02T00:00:00",//Data qualification
-	"endValidityDate":"2019-07-11T23:59:59",//Data qualification
+	"startValidityDate":"2019-05-02T00:00:00Z",//Data qualification
+	"endValidityDate":"2019-07-11T23:59:59Z",//Data qualification
 	"status":"VBN",//ID
 	"languageCode":"FR",
 	"labels":
@@ -42,8 +42,8 @@
 	"file":
 	{
 		"filePath": "byd-file-repo/file",//bucketID
-		"fileHash": "HFO762LKF08628BZCN0376EU",
-		"fileHashMethod": "SHA3"
+		"fileHash": "adf603184ff4ca990970019d3cc72c16793d543562ddef94acca35998395436d",
+		"fileHashMethod": "SHA3-256"
 	},
 	"location":
 	{
