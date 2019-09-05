@@ -183,11 +183,11 @@ SELECT pg_catalog.setval('beyond.account_pk_id_seq', 32, true);
 
  
 
-INSERT INTO beyond.permission (pk_id, code, label, description) VALUES (1, 'administrer', 'administrer', 'administrer');
-INSERT INTO beyond.permission (pk_id, code, label, description) VALUES (2, 'Importer', 'Importer', 'Importer');
-INSERT INTO beyond.permission (pk_id, code, label, description) VALUES (3, 'Transformer', 'Transformer', 'Transformer');
-INSERT INTO beyond.permission (pk_id, code, label, description) VALUES (4, 'Accéder', 'Accéder', 'Accéder');
-INSERT INTO beyond.permission (pk_id, code, label, description) VALUES (5, 'Télécharger', 'Télécharger', 'Télécharger');
+INSERT INTO beyond.permission (pk_id, code, label, description) VALUES (1, 'ADMIN', 'administrer', 'administrer');
+INSERT INTO beyond.permission (pk_id, code, label, description) VALUES (2, 'IMPORT', 'Importer', 'Importer');
+INSERT INTO beyond.permission (pk_id, code, label, description) VALUES (3, 'TRANSFORM', 'Transformer', 'Transformer');
+INSERT INTO beyond.permission (pk_id, code, label, description) VALUES (4, 'ACCESS', 'Accéder', 'Accéder');
+INSERT INTO beyond.permission (pk_id, code, label, description) VALUES (5, 'DOWNLOAD', 'Télécharger', 'Télécharger');
 
  
 
