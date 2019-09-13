@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿# Liste des .env
+﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿# Liste des .env
 ### La listes des .env pour les micros services (et pour le frontend)
 > **Note:** 
 > Chaque micros services doit avoir un .env à la racine du projet pour être fonctionnelle 
@@ -54,3 +54,23 @@ ssoUrl correspond au micro service byd-all-sso
 	  permissionApiVersion: 'api/v1',
 	  ssoUrl: 'http://localhost:2999/'
 	};
+	
+----
+**byd-df-frontend**
+
+Le fichier src/app/assets/environment/app-config.json est à configuré avec les variables suivantes :
+
+	{
+	  "production": true,
+	  "api_url": "http://localhost:3001/api/v1",
+	  "permission_api_url": "http://localhost:3000/api/v1",
+	  "sso_url": "http://localhost:2999",
+	  "sso_redirect": "?redirect=LOCAL"
+	}
+
+permission_api_url = @ du MS byd-all-user
+sso_url = @ du MS byd-all-sso
+sso_redirect = query param du code de l'application. ex : redirect=LOCAL (redirige vers localhost:4200),
+				redirect=REALITY (redirige vers l'environnement distant de REALITY), redirect=DATAFACTORY (redirige vers l'environnement distant de DATAFACTORY)
+				
+---
