@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿# Liste des .env
+﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿# Liste des .env
 ### La listes des .env pour les micros services (et pour le frontend)
 > **Note:** 
 > Chaque micros services doit avoir un .env à la racine du projet pour être fonctionnelle 
@@ -68,9 +68,9 @@ Le fichier src/app/assets/environment/app-config.json est à configuré avec les
 	  "sso_redirect": "?redirect=LOCAL"
 	}
 
-permission_api_url = @ du MS byd-all-user
-sso_url = @ du MS byd-all-sso
-sso_redirect = query param du code de l'application. ex : redirect=LOCAL (redirige vers localhost:4200),
+- permission_api_url = @ du MS byd-all-user
+- sso_url = @ du MS byd-all-sso
+- sso_redirect = query param du code de l'application. ex : redirect=LOCAL (redirige vers localhost:4200),
 				redirect=REALITY (redirige vers l'environnement distant de REALITY), redirect=DATAFACTORY (redirige vers l'environnement distant de DATAFACTORY)
 				
 ---
