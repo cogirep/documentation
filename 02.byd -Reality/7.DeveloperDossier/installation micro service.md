@@ -1,4 +1,4 @@
-### Docs d’installation des Backends
+### Doc d’installation des Backends
 
 * Cloner le micro service sur bitbucket
 
@@ -10,9 +10,7 @@
     
         (Attention le .env peut être différent celons les micro services)
 
-* installer les dépendances du micro service 
-
-* Placer vous dans le dossier et effectuer la commande npm i 
+* Installer les dépendances du micro service, Placer vous dans le dossier et effectuer la commande npm i 
 
 * Vous pouvez alors lancer le micro service avec la commande npm start
 
