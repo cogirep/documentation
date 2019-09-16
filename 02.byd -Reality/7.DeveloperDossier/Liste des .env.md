@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿# Liste des .env
+﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿# Liste des .env
 ### La listes des .env pour les micros services (et pour le frontend)
 > **Note:** 
 > Chaque micros services doit avoir un .env à la racine du projet pour être fonctionnelle 
@@ -61,16 +61,18 @@ ssoUrl correspond au micro service byd-all-sso
 Le fichier src/app/assets/environment/app-config.json est à configuré avec les variables suivantes :
 
 	{
-	  "production": true,
-	  "api_url": "http://localhost:3001/api/v1",
-	  "permission_api_url": "http://localhost:3000/api/v1",
-	  "sso_url": "http://localhost:2999",
-	  "sso_redirect": "?redirect=LOCAL"
+	  "ENVIRONMENT": "local",
+	  "PRODUCTION": false,
+	  "DATA_FACTORY_API_URL" : "https://idcard.beyond-sandbox.par01.containers.appdomain.cloud/api/v0",
+	  "PERMISSION_API_URL": "http://localhost:3000/api/v1",
+	  "SSO_URL": "http://localhost:2999",
+	  "SSO_REDIRECT": "?redirect=LOCAL"
 	}
 
-- permission_api_url = @ du MS byd-all-user
-- sso_url = @ du MS byd-all-sso
-- sso_redirect = query param du code de l'application. ex : redirect=LOCAL (redirige vers localhost:4200),
+- DATA_FACTORY_API_URL : @ du MS byd-df-idcard
+- PERMISSION_API_URL = @ du MS byd-all-user
+- SSO_URL = @ du MS byd-all-sso
+- SSO_REDIRECT = query param du code de l'application. ex : redirect=LOCAL (redirige vers localhost:4200),
 				redirect=REALITY (redirige vers l'environnement distant de REALITY), redirect=DATAFACTORY (redirige vers l'environnement distant de DATAFACTORY)
 				
 ---
