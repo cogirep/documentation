@@ -10,7 +10,6 @@
 > 
 >
 > >le champs "POSTGRES_BASE" dépend du nom que vous avez donné a votre BDD
-
 -----
 **byd-all-sso:**
 
@@ -40,6 +39,34 @@
 	APPIDAPIKEY=2MzgKPuEqiWAaGGlUr5dDvmWWL5oJohrK3x2CiqjHS8l
 	IBMCLOUDURL=https://iam.cloud.ibm.com/
 ----
+**byd-all-navigation:**
+
+	PORT=2999
+	AUTH_URL=http://localhost:2999
+	FRONTEND_URL=http://localhost:4200
+	POSTGRES_HOST=127.0.0.1
+	POSTGRES_PORT=5432
+	POSTGRES_BASE=beyond
+	POSTGRES_SCHEMA=beyond
+	POSTGRES_USER=postgres (par défaut)
+	POSTGRES_PASS=admin (par défaut)
+	APPIDTENANTID=afe69514-2c70-4db4-aa79-58eb1a4f1546
+-----
+
+Connection aux bdd en ligne:
+
+DEV
+
+    POSTGRES_HOST=3496ce98-9e42-4255-a570-26dc1b56d1a6.659dc287bad647f9b4fe17c4e4c38dcc.databases.appdomain.cloud
+    POSTGRES_PORT=30346
+    POSTGRES_BASE=byd-rea-V1
+    POSTGRES_SCHEMA=beyond
+    POSTGRES_USER=(username)
+    POSTGRES_PASS=(userpassword)
+    POSTGRES_SSL=true
+    
+INT
+_____
 **byd-rea-frontend**
 
 Le baseApiUrl est configuré avec le bouchon de DF qui contient les données à afficher sur la carte.
