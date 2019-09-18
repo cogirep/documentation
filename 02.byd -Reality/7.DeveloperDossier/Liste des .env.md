@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿# Liste des .env
+﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿# Liste des .env
 ### La listes des .env pour les micros services (et pour le frontend)
 > **Note:** 
 > Chaque micros services doit avoir un .env à la racine du projet pour être fonctionnelle 
@@ -41,9 +41,7 @@
 ----
 **byd-all-navigation:**
 
-	PORT=2999
-	AUTH_URL=http://localhost:2999
-	FRONTEND_URL=http://localhost:4200
+	PORT=3001
 	POSTGRES_HOST=127.0.0.1
 	POSTGRES_PORT=5432
 	POSTGRES_BASE=beyond
@@ -51,6 +49,7 @@
 	POSTGRES_USER=postgres (par défaut)
 	POSTGRES_PASS=admin (par défaut)
 	APPIDTENANTID=afe69514-2c70-4db4-aa79-58eb1a4f1546
+	DEFAULT_LANGUAGE=FR-fr
 -----
 
 Connection aux bdd en ligne:
