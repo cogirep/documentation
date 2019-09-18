@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿# Liste des .env
+﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿# Liste des .env
 ### La listes des .env pour les micros services (et pour le frontend)
 > **Note:** 
 > Chaque micros services doit avoir un .env à la racine du projet pour être fonctionnelle 
@@ -93,8 +93,10 @@ Le fichier src/app/assets/environment/app-config.json est à configuré avec les
 	  "DATA_FACTORY_API_URL" : "https://idcard.beyond-sandbox.par01.containers.appdomain.cloud/api/v0",
 	  "PERMISSION_API_URL": "http://localhost:3000/api/v1",
 	  "SSO_URL": "http://localhost:2999",
-	  "SSO_REDIRECT": "?redirect=LOCAL"
+	  "SSO_REDIRECT": "?redirect=LOCAL",
+	  "NAVIGATION": "http://localhost:3001/api/v1"
 	}
+
 
 - DATA_FACTORY_API_URL : @ du MS byd-df-idcard
 - PERMISSION_API_URL = @ du MS byd-all-user
