@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿# Liste des .env
+﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿# Liste des .env
 ### La listes des .env pour les micros services (et pour le frontend)
 > **Note:** 
 > Chaque micros services doit avoir un .env à la racine du projet pour être fonctionnelle 
@@ -27,6 +27,15 @@
 **byd-all-transfo-decompress:**
 
 	PORT=4000
+	WORKERS=1
+	ENDPOINT=s3.eu-de.cloud-object-storage.appdomain.cloud
+	IBM_API_KEY=rsGF9IZp8Tze5bY7DawhFFdWMBU_J1XY52BFwqmtS7vJ
+	INSTANCE_ID=crn:v1:bluemix:public:cloud-object-storage:global:a/35d31fa1e582d8a4c1ddb3d4eabfdd95:0f1c02c7-316b-4a99-9ace-38a48babfbb9::
+
+-----
+**byd-all-transfo-json2yml:**
+
+	PORT=4001
 	WORKERS=1
 	ENDPOINT=s3.eu-de.cloud-object-storage.appdomain.cloud
 	IBM_API_KEY=rsGF9IZp8Tze5bY7DawhFFdWMBU_J1XY52BFwqmtS7vJ
