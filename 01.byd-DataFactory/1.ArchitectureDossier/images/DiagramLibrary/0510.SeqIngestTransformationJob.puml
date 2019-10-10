@@ -38,7 +38,7 @@ IDcard -> IDcard : Validation
 activate IDcard
 IDcard -> IDcard: Check data integrity
 IDcard -> IDcard : Validate uniqueness
-IDcard -> MongoDB : check file hash uniqueness
+IDcard -> MongoDB : check Identity uniqueness
 activate MongoDB #888888
 MongoDB --> IDcard : Ok
 deactivate MongoDB
