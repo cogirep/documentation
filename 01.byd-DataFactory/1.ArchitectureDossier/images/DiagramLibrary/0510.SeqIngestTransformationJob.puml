@@ -68,9 +68,10 @@ RabbitProducer -> RabbitProducer : create job object
 RabbitProducer -> Rabbit : append job to transf X 
 activate Rabbit #888888
 Rabbit --> RabbitProducer : Aknowledgement
-RabbitProducer --> Integration : Ok
+RabbitProducer --> Integration : Job Unique ID
 deactivate RabbitProducer
 Integration --> Notif: Transfo X Scheduled
+deactivate Integration
 Rabbit -> Rabbit: route job to queue
 activate Rabbit
 Rabbit -> RabbitConsumer: push job
