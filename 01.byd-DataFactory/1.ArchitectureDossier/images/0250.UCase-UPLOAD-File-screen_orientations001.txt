@@ -1,0 +1,58 @@
+@startuml
+salt
+
+{
+{
+<b>Acteur: </b>  Utilisateur final : User 001(Tenant1) 
+<b>Permissions: </b> 
+ - [DATA-UPLOAD]: Dispose du bouton Import un nouveau fichier
+ - [DATA-TYPE001] : Autorisé à remonter un fichier 
+  de type 001 pour lui appliquer la transformation LAS vers CESIUM
+.
+}
+{+
+<b> BEYOND DATA FACTORY MANAGER -</b> Import d'un nouveau fichier
+.
+[<&file>  Sélectioner un fichier  ]
+==
+{<b>Carte d'identité BEYOND</b>
+.
+{<b>Label        | "Représentation 3D de Brassy 58140"
+<b>Langue        | (X)Francais 
+.|()Anglais
+  <b>Annotations        | "Représentation 3D, Bourgogne,Tenant1,#FichierBrut"
+<b>Propriétaire        | "User001              "
+.
+<b>Date d'expiration       | "2025-02-02   "
+<b>Emplacement géographique (GeoJSON) | "                       "
+.
+}
+
+}
+
+==
+{
+.
+<b>Transformation à appliquer
+. 
+{.|(X) TYPE001 - Fichier LAS2CESIUM
+.|() Autre_Type_autorisé...}
+}
+.
+==
+{.
+
+<b>Visibilité 
+.
+//A définir
+.
+}
+==
+.
+{[<&check>  Importer  ]| [<&x>  Annuler]}
+.
+}
+
+}
+
+@enduml
