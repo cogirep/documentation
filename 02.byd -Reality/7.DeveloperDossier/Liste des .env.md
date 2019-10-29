@@ -57,6 +57,7 @@
 	APPIDAPIKEY=2MzgKPuEqiWAaGGlUr5dDvmWWL5oJohrK3x2CiqjHS8l
 	IBMCLOUDURL=https://iam.cloud.ibm.com/
 ----
+
 **byd-all-navigation:**
 
 	PORT=3001
@@ -84,6 +85,7 @@ DEV
     
 INT
 _____
+
 **byd-rea-frontend**
 
 Le baseApiUrl est configuré avec le bouchon de DF qui contient les données à afficher sur la carte.
@@ -98,7 +100,6 @@ ssoUrl correspond au micro service byd-all-sso
 	  permissionApiVersion: 'api/v1',
 	  ssoUrl: 'http://localhost:2999/'
 	};
-	
 ----
 **byd-df-frontend**
 
@@ -122,3 +123,4 @@ Le fichier src/app/assets/environment/app-config.json est à configuré avec les
 				redirect=REALITY (redirige vers l'environnement distant de REALITY), redirect=DATAFACTORY (redirige vers l'environnement distant de DATAFACTORY)
 				
 ---
+
