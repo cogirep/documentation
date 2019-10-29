@@ -1,10 +1,10 @@
 {
-  "$schema": "Enrichment.schema.json",
+  "$schema": "enrichment.schema.json",
   "$id": "enrichment.schema.json",
   "type": "object",
   "title": "enrichment schema",
   "definitions": {
-    "enrichment" : {
+    "enrichment": {
       "properties": {
         "_id": {
           "$id": "#/properties/_id",
@@ -76,25 +76,15 @@
           ],
           "pattern": "^(.*)$"
         },
+        "createdBy": {
+          "$id": "#/properties/createdBy",
+          "type": "string",
+          "title": "ID of the user who created the template"
+        },
         "properties": {
           "$id": "#/properties/properties",
           "type": "object",
-          "title": "The Properties Schema",
-          "required": [
-            "key"
-          ],
-          "properties": {
-            "key": {
-              "$id": "#/properties/properties/properties/key",
-              "type": "string",
-              "title": "The Key Schema",
-              "default": "",
-              "examples": [
-                "value"
-              ],
-              "pattern": "^(.*)$"
-            }
-          }
+          "title": "Dynamic Properties (enrichment)"
         }
       },
       "required": [
@@ -105,7 +95,8 @@
         "idcardId",
         "status",
         "idcardRevisionId",
-        "properties"
+        "properties",
+        "createdBy"
       ]
     }
   }
