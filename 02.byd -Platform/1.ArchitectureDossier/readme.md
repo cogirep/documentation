@@ -1,31 +1,15 @@
-> Modèle de fichier README a mettre à la racine des dépôts.
+# BEYOND PLATFORM - Dossier d'architecture
 
-# TITRE_DU_PROJET_A_REMPLACER
-
-Description du projet en 1 paragraphe
+Le présent document détaille les éléments d'architecture de BEYOND PLATFORM, plateforme de services génériques de l’écosystème **BEYOND**.
 
 ## Démarrage
 
-Ces instructions doivent permettre de cloner une copie du projet  sur votre ordinateur local à des fins de développement et de tests.
+Pour récupérer localement cette documentation, cloner le repository "byd-all-documentation" via GIT.
+Se référer à : https://github.com/sxd-platform/byd-all-documentation
 
-### Pré-requis
-
-Elements necessaire a l'utilisation du dépots
-
-### Installation
-
-Pas-à-pas permettant d'installer un environnement de developpement opérationnel.
-
-## Déroulement des tests
-
-Mise en place des tests automatiques (TU...)
-
-## Déploiement
-
-Mise en place des tests automatiques (TU...)
 
 ## Version
 
 |Version |Description|Auteur|
-|:---:|---|---|---|---|
-|**SEMVER**|Version Initiale|SWT|
+|:---:|---|---|
+|**0.1.0**|Version Initiale|FFA|
