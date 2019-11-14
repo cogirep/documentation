@@ -1,0 +1,96 @@
+@startuml component-model
+
+header
+    <b>BEYOND Platform</b> - Diagramme de composants
+end header
+
+!include /Users/fredericfadda/ffa-dev/C4-PlantUML/C4.puml
+!include /Users/fredericfadda/ffa-dev/C4-PlantUML/C4_Context.puml
+!include /Users/fredericfadda/ffa-dev/C4-PlantUML/C4_Container.puml
+!include /Users/fredericfadda/ffa-dev/C4-PlantUML/C4_Component.puml
+
+Person(EndUSer, "End user")
+Person(AdminIAM, "Administrator\n(users)")
+Person(AdminBYDPTF, "Administrator\n(BYD configuration)")
+Person(AdminDF, "Administrator\n(business)")
+
+
+System_Boundary(BYDPTFM, "BEYOND PLATFORM") {
+    System(BYDMGR, "BYD MANAGER", "Administration & supervision"){
+        Container(BYDMGRFrontEnd, "BYD MGR\nFrontEnd", "Angular") {
+            Component(BYDHomePage, "Home Page", "HMI")
+            Component(BYDMgrPage, "Beyond Manager Page", "HMI")
+        }
+    }
+    System(BYDDFMGR, "BYD DATA FACTORY MANAGER", "Administration"){
+        Container(BYDDFMGRFrontEnd, "BYD DF MNGR\nFrontEnd", "Angular") {
+            Component(BYDDFDataAccessMgrPage, "Data Access Manager", "HMI")
+        }
+    }
+    System(BYDDF, "BEYOND DATA FACTORY"){
+        Container(BYDDFDataFeeder, "BYD DF Data File Feeder", "Node.js") {
+            Component(BYDDFDataFeederUpload, "File upload", "Service")
+            Component(BYDDFDataFeederStorage, "File Storage", "Service")
+        }
+        Container(BYDDFCOS, "BYD DF File Storage", "Cloud Object Storage") {
+            Component(BYDDFCOSSvc, "COS API", "Service")
+            Component(BYDDFCOSBucketRaw, "Raw Bucket", "Bucket")
+            Component(BYDDFCOSBucketTransfo_1, "Bucket Transfo 1", "Bucket")
+        }
+        ContainerDb(BYDDFDBGEO, "BYD DF\nGeo Spatial DB", "PostgreSQL + PostGIS")
+        ContainerDb(BYDDFDB, "BYD DF\nDB", "MongoDB"){
+            Component(BYDDFIDCards, "Id Cards", "collection")
+        }
+    }
+    System(BYDREALITY, "BEYOND REALITY"){
+        Container(BYDRTYFrontEnd, "BYD REALITY\nFrontEnd", "Angular") {
+            Component(BYDRTY3DPage, "3D renderer", "HMI")
+        }
+        Container(BYDRTYService, "BYD REALITY\nService", "Node.js"){
+            Component(BYDRTY3DSvc, "3D renderer service", "Cesium")
+            Component(BYDRTYSecuritySvc, "Security service", "js")
+        }
+        ContainerDb(BYDRTYDB, "BYD REALITY\nDB", "PostgreSQL"){
+            Component(BYDRTYUSR, "User fine grain access", "schema")
+        }
+    }
+    System(BYDIDP, "BEYOND IDENTITY & ACCESS MANAGER", "Identity & access management"){
+        Container(BYDIAM, "BEYOND IAM", "Keycloak") {
+            Component(BYDIAMLoginPage, "Login Page", "HMI")
+            Component(BYDIAMAuthenticate, "Authentication Service", "Service")
+            Component(BYDIAMFederate, "Federation Service", "Service")
+        }
+        ContainerDb(BYDIAMDB, "BEYOND IAM\nDB", "PostgreSQL")
+    }
+
+}
+
+System_Ext(IdP, "External Identity Providers", "SSO")
+
+' Relations
+' - with users
+Rel(AdminIAM, BYDHomePage, "Uses", "HTTPS")
+Rel(AdminBYDPTF, BYDHomePage, "Uses", "HTTPS")
+Rel(AdminDF, BYDHomePage, "Uses", "HTTPS")
+Rel(EndUSer, BYDHomePage, "Uses", "HTTPS")
+' - between pages
+Rel(BYDHomePage, BYDMgrPage, "Includes")
+Rel(BYDHomePage, BYDDFDataAccessMgrPage, "Includes")
+Rel(BYDHomePage, BYDRTY3DPage, "Includes")
+' - between pages and services
+Rel(BYDMgrPage, BYDIAMAuthenticate, "Uses", "HTTPS")
+Rel(BYDDFDataAccessMgrPage, BYDIAMAuthenticate, "Uses", "HTTPS")
+Rel(BYDRTY3DPage, BYDRTY3DSvc, "Uses", "HTTPS")
+' - between services
+Rel(BYDIAMAuthenticate, BYDIAMFederate, "Uses")
+Rel(BYDRTY3DSvc, BYDDFCOSSvc, "Uses")
+Rel(BYDRTY3DSvc, BYDRTYSecuritySvc, "Uses")
+Rel(BYDDFCOSSvc, BYDDFCOSBucketTransfo_1, "Uses")
+
+' - between services and containers
+Rel(BYDIAM, BYDIAMDB, "Uses", "JDBC")
+Rel(BYDRTYSecuritySvc, BYDRTYUSR, "Uses", "JDBC")
+' - between services and systems
+Rel(BYDIAMFederate, IdP, "USes", "OIDC")
+
+@enduml

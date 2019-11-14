@@ -1,24 +1,28 @@
 @startuml system-context
 header
-<b>BEYOND Platform</b> - Diagramme de contexte
+    <b>BEYOND Platform</b> - Diagramme de contexte
 end header
 
-( \n\n BEYOND PLATEFORME\n\n  ) as SYSTEM
+!include /Users/fredericfadda/ffa-dev/C4-PlantUML/C4.puml
+!include /Users/fredericfadda/ffa-dev/C4-PlantUML/C4_Context.puml
 
-:Utilisateur final: as ACTOR4 <<human>>
-:Administrateur d'utilisateur: as ACTOR1 <<human>>
-:Administrateur technique: as ACTOR2 <<human>>
-:Administrateur 'Metier': as ACTOR3 <<human>>
-:Utilisateur anonyme: as ACTOR5 <<human>>
-:Identity Provider: as SYSTEM1<<system>>
+Person(EndUSer, "End user")
+Person(AdminIAM, "Administrator\n(users)")
+Person(AdminBYDPTF, "Administrator\n(BYD configuration)")
+Person(AdminDF, "Administrator\n(business)")
 
-ACTOR1  ---|>SYSTEM
-ACTOR2  ---|>SYSTEM
-ACTOR5  --|>SYSTEM
-ACTOR4  --|>SYSTEM
-ACTOR3  ---|>SYSTEM
+System_Boundary(BYDPTFM, "BEYOND PLATFORM") {
+}
 
-SYSTEM ---|> SYSTEM1
+System_Ext(IdP, "External Identity Providers", "SSO")
 
+' Relations
+' - with users
+Rel(AdminIAM, BYDPTFM, "Uses", "HTTPS")
+Rel(AdminBYDPTF, BYDPTFM, "Uses", "HTTPS")
+Rel(AdminDF, BYDPTFM, "Uses", "HTTPS")
+Rel(EndUSer, BYDPTFM, "Uses", "HTTPS")
+' - between systems and external systems
+Rel(BYDPTFM, IdP, "USes", "OIDC")
 
 @enduml

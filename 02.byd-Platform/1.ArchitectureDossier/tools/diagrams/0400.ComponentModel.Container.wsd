@@ -1,0 +1,84 @@
+@startuml component-model-containers
+
+header
+    <b>BEYOND Platform</b> - Diagramme de composants
+end header
+
+!include /Users/fredericfadda/ffa-dev/C4-PlantUML/C4.puml
+!include /Users/fredericfadda/ffa-dev/C4-PlantUML/C4_Context.puml
+!include /Users/fredericfadda/ffa-dev/C4-PlantUML/C4_Container.puml
+!include /Users/fredericfadda/ffa-dev/C4-PlantUML/C4_Component.puml
+
+Person(EndUSer, "End user")
+Person(AdminIAM, "Administrator\n(users)")
+Person(AdminBYDPTF, "Administrator\n(BYD configuration)")
+Person(AdminDF, "Administrator\n(business)")
+
+
+System_Boundary(BYDPTFM, "BEYOND PLATFORM") {
+    System(BYDMGR, "BYD MANAGER", "Administration & supervision"){
+        Container(BYDMGRFrontEnd, "BYD MGR\nFrontEnd", "Angular") {
+        }
+    }
+    System(BYDDFMGR, "BYD DATA FACTORY MANAGER", "Administration"){
+        Container(BYDDFMGRFrontEnd, "BYD DF MNGR\nFrontEnd", "Angular") {
+        }
+    }
+    System(BYDDF, "BEYOND DATA FACTORY"){
+        Container(BYDDFDataFeeder, "BYD DF Data File Feeder", "Node.js") {
+        }
+        Container(BYDDFId, "BYD DF Identifier", "Node.js") {
+        }
+        Container(BYDDFAssoMgr, "BYD DF Association Manager", "Node.js") {
+        }
+        Container(BYDDFCOS, "BYD DF File Storage", "Cloud Object Storage") {
+        }
+        ContainerDb(BYDDFDBGEO, "BYD DF\nGeo Spatial DB", "PostgreSQL + PostGIS")
+        ContainerDb(BYDDFDB, "BYD DF\nDB", "MongoDB"){
+        }
+    }
+    System(BYDREALITY, "BEYOND REALITY"){
+        Container(BYDRTYFrontEnd, "BYD REALITY\nFrontEnd", "Angular") {
+        }
+        Container(BYDRTYService, "BYD REALITY\nService", "Node.js"){
+        }
+        ContainerDb(BYDRTYDB, "BYD REALITY\nDB", "PostgreSQL"){
+        }
+    }
+    System(BYDIDP, "BEYOND IDENTITY & ACCESS MANAGER", "Identity & access management"){
+        Container(BYDIAM, "BEYOND IAM", "Keycloak") {
+        }
+        ContainerDb(BYDIAMDB, "BEYOND IAM\nDB", "PostgreSQL")
+    }
+
+}
+
+System_Ext(IdP, "External Identity Providers", "SSO")
+
+' Relations
+' - with users
+Rel(AdminIAM, BYDMGRFrontEnd, "Uses", "HTTPS")
+Rel(AdminBYDPTF, BYDMGRFrontEnd, "Uses", "HTTPS")
+Rel(AdminDF, BYDMGRFrontEnd, "Uses", "HTTPS")
+Rel(EndUSer, BYDMGRFrontEnd, "Uses", "HTTPS")
+' - between pages
+Rel(BYDMGRFrontEnd, BYDDFMGRFrontEnd, "Includes")
+Rel(BYDMGRFrontEnd, BYDRTYFrontEnd, "Includes")
+' - between pages and services
+Rel(BYDMGRFrontEnd, BYDIAM, "Uses", "HTTPS")
+Rel(BYDDFMGRFrontEnd, BYDIAM, "Uses", "HTTPS")
+Rel(BYDRTYFrontEnd, BYDIAM, "Uses", "HTTPS")
+' - between services
+Rel(BYDRTYFrontEnd, BYDRTYService, "Uses")
+Rel(BYDRTYService, BYDRTYDB, "Uses")
+Rel(BYDRTYService, BYDDFId, "Uses")
+Rel(BYDRTYService, BYDDFDataFeeder, "Uses")
+Rel(BYDDFId, BYDDFDB, "Uses")
+Rel(BYDDFId, BYDDFDBGEO, "Uses")
+Rel(BYDRTYService, BYDDFCOS, "Uses")
+' - between services and containers
+Rel(BYDIAM, BYDIAMDB, "Uses", "JDBC")
+' - between services and systems
+Rel(BYDIAM, IdP, "USes", "OIDC")
+
+@enduml
