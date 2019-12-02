@@ -1,0 +1,92 @@
+{
+  "$schema": "Association.schema.json",
+  "$id": "Association.schema.json",
+  "type": "object",
+  "title": "Association schema",
+  "definitions": {
+    "association": {
+      "properties": {
+        "_id": {
+          "$id": "#/properties/_id",
+          "type": "string",
+          "title": "The _id Schema",
+          "default": "",
+          "examples": [
+            "561515454"
+          ],
+          "pattern": "^(.*)$"
+        },
+        "associationType": {
+          "associationTypeId": {
+            "$id": "#/properties/associationTypeId",
+            "type": "string",
+            "title": "The associationTypeId Schema",
+            "default": "",
+            "examples": [
+              "561515454"
+            ],
+            "pattern": "^(.*)$"
+          },
+          "associationTypeLabel": {
+            "$id": "#/properties/associationTypeLabel",
+            "type": "string",
+            "title": "The associationTypeLabel Schema",
+            "default": "",
+            "examples": [
+              "561515454"
+            ],
+            "pattern": "^(.*)$"
+          }
+        },
+        "createdAt": {
+          "$id": "#/properties/createdAt",
+          "type": "string",
+          "title": "The Createdat Schema",
+          "default": "",
+          "examples": [
+            "1545454"
+          ],
+          "pattern": "^(.*)$"
+        },
+        "revisionId": {
+          "$id": "#/properties/revisionId",
+          "type": "string",
+          "title": "The Revisionid Schema",
+          "default": "",
+          "examples": [
+            "215154"
+          ],
+          "pattern": "^(.*)$"
+        },
+        "templateId": {
+          "$id": "#/properties/templateId",
+          "type": "string",
+          "title": "The Templateid Schema",
+          "default": "",
+          "examples": [
+            "62554554"
+          ],
+          "pattern": "^(.*)$"
+        },
+        "status": {
+          "$id": "#/properties/status",
+          "type": "string",
+          "title": "The Status Schema",
+          "default": "",
+          "examples": [
+            "ACTIF"
+          ],
+          "pattern": "^(.*)$"
+        }
+      },
+      "required": [
+        "_id",
+        "createdAt",
+        "revisionId",
+        "templateId",
+        "status",
+        "properties"
+      ]
+    }
+  }
+}

@@ -23,11 +23,17 @@ System_Boundary(BYDPTFM, "BEYOND PLATFORM") {
     System(BYDDFMGR, "BYD DATA FACTORY MANAGER", "Administration"){
         Container(BYDDFMGRFrontEnd, "BYD DF MNGR\nFrontEnd", "Angular") {
         }
-    }
+        Container(BYDDFMGRService, "BYD DF MNGR\nServices", "Node.js") {
+        }
+         ContainerDb(BYDDFMGRDB, "BYD DF MNGR\nDB", "MongoDB"){
+        }
+   }
     System(BYDDF, "BEYOND DATA FACTORY"){
         Container(BYDDFDataFeeder, "BYD DF Data File Feeder", "Node.js") {
         }
         Container(BYDDFId, "BYD DF Identifier", "Node.js") {
+        }
+        Container(BYDDFTransfoFeeder, "BYD DF Transformation Feeder", "Node.js") {
         }
         Container(BYDDFAssoMgr, "BYD DF Association Manager", "Node.js") {
         }
@@ -66,6 +72,8 @@ Rel(BYDMGRFrontEnd, BYDDFMGRFrontEnd, "Includes")
 Rel(BYDMGRFrontEnd, BYDRTYFrontEnd, "Includes")
 ' - between pages and services
 Rel(BYDMGRFrontEnd, BYDIAM, "Uses", "HTTPS")
+Rel(BYDMGRFrontEnd, BYDDFMGRService, "Uses", "HTTPS")
+Rel(BYDDFMGRFrontEnd, BYDDFMGRService, "Uses", "HTTPS")
 Rel(BYDDFMGRFrontEnd, BYDIAM, "Uses", "HTTPS")
 Rel(BYDRTYFrontEnd, BYDIAM, "Uses", "HTTPS")
 ' - between services
@@ -73,10 +81,11 @@ Rel(BYDRTYFrontEnd, BYDRTYService, "Uses")
 Rel(BYDRTYService, BYDRTYDB, "Uses")
 Rel(BYDRTYService, BYDDFId, "Uses")
 Rel(BYDRTYService, BYDDFDataFeeder, "Uses")
+' - between services and containers
 Rel(BYDDFId, BYDDFDB, "Uses")
 Rel(BYDDFId, BYDDFDBGEO, "Uses")
+Rel(BYDDFMGRService, BYDDFMGRDB, "Uses")
 Rel(BYDRTYService, BYDDFCOS, "Uses")
-' - between services and containers
 Rel(BYDIAM, BYDIAMDB, "Uses", "JDBC")
 ' - between services and systems
 Rel(BYDIAM, IdP, "USes", "OIDC")
