@@ -1,0 +1,22 @@
+{
+	"_id": "CDE", //mongoID
+	"createdAt": "2019-12-01T15:53:01Z", //object Timestamp
+	"revisionId": "FGH", //versionID
+	"idcardId": "ABC", //mongoID
+	"idcardRevisionId": "XYZ", //versionID
+	"templateId": "IJK", //mongoID
+	"templateIdRevisionId": "LMN", //versionID
+	"status": "ACTIF",
+	"properties": {
+		"members": [
+			{
+				"idcardId": "CCC", //mongoID,
+				"revisionId": "CCC-1", //mongoID
+			},
+			{
+				"idcardId": "DDD", //mongoID
+				"revisionId": "DDD-1", //mongoID
+			}
+		]
+	}
+}

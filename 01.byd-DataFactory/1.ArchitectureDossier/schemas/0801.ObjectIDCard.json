@@ -6,7 +6,6 @@
 		"objectID":
 		{
 			"type":"string",
-			"ipsum": "id",
 			"required": true,
 			"description" : "Identifiant technique de l'objet (assimilable  à une clé primaire)"
 		},
@@ -95,7 +94,7 @@
 		                "type":"object",
 		                "properties":
 		                {
-		                	"annotationID": {"type":"string", "required": true}
+		                	"annotationID": {"type":"string", "required": true, "description": "Sur la base d'une collection d'ontologie"}
 		                }
 		            }
 		        },
@@ -127,7 +126,7 @@
 		"location":
 		{
 			"geometry": {"type":"geoJSON"},
-			"projection": {"type": "string"},
+			"projection": {"type": "string"}
 		}
 	}
 }
