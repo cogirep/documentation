@@ -4,7 +4,7 @@
   "type": "object",
   "title": "enrichment schema",
   "definitions": {
-    "enrichment" : {
+    "enrichment": {
       "properties": {
         "_id": {
           "$id": "#/properties/_id",
@@ -93,6 +93,36 @@
                 "value"
               ],
               "pattern": "^(.*)$"
+            }
+          }
+        }
+      },
+      "annotations": {
+        "type": "object",
+        "properties": {
+          "public": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "annotationID": {
+                  "type": "string",
+                  "required": true,
+                  "description": "Sur la base d'une collection d'ontologie"
+                }
+              }
+            }
+          },
+          "private": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "annotation": {
+                  "type": "string",
+                  "required": true
+                }
+              }
             }
           }
         }
