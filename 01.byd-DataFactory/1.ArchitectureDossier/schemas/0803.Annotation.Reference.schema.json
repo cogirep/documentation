@@ -83,8 +83,8 @@
       "_id",
       "createdAt",
       "revisionId",
-      "templateId",
       "status",
+      "properties",
       "visibility",
       "annotationType"
     ]
