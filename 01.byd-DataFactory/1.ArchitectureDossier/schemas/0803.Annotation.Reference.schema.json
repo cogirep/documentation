@@ -85,7 +85,8 @@
       "revisionId",
       "templateId",
       "status",
-      "visibility"
+      "visibility",
+      "annotationType"
     ]
   }
 }
