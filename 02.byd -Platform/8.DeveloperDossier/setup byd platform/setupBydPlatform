@@ -3,7 +3,7 @@
 ###PRE-REQUIS : Accès
 
 * Git (pro)
-    * Créer son compte sur `https://github.com/`
+    * Créer son compte sur `https://github.com/` avec votre adresse IBM
         * Demander à Vincent Hodicq accès aux repos projets, communiquer les informations suivantes: 
             * Pseudo
             * Mail
@@ -29,14 +29,20 @@
 
 * Git 
     * Cloner les repos disponibles commencant par BYD-xxx sur `https://github.com/sxd-platform`
-----    
+----  
+
+* GitKraken
+    * Suivre la documentation disponible au lien suivant: `https://github.com/sxd-platform/byd-all-documentation/tree/develop/02.byd%20-Platform/8.DeveloperDossier/gitflow`
+
+----
+  
 * Node
     - Installer node au lien suivant : `https://nodejs.org/en/`
 > IMPORTANT demander au moment de l'installation la version de node à télécharger
 
 ----
-* Créer un profil SXD pour package NPM
-    * WIP
+* Installer l'UI component
+    * Suivre la documentation disponible au lien suivant: `https://github.com/sxd-platform/byd-all-documentation/tree/develop/02.byd%20-Platform/8.DeveloperDossier/UI%20-component`
     
 ----
 * .ENV
