@@ -81,7 +81,7 @@
                 }
             }
 		},
-		"annotations":
+		"tags":
 		{
 			"type":"object",
             "properties":
@@ -94,7 +94,7 @@
 		                "type":"object",
 		                "properties":
 		                {
-		                	"annotationID": {"type":"string", "required": true, "description": "Sur la base d'une collection d'ontologie"}
+		                	"tagID": {"type":"string", "required": true, "description": "Sur la base d'une collection d'ontologie"}
 		                }
 		            }
 		        },
@@ -106,7 +106,7 @@
 		                "type":"object",
 		                "properties":
 		                {
-		                	"annotation": {"type":"string", "required": true}
+		                	"tag": {"type":"string", "required": true}
 		                }
 		            }
 		        }
@@ -117,6 +117,7 @@
 			"type": "object",
 			"properties": 
 			{
+				"revisionIdSource": {"type":"string", "required": true},//file revision
 				"filePath": {"type":"string", "required": true},//COS url (bucket id)
 				"fileHash": {"type":"string", "required": true},
 				"fileHashMethod": {"type":"string", "required": true}//ou objet avec référence paramètre ?
