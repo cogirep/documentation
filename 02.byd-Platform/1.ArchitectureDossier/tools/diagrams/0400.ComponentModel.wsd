@@ -30,12 +30,14 @@ System_Boundary(BYDPTFM, "BEYOND PLATFORM") {
             Component(BYDDFDataAccessMgrPage, "Data Access Manager", "HMI")
             Component(BYDDFIDCardMgrPage, "ID Card Manager", "HMI")
             Component(BYDDFEnrichmentMgrPage, "ID Card Enrichment Manager", "HMI")
+            Component(BYDDFTagMgrPage, "ID Card Tag Manager", "HMI")
         }
     }
     System(BYDDF, "BEYOND DATA FACTORY"){
         Container(BYDDFId, "BYD DF Identifier", "Node.js") {
             Component(BYDDFIdCardMgr, "ID Card CRUD", "Service")
             Component(BYDDFIdCardEnrichMgr, "ID Card Enrichment CRUD", "Service")
+            Component(BYDDFIdCardTagMgr, "ID Card public Tags CRUD", "Service")
         }
         Container(BYDDFTransfoManager, "BYD DF Transformation Mgr", "Node.js") {
             Component(BYDDFTransfoMgr, "BYD DF Transformation Mgr", "Service")
@@ -57,12 +59,15 @@ System_Boundary(BYDPTFM, "BEYOND PLATFORM") {
         Container(BYDDFCOS, "BYD DF File Storage", "Cloud Object Storage") {
             Component(BYDDFCOSSvc, "COS API", "Service")
             Component(BYDDFCOSBucketRaw, "Raw Bucket", "Bucket")
-            Component(BYDDFCOSBucketSecured, "Certified Bucket", "Bucket")
+            Component(BYDDFCOSBucketSecured, "Safe Bucket", "Bucket")
             Component(BYDDFCOSBucketTransfo_1, "Bucket Transfo 1", "Bucket")
         }
         ContainerDb(BYDDFDBGEO, "BYD DF\nGeo Spatial DB", "PostgreSQL + PostGIS")
+
         ContainerDb(BYDDFDB, "BYD DF\nDB", "MongoDB"){
             Component(BYDDFIDCards, "Id Cards", "collection")
+            Component(BYDDFIDCardsEnrichments, "Id Cards Enrichments", "collection")
+            Component(BYDDFIDCardsTags, "Id Cards Public Tags Reference", "collection")
         }
     }
     System(BYDREALITY, "BEYOND REALITY"){
@@ -110,6 +115,7 @@ Rel(BYDDFIDCardMgrPage, BYDDFIdCardMgr, "Uses", "HTTPS")
 Rel(BYDDFIDCardMgrPage, BYDDFDataFeederUpload, "Uses", "HTTPS")
 Rel(BYDDFIDCardMgrPage, BYDDFTransfoHandler, "Uses", "HTTPS")
 Rel(BYDDFEnrichmentMgrPage, BYDDFIdCardEnrichMgr, "Uses", "HTTPS")
+Rel(BYDDFTagMgrPage, BYDDFIdCardTagMgr, "Uses", "HTTPS")
 Rel(BYDIAMMgrPage, BYDIAMMgr, "Uses", "HTTPS")
 Rel(BYDRTY3DPage, BYDRTY3DSvc, "Uses", "HTTPS")
 ' - between services
@@ -119,7 +125,6 @@ Rel(BYDDFDataFeederStorage, BYDDFCOSSvc, "Uses")
 Rel(BYDDFCOSSvc, BYDDFCOSBucketRaw, "Uses")
 Rel(BYDDFCOSSvc, BYDDFCOSBucketSecured, "Uses")
 Rel(BYDDFCOSSvc, BYDDFCOSBucketTransfo_1, "Uses")
-Rel(BYDDFIdCardMgr, BYDDFDB, "Uses")
 Rel(BYDDFIdCardMgr, BYDDFTransfoHandler, "Uses")
 Rel(BYDDFIdCardEnrichMgr, BYDDFIdCardMgr, "Uses")
 Rel(BYDDFTransfoHandler, BYDDFTransfoQueueMgr, "Uses")
@@ -134,6 +139,13 @@ Rel(BYDIAMMgr, BYDIAMUserMgr, "Uses")
 ' - between services and containers
 Rel(BYDIAM, BYDIAMDB, "Uses", "JDBC")
 Rel(BYDRTYSecuritySvc, BYDRTYUSR, "Uses", "JDBC")
+' - between services and data collections
+Rel(BYDDFIdCardMgr, BYDDFIDCards, "Uses")
+Rel(BYDDFIdCardEnrichMgr, BYDDFIDCardsEnrichments, "Uses")
+Rel(BYDDFIdCardTagMgr, BYDDFIDCardsTags, "Uses")
+
+
+
 ' - between services and systems
 Rel(BYDIAMFederate, IdP, "USes", "OIDC")
 
