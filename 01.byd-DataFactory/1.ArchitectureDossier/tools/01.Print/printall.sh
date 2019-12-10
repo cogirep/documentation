@@ -2,7 +2,7 @@ now="$( date +"%Y%m%d_%H%M%S" )"
 directory="../../"
 printdirectory="./tools/01.Print/"
 templatedirectory="./tools/01.Print/template"
-exportdirectory="/Users/SWilbert/Documents/SIXENSE-Dossier-Architecture/"
+exportdirectory="./tools/01.Print/exporteddoc/"
 outputfilename="BEYOND-platform"
 
 

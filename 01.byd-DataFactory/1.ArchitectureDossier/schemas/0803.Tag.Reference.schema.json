@@ -1,10 +1,11 @@
 {
-  "$schema": "Annotation.Reference.schema.json",
-  "$id": "Annotation.Reference.schema.json",
+  //Ajouter label + multilinguisme - cf id card
+  "$schema": "Tag.Reference.schema.json",
+  "$id": "Tag.Reference.schema.json",
   "type": "object",
-  "title": "Annotation schema",
+  "title": "Tag schema",
   "definitions": {
-    "annotation": {
+    "Tag": {
       "properties": {
         "_id": {
           "$id": "#/properties/_id",
@@ -70,12 +71,12 @@
       "visibility": {
         "type": "string",
         "enum": ["public","private"],
-        "description": "is it a public (visible by all) or private (visible by owner Tenant only) annotation"
+        "description": "is it a public (visible by all) or private (visible by owner Tenant only) Tag"
       },
-      "annotationType": {
+      "TagType": {
         "type": "string",
         "enum": ["business","technical"],
-        "description": "The type of annotation"
+        "description": "The type of Tag"
       }
 
     },
@@ -86,7 +87,7 @@
       "status",
       "properties",
       "visibility",
-      "annotationType"
+      "TagType"
     ]
   }
 }

@@ -9,7 +9,6 @@ echo '===================================================='
 echo ' Lancement du processus'
 echo ' Fichier : '$1
 
-
 cd $directory
 
 pandoc $1  --reference-doc=$templatedirectory/Sixensetemplate.dotx -o $exportdirectory$now.ArchitectureDossier$1.docx
