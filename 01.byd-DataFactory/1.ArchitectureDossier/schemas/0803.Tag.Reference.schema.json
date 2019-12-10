@@ -1,5 +1,4 @@
 {
-  //Ajouter label + multilinguisme - cf id card
   "$schema": "Tag.Reference.schema.json",
   "$id": "Tag.Reference.schema.json",
   "type": "object",
@@ -68,6 +67,21 @@
           }
         }
       },
+      "labels":
+      {
+        "type":"array",
+        "items":
+              {
+                  "type":"object",
+                  "required":true,
+                  "minItems": 1,
+                  "properties":
+                  {
+                    "languageCode": {"type":"string", "required": true,	"description": "Codification de la langue d'un label au format locale: language-REGION (ISO 639-1 + ISO 3166): par ex fr-FR" },
+                    "label": {"type":"string", "required": true}
+                  }
+              }
+      },  
       "visibility": {
         "type": "string",
         "enum": ["public","private"],
