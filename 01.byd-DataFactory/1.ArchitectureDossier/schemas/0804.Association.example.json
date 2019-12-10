@@ -19,7 +19,7 @@
       "label": "Cesium Transformation"
     }
   ],
-  "annotations": {
+  "tags": {
     "public": [
       {
         "annotationID": "ASSOCIATION" //tagID
@@ -32,7 +32,7 @@
       }
     ],
     "private": [
-      "La transformation Example",
+      "La transformation Exemple",
       "Mon annotation"
     ]
   }

@@ -11,11 +11,11 @@
 		"members": [
 			{
 				"idcardId": "CCC", //mongoID,
-				"revisionId": "CCC-1", //mongoID
+				"revisionId": "CCC-1" //mongoID
 			},
 			{
 				"idcardId": "DDD", //mongoID
-				"revisionId": "DDD-1", //mongoID
+				"revisionId": "DDD-1" //mongoID
 			}
 		]
 	}

@@ -1,5 +1,5 @@
 {
-  "$schema": "Tag.Reference.schema.json",
+  "$schema": "0803.Tag.Reference.schema.json",
   "$id": "Tag.Reference.schema.json",
   "type": "object",
   "title": "Tag schema",
@@ -65,44 +65,52 @@
               "pattern": "^(.*)$"
             }
           }
+        },
+        "labels": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": true,
+            "minItems": 1,
+            "properties": {
+              "languageCode": {
+                "type": "string",
+                "required": true,
+                "description": "Codification de la langue d'un label au format locale: language-REGION (ISO 639-1 + ISO 3166): par ex fr-FR"
+              },
+              "label": {
+                "type": "string",
+                "required": true
+              }
+            }
+          }
+        },
+        "visibility": {
+          "type": "string",
+          "enum": [
+            "public",
+            "private"
+          ],
+          "description": "is it a public (visible by all) or private (visible by owner Tenant only) Tag"
+        },
+        "TagType": {
+          "type": "string",
+          "enum": [
+            "business",
+            "technical"
+          ],
+          "description": "The type of Tag"
         }
       },
-      "labels":
-      {
-        "type":"array",
-        "items":
-              {
-                  "type":"object",
-                  "required":true,
-                  "minItems": 1,
-                  "properties":
-                  {
-                    "languageCode": {"type":"string", "required": true,	"description": "Codification de la langue d'un label au format locale: language-REGION (ISO 639-1 + ISO 3166): par ex fr-FR" },
-                    "label": {"type":"string", "required": true}
-                  }
-              }
-      },  
-      "visibility": {
-        "type": "string",
-        "enum": ["public","private"],
-        "description": "is it a public (visible by all) or private (visible by owner Tenant only) Tag"
-      },
-      "TagType": {
-        "type": "string",
-        "enum": ["business","technical"],
-        "description": "The type of Tag"
-      }
-
-    },
-    "required": [
-      "_id",
-      "createdAt",
-      "revisionId",
-      "status",
-      "properties",
-      "visibility",
-      "TagType"
-    ]
+      "required": [
+        "_id",
+        "createdAt",
+        "revisionId",
+        "status",
+        "properties",
+        "visibility",
+        "TagType"
+      ]
+    }
   }
-}
 }
