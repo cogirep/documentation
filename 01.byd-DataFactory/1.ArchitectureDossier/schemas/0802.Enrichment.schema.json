@@ -1,0 +1,142 @@
+{
+  "$schema": "0802.Enrichment.schema.json",
+  "$id": "enrichment.schema.json",
+  "type": "object",
+  "title": "enrichment schema",
+  "definitions": {
+    "enrichment": {
+      "properties": {
+        "_id": {
+          "$id": "#/properties/_id",
+          "type": "string",
+          "title": "The _id Schema",
+          "default": "",
+          "examples": [
+            "561515454"
+          ],
+          "pattern": "^(.*)$"
+        },
+        "createdAt": {
+          "$id": "#/properties/createdAt",
+          "type": "string",
+          "title": "The Createdat Schema",
+          "default": "",
+          "examples": [
+            "1545454"
+          ],
+          "pattern": "^(.*)$"
+        },
+        "revisionId": {
+          "$id": "#/properties/revisionId",
+          "type": "string",
+          "title": "The Revisionid Schema",
+          "default": "",
+          "examples": [
+            "215154"
+          ],
+          "pattern": "^(.*)$"
+        },
+        "templateId": {
+          "$id": "#/properties/templateId",
+          "type": "string",
+          "title": "The Templateid Schema",
+          "default": "",
+          "examples": [
+            "62554554"
+          ],
+          "pattern": "^(.*)$"
+        },
+        "idcardId": {
+          "$id": "#/properties/idcardId",
+          "type": "string",
+          "title": "The Idcardid Schema",
+          "default": "",
+          "examples": [
+            "45154564"
+          ],
+          "pattern": "^(.*)$"
+        },
+        "status": {
+          "$id": "#/properties/status",
+          "type": "string",
+          "title": "The Status Schema",
+          "default": "",
+          "examples": [
+            "ACTIF"
+          ],
+          "pattern": "^(.*)$"
+        },
+        "idcardRevisionId": {
+          "$id": "#/properties/idcardRevisionId",
+          "type": "string",
+          "title": "The Idcardrevisionid Schema",
+          "default": "",
+          "examples": [
+            "51545455"
+          ],
+          "pattern": "^(.*)$"
+        },
+        "properties": {
+          "$id": "#/properties/properties",
+          "type": "object",
+          "title": "The Properties Schema",
+          "required": [
+            "key"
+          ],
+          "properties": {
+            "key": {
+              "$id": "#/properties/properties/properties/key",
+              "type": "string",
+              "title": "The Key Schema",
+              "default": "",
+              "examples": [
+                "value"
+              ],
+              "pattern": "^(.*)$"
+            }
+          }
+        }
+      },
+      "tags": {
+        "type": "object",
+        "properties": {
+          "public": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "tagId": {
+                  "type": "string",
+                  "required": true,
+                  "description": "Sur la base d'une collection d'ontologie"
+                }
+              }
+            }
+          },
+          "private": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "annotation": {
+                  "type": "string",
+                  "required": true
+                }
+              }
+            }
+          }
+        }
+      },
+      "required": [
+        "_id",
+        "createdAt",
+        "revisionId",
+        "templateId",
+        "idcardId",
+        "status",
+        "idcardRevisionId",
+        "properties"
+      ]
+    }
+  }
+}

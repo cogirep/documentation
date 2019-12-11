@@ -1,0 +1,50 @@
+@startuml component-model-system-level
+
+header
+    <b>BEYOND Platform</b> - Diagramme de composants
+end header
+
+!include /Users/fredericfadda/ffa-dev/C4-PlantUML/C4.puml
+!include /Users/fredericfadda/ffa-dev/C4-PlantUML/C4_Context.puml
+!include /Users/fredericfadda/ffa-dev/C4-PlantUML/C4_Container.puml
+!include /Users/fredericfadda/ffa-dev/C4-PlantUML/C4_Component.puml
+
+Person(EndUSer, "End user")
+Person(AdminIAM, "Administrator\n(users)")
+Person(AdminBYDPTF, "Administrator\n(BYD configuration)")
+Person(AdminDF, "Administrator\n(business)")
+
+
+System_Boundary(BYDPTFM, "BEYOND PLATFORM") {
+    System(BYDMGR, "BYD MANAGER", "Administration & supervision"){
+    }
+    System(BYDDFMGR, "BYD DATA FACTORY MANAGER", "Administration"){
+    }
+    System(BYDDF, "BEYOND DATA FACTORY"){
+    }
+    System(BYDREALITY, "BEYOND REALITY", "BYD APP"){
+    }
+    System(BYDIDP, "BEYOND IDENTITY & ACCESS MANAGER", "Identity & access management"){
+    }
+
+}
+
+System_Ext(IdP, "External Identity Providers", "SSO")
+
+' Relations
+' - with users
+Rel(AdminIAM, BYDPTFM, "Uses", "HTTPS")
+Rel(AdminBYDPTF, BYDPTFM, "Uses", "HTTPS")
+Rel(AdminDF, BYDPTFM, "Uses", "HTTPS")
+Rel(EndUSer, BYDPTFM, "Uses", "HTTPS")
+' - between services
+Rel(BYDREALITY, BYDIDP, "Uses")
+Rel(BYDREALITY, BYDDF, "Uses")
+Rel(BYDMGR, BYDIDP, "Uses")
+Rel(BYDDFMGR, BYDDF, "Uses")
+Rel(BYDDFMGR, BYDIDP, "Uses")
+Rel(BYDDF, BYDIDP, "Uses")
+' - between systems and external systems
+Rel(BYDIDP, IdP, "USes", "OIDC")
+
+@enduml

@@ -3,7 +3,6 @@ directory="../../"
 printdirectory="./tools/01.Print/"
 templatedirectory="./tools/01.Print/template"
 exportdirectory="./tools/01.Print/exporteddoc/"
-outputfilename="BEYOND-platform"
 
 
 echo '===================================================='
@@ -24,5 +23,5 @@ pandoc $now.allpages.md  --reference-doc=$templatedirectory/Sixensetemplate.dotx
 rm $now.allpages.md
 echo '----------------------------------------------------'
 echo 'Processus terminé.'
-echo 'Fichier créé: ' $exportdirectory$now.$outputfilename-ArchitectureDossier.docx
+echo 'Fichier créé: ' $exportdirectory$now.ArchitectureDossier.docx
 echo '===================================================='
