@@ -22,9 +22,6 @@
   "tags": {
     "public": [
       {
-        "annotationID": "ASSOCIATION" //tagID
-      },
-      {
         "annotationID": "BSY" //tagID
       },
       {
@@ -35,5 +32,15 @@
       "La transformation Exemple",
       "Mon annotation"
     ]
-  }
+  },
+  "members": [
+    {
+      "idcardId": "CCC", //mongoID,
+      "revisionId": "CCC-1" //mongoID
+    },
+    {
+      "idcardId": "DDD", //mongoID
+      "revisionId": "DDD-1" //mongoID
+    }
+  ]
 }
