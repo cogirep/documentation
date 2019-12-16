@@ -94,7 +94,7 @@
 		                "type":"object",
 		                "properties":
 		                {
-		                	"tagID": {"type":"string", "required": true, "description": "Sur la base d'une collection d'ontologie"}
+		                	"tagID": {"type":"string", "required": true, "description": "Sur la base de la collection de référence / ontologie"}
 		                }
 		            }
 		        },
