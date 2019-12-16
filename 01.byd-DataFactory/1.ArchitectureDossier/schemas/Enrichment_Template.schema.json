@@ -1,0 +1,129 @@
+{
+  "$schema": "enrichment-template.schema.json",
+  "$id": "enrichment-template.schema.json",
+  "type": "object",
+  "title": "Enrichment Template Schema",
+  "definitions": {
+    "enrichment-template": {
+      "properties": {
+        "_id": {
+          "$id": "#/properties/_id",
+          "type": "string",
+          "title": "The _id Schema",
+          "default": "",
+          "examples": [
+            "1234"
+          ],
+          "pattern": "^(.*)$"
+        },
+        "createdAt": {
+          "$id": "#/properties/createdAt",
+          "type": "string",
+          "title": "The Createdat Schema",
+          "default": "",
+          "examples": [
+            "12154545"
+          ],
+          "pattern": "^(.*)$"
+        },
+        "revisionId": {
+          "$id": "#/properties/revisionId",
+          "type": "string",
+          "title": "The Revisionid Schema",
+          "default": "",
+          "examples": [
+            "515545"
+          ],
+          "pattern": "^(.*)$"
+        },
+        "label": {
+          "$id": "#/properties/label",
+          "type": "string",
+          "title": "The Label Schema",
+          "default": "",
+          "examples": [
+            "test"
+          ],
+          "pattern": "^(.*)$"
+        },
+        "isLocked": {
+          "$id": "#/properties/isLocked",
+          "type": "boolean",
+          "title": "Defines whether the template can be altered/removed",
+          "default": false
+        },
+        "createdBy": {
+          "$id": "#/properties/createdBy",
+          "type": "string",
+          "title": "ID of the user who created the template"
+        },
+        "status": {
+          "$id": "#/properties/status",
+          "type": "string",
+          "title": "The Status Schema",
+          "default": "",
+          "enum": ["DRAFT", "ACTIVATED", "DEACTIVATED"]
+        },
+        "templateSchema": {
+          "$id": "#/properties/templateSchema",
+          "type": "object",
+          "title": "The Templateschema Schema",
+          "patternProperties": {
+            "^.+$": {
+              "type": "object",
+              "title": "A dynamic key that represents the category in the form. the value is an object",
+              "properties": {
+                "order": {
+                  "type": "numeric",
+                  "title": "the order of the category in the form"
+                },
+                "fields": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "title": "A list of the template (form) attributes in the same category",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "title": "is the the format of this attribute",
+                        "enum": ["string", "date", "numeric", "boolean"]
+                      },
+                      "label": {
+                        "type": "string",
+                        "title": "the attribute label displayed in the form"
+                      },
+                      "isRequired": {
+                        "type": "boolean",
+                        "title": "true if the attribute is required to submit the form"
+                      },
+                      "order": {
+                        "type": "numeric",
+                        "title": "the order of the attribute inside the category"
+                      },
+                      "permissionId": {
+                        "type": "string",
+                        "title": "the permission id required to set the attribute"
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "_id",
+        "createdAt",
+        "revisionId",
+        "label",
+        "status",
+        "templateSchema",
+        "createdBy"
+      ]
+    }
+  }
+}
