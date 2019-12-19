@@ -1,12 +1,12 @@
 {
-	"objectID":"ABC",//MongoID
-	"revisionID":"XYZ",//versionID
+	"_id":"ABC",//MongoID
+	"revisionId":"XYZ",//versionID
 	"createdAt":"2019-09-15T15:53:01Z",//object Timestamp
-	"beyondID":"IOP",//UID
-	"ownerID":"QSD",//ID
+	"beyondId":"IOP",//UID
+	"ownerId":"QSD",//ID
 	"createdBy":"WXC",//ID
-	"startValidityDate":"2019-05-02T00:00:00Z",//Data qualification
-	"endValidityDate":"2019-07-11T23:59:59Z",//Data qualification
+	"ValidityStartsAt":"2019-05-02T00:00:00Z",//Data qualification
+	"ValidityEndsAt":"2019-07-11T23:59:59Z",//Data qualification
 	"status":"VBN",//ID
 	"languageCode":"FR",
 	"labels":

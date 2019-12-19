@@ -3,33 +3,33 @@
 	"$schema": "http://json-schema.org/draft-03/schema",
 	"properties":
 	{
-		"objectID":
+		"_id":
 		{
 			"type":"string",
 			"required": true,
-			"description" : "Identifiant technique de l'objet (assimilable  à une clé primaire)"
+			"description" : "Identifiant technique de l'objet (assimilable à une clé primaire)"
 		},
-		"revisionID":
+		"revisionId":
 		{
 			"type":"string",
 			"required": true,
 			"description" : "Identifiant secondaire permettant de déterminer une version d'un objet a des fins de tracabilité"
 
 		},
-		"createdDatetime":
+		"createdAt":
 		{
 			"type":"date-time",
 			"required": true,
 			"description" : "Date de création technique dans le référentiel (ISO 8601 - Zulu). Permet de récupérer la revision la plus récente"
 
 		},
-		"beyondID":
+		"beyondId":
 		{
 			"type":"string",
 			"required": true,
 			"description" : "Identifiant BEYOND (fonctionnel de l'objet) de type UUID v4"
 		},
-		"ownerID":
+		"ownerId":
 		{
 			"type":"string",
 			"required": true,
@@ -42,15 +42,15 @@
 			"description" : "Identifiant technique (pas email) de l'utilisateur (GDRP)"
 			
 		},
-		"startValidityDate":
+		"ValidityStartsAt":
 		{
-			"type":"date",
+			"type":"date-time",
 			"description" : "Début de date de validité de l'objet (ISO 8601)"
 			
 		},
-		"endValidityDate":
+		"ValidityEndsAt":
 		{
-			"type":"date",
+			"type":"date-time",
 			"description" : "Fin de date de validité (expiration) de l'objet (ISO 8601)"
 		
 		},
