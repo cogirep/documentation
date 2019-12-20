@@ -1,12 +1,12 @@
 {
-	"objectID": "ABC", //mongoID
-	"revisionID": "XYZ", //versionID
+	"objectId": "ABC", //mongoID
+	"revisionId": "XYZ", //versionID
 	"createdAt": "2019-09-15T15:53:01Z", //object Timestamp
-	"beyondID": "ASSO_2019-12-02_HJJKHJKHK", //UUID
-	"ownerID": "SXD", //tenantID
+	"beyondId": "ASSO_2019-12-02_HJJKHJKHK", //UUID
+	"ownerId": "SXD", //tenantID
 	"createdBy": "WXC", //userID
-	"startValidityDate": "2019-05-02T00:00:00Z", //Data qualification
-	"endValidityDate": "2019-07-11T23:59:59Z", //Data qualification
+	"ValidityStartsAt": "2019-05-02T00:00:00Z", //Data qualification
+	"ValidityEndssAt": "2019-07-11T23:59:59Z", //Data qualification
 	"status": "VBN", //statusID
 	"languageCode": "FR",
 	"labels": [
