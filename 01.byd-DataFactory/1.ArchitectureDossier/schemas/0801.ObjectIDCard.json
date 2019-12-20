@@ -7,7 +7,7 @@
 		{
 			"type":"string",
 			"required": true,
-			"description" : "Identifiant technique de l'objet (assimilable à une clé primaire)"
+			"description" : "Identifiant technique de l'objet (assimilable  à une clé primaire)"
 		},
 		"revisionId":
 		{
