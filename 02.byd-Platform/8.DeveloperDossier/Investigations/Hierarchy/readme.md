@@ -50,7 +50,7 @@ A contrario, il s'avèrera compliqué d'obtenir toute la généalogie en une seu
 
 Le fondement et la philosophie sont similaires à la vision présentée précédemment. Une nuance sera néanmoins portée sur le stockage des informations.
 
-A date, et dans une approche théorique, on peut imaginer la suppression des enfants (champ _"children"_) portés par chaque membre. En effet, la simple présence des parents (champ _"parents"_) suffit à reconsituer une généalogie.
+A date, et dans une approche théorique, on peut imaginer la suppression des enfants (champ _"children"_) portés par chaque membre. En effet, la simple présence des parents (champ _"parents"_) suffit à reconstituer une généalogie.
 
 Voici le modèle de données que cela génère :
 
