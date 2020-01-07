@@ -1,0 +1,113 @@
+{
+    "objectID": "ABC",
+    "revisionID": "XYZ",
+    "createdAt": "2019-09-15T15:53:01Z",
+    "beyondID": "ASSO_2019-12-02_HJJKHJKHK",
+    "ownerID": "SXD",
+    "createdBy": "WXC",
+    "startValidityDate": "2019-05-02T00:00:00Z",
+    "endValidityDate": "2019-07-11T23:59:59Z",
+    "status": "VBN",
+    "languageCode": "FR",
+    "labels": [
+        {
+            "languageCode": "FR",
+            "label": "Transformation Cesium"
+        },
+        {
+            "languageCode": "EN",
+            "label": "Cesium Transformation"
+        }
+    ],
+    "tags": {
+        "public": [
+            {
+                "annotationID": "BSY"
+            },
+            {
+                "annotationID": "CSZ"
+            }
+        ],
+        "private": [
+            "La transformation Exemple",
+            "Mon annotation"
+        ]
+    },
+    "members": [
+        {
+            "beyondID": "AAA",
+            "revisionID": "AAA-1"
+        },
+        {
+            "beyondID": "BBB",
+            "revisionID": "BBB-1"
+        },
+        {
+            "beyondID": "CCC",
+            "revisionID": "CCC-1"
+        },
+        {
+            "beyondID": "DDD",
+            "revisionID": "DDD-1"
+        },
+        {
+            "beyondID": "EEE",
+            "revisionID": "EEE-1"
+        },
+        {
+            "beyondID": "FFF",
+            "revisionID": "FFF-1"
+        },
+        {
+            "beyondID": "GGG",
+            "revisionID": "GGG-1"
+        }
+    ],
+    "relationships": [
+        {
+            "beyondID": "AAA",
+            "revisionID": "AAA-1",
+            "children": [
+                {
+                    "beyondID": "BBB",
+                    "revisionID": "BBB-1",
+                    "children": [
+                        {
+                            "beyondID": "DDD",
+                            "revisionID": "DDD-1",
+                            "children": [
+                                {
+                                    "beyondID": "EEE",
+                                    "revisionID": "EEE-1",
+                                    "children": {}
+                                },
+                                {
+                                    "beyondID": "FFF",
+                                    "revisionID": "FFF-1",
+                                    "children": [
+                                        {
+                                            "beyondID": "GGG",
+                                            "revisionID": "GGG-1",
+                                            "children": {}
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "beyondID": "CCC",
+                    "revisionID": "CCC-1",
+                    "children": [
+                        {
+                            "beyondID": "FFF",
+                            "revisionID": "FFF-1",
+                            "children": {}
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
