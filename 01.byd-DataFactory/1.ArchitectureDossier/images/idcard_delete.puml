@@ -18,13 +18,13 @@ endif
 
 
 partition "Suppression de \nl'idcard" {
-    -Supprimer de l'enrichissement associé
+    -Suppression de l'enrichissement associé
     floating note left: Hard delete
     if ( \n fichier associé \n )
     -[#red]-> Oui;
     -Supprimer les fichiers dans le \nCOS (Cloud Object Storage)
     endif
-    -Supprimer de l'idcard
+    -Suppression de l'idcard
     if ( \n Ecriture OK \n )
     -[#green]-> Oui ;
     -Retour du code \n **200: SUCCESS**
@@ -42,7 +42,7 @@ end note
 legend 
 **Légende**
 
-**Retour du code erreur** : Permet la remontée d'un message d'erreur (localisée) à l'utilisateur.
+**Retour du code erreur** : Permet la remontée d'un message d'erreur (localisé) à l'utilisateur.
 
 endlegend
 

@@ -14,7 +14,7 @@ endif
 
 
 partition "GetAll " {
-    -Récupère tous les idcards \nPublic et du groupe de l'utilisateur
+    -Récupère tous les idcards \npublics et du groupe de l'utilisateur
     note right
     en fonction
     * de la pagination
@@ -40,7 +40,7 @@ stop
 legend 
 **Légende**
 
-**Retour du code erreur** : Permet la remontée d'un message d'erreur (localisée) à l'utilisateur.
+**Retour du code erreur** : Permet la remontée d'un message d'erreur (localisé) à l'utilisateur.
 
 endlegend
 

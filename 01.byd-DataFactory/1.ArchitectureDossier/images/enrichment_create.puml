@@ -61,7 +61,7 @@ stop
 legend 
 **Légende**
 
-**Retour du code erreur** : Permet la remontée d'un message d'erreur (localisée) à l'utilisateur.
+**Retour du code erreur** : Permet la remontée d'un message d'erreur (localisé) à l'utilisateur.
 
 endlegend
 
