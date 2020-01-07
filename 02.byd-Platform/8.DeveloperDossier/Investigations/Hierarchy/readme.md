@@ -28,7 +28,7 @@ A contrario, il s'avèrera compliqué de constituer le document Mongo lors de la
 
 ## Vision alternative
 
-Il est possible de penser la hiérarchie différement. Plutôt que de stocker la hiérarchie complète dans un champ dédié, chaque membre de l'association portera son lien direct avec un autre membre, au premier niveau uniquement.
+Il est possible de penser la hiérarchie différemment. Plutôt que de stocker la hiérarchie complète dans un champ dédié, chaque membre de l'association portera son lien direct avec un autre membre, au premier niveau uniquement.
 
 Voici le modèle de données que cela génère :
 
