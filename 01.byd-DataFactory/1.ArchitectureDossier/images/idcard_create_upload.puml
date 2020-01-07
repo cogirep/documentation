@@ -1,0 +1,74 @@
+@startuml
+
+title
+POST **/files/** : Créer un idcard avec upload d'un fichier
+
+end title
+
+start
+if ( \n Vérifier les droits \n **import** \n)
+    -[#red]-> Non ;
+    -Retour du code erreur \n **401: UNAUTHORIZED**
+    stop
+endif
+
+-Upload d'un fichier du client vers le microservice
+
+partition "Transformation \ndemandé" {
+    if ( \n Archive *.zip \n ) then (Oui)
+        if ( \n Visualisation **POINTCLOUD** ou **3DMODEL** \n fichier **tileset.json**  est présent dans l'archive \n ) then (Non) 
+            -Supprimer le fichier reçu
+            -Retour du code erreur \n **400: Wrong transformation requested**
+            stop
+        elseif ( \n Transformation **ORTHOIMAGE** \n fichier **tileset.json**  est présent dans l'archive \n ) then (Oui) 
+            -Supprimer le fichier reçu
+            -Retour du code erreur \n **400: Wrong transformation requested**
+            stop
+        endif
+    else (Non)
+    endif
+}
+
+-Upload sur le Cloud Object Storage (COS)
+
+partition "Creation de \nl'idcard" {
+    -Génération du BEYONTID et du REVISIONID
+    -Création de l'idcard de l'idcard
+    if ( \n Ecriture OK \n )
+        -[#green]-> Oui ;
+        -Retour du code \n **200: SUCCESS**
+    else
+        -[#red]-> Non ;
+        -Retour du code erreur \n **500: INTERNAL_ERROR**
+    endif
+}
+
+partition "Transformation demandée" {
+    if ( \n Visualisation POINTCLOUD \n Visualisation ORTHO \n Visualisation 3DMODEL \n Visualisation GEOJSON \n ) then (Oui)
+        if ( Archive *.zip ) then (Oui)
+            -Décompresser l'archive
+            -Upload sur le COS
+        else (Non)
+        endif
+        -Ajout d'un enrichissement
+    elseif (JSON2YML) then (Oui)
+        -Lancer la transfo JSON2YML
+    elseif (POINTCLOUD) then (Oui)
+        -Lancer la transfo POINTCLOUD
+    elseif (3DMODEL) then (Oui)
+        -Lancer la transfo 3DMODEL
+    elseif (ORTHOIMAGE) then (Oui)
+        -Lancer la transfo ORTHOIMAGE
+    else (Non)
+    endif
+}
+stop
+
+legend 
+**Légende**
+
+**Retour du code erreur** : Permet la remontée d'un message d'erreur (localisée) à l'utilisateur.
+
+endlegend
+
+@enduml

@@ -1,0 +1,35 @@
+@startuml
+
+title
+DELETE **/enrichment/:id** : Suppression un enrichissement
+
+end title
+
+start
+if ( \n Vérifier les droits \n **admin** \n)
+-[#red]-> Non ;
+-Retour du code erreur \n **401: UNAUTHORIZED**
+stop
+endif
+
+partition "Suppression de \nl'enrichissement" {
+    -Suppression de l'enrichissement
+    floating note left: Hard delete
+    if ( \n Effacement OK \n )
+    -[#green]-> Oui ;
+    -Retour du code \n **200: SUCCESS**
+    else
+    -[#red]-> Non ;
+    -Retour du code erreur \n **500: INTERNAL_ERROR**
+    endif
+}
+stop
+
+legend 
+**Légende**
+
+**Retour du code erreur** : Permet la remontée d'un message d'erreur (localisée) à l'utilisateur.
+
+endlegend
+
+@enduml

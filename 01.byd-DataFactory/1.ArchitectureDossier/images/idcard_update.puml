@@ -1,0 +1,40 @@
+@startuml
+
+title
+PUT **/idcard/:id** : Mise à jour un idcard
+
+end title
+
+start
+if ( \n Vérifier les droits \n **admin** \n)
+    -[#red]-> Non ;
+    -Retour du code erreur \n **401: UNAUTHORIZED**
+    stop
+elseif ( \n Valide body \n **JSON Schema** \n )
+    -[#red]-> Non ;
+    -Retour du code erreur \n **406: BODY_ERROR**
+    stop
+endif
+
+
+partition "Mise à jour de \nl'idcard" {
+    -Génération du REVISIONID
+    -Mise à jour de l'idcard de l'idcard
+    if ( \n Ecriture OK \n )
+        -[#green]-> Oui ;
+        -Retour du code \n **200: SUCCESS**
+    else
+        -[#red]-> Non ;
+        -Retour du code erreur \n **500: INTERNAL_ERROR**
+    endif
+}
+stop
+
+legend 
+**Légende**
+
+**Retour du code erreur** : Permet la remontée d'un message d'erreur (localisée) à l'utilisateur.
+
+endlegend
+
+@enduml

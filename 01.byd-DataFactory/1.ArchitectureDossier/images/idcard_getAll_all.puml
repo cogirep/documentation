@@ -1,0 +1,50 @@
+@startuml
+
+title
+GET **/idcard/all** : Récupérer tous les idcards
+
+end title
+
+start
+if ( \n Vérifier les droits \n **access** \n)
+    -[#red]-> Non ;
+    -Retour du code erreur \n **401: UNAUTHORIZED**
+    stop
+else (Oui)
+endif
+
+
+partition "GetAll for cesium " {
+    -Récupère le template Cesium et données de context (contextData)
+    if ( \n les templates (système) existent \n )
+        -[#red]-> Non ;
+        -Retour du code erreur \n **500: TEMPLATE_MISSING**
+        stop
+    else (Oui)
+    endif
+    -Récupère tous les idcards public et du groupe de \n l'utilisateur ayant le template Cesium et/ou contextData
+    note right
+    On peut aussi faire
+    * de la recherche
+    endnote
+
+    if ( \n Données \n )
+        -[#green]-> Oui ;
+        -Retour du code \n **200: SUCCESS** \n avec la donnée
+    else
+        -[#red]-> Non ;
+        -Retour du code erreur \n **500: INTERNAL_ERROR**
+    endif
+}
+stop
+
+
+
+legend 
+**Légende**
+
+**Retour du code erreur** : Permet la remontée d'un message d'erreur (localisée) à l'utilisateur.
+
+endlegend
+
+@enduml

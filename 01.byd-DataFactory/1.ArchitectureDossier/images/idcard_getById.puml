@@ -1,0 +1,48 @@
+@startuml
+
+title
+GET **/idcard/:id** : Récupérer un idcard
+
+end title
+
+start
+if ( \n Vérifier les droits \n **access** \n)
+-[#red]-> Non ;
+-Retour du code erreur \n **401: UNAUTHORIZED**
+stop
+elseif ( \n Valide id \n )
+-[#red]-> Non ;
+-Retour du code erreur \n **406: ID_NOTVALID**
+stop
+endif
+
+
+partition "GetById " {
+    -Récupère l'idcard
+    note right
+    **Amélioration**: 
+    vérifier le group de l'utilisateur pour ne remonter 
+    uniquement l'idcard pour son groupe ou en public
+    car pour l'instant, on donne n'importe quel idcard
+    endnote
+    if ( \n Données \n )
+        -[#green]-> Oui ;
+        -Retour du code \n **200: SUCCESS** \n avec la donnée
+    elseif ( \n Erreur \n )
+        -[#green]-> Non ;
+        -Retour du code \n **400: NOT_FOUND**
+    else
+        -[#red]-> Oui ;
+        -Retour du code erreur \n **500: INTERNAL_ERROR**
+    endif
+}
+stop
+
+legend 
+**Légende**
+
+**Retour du code erreur** : Permet la remontée d'un message d'erreur (localisée) à l'utilisateur.
+
+endlegend
+
+@enduml
