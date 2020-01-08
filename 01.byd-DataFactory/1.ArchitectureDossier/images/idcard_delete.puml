@@ -1,0 +1,49 @@
+@startuml
+
+title
+DELETE **/idcard/:id** : Supprimer un idcard
+
+end title
+
+start
+if ( \n Vérifier les droits \n **admin** \n)
+-[#red]-> Non ;
+-Retour du code erreur \n **401: UNAUTHORIZED**
+stop
+elseif ( \n Valide id \n )
+-[#red]-> Non ;
+-Retour du code erreur \n **406: ID_NOTVALID**
+stop
+endif
+
+
+partition "Suppression de \nl'idcard" {
+    -Suppression de l'enrichissement associé
+    floating note left: Hard delete
+    if ( \n fichier associé \n )
+    -[#red]-> Oui;
+    -Supprimer les fichiers dans le \nCOS (Cloud Object Storage)
+    endif
+    -Suppression de l'idcard
+    if ( \n Ecriture OK \n )
+    -[#green]-> Oui ;
+    -Retour du code \n **200: SUCCESS**
+    else
+    -[#red]-> Non ;
+    -Retour du code erreur \n **500: INTERNAL_ERROR**
+    endif
+}
+stop
+
+note right
+  Doit-on supprimer l'idcard dans les associations ?
+end note
+
+legend 
+**Légende**
+
+**Retour du code erreur** : Permet la remontée d'un message d'erreur (localisé) à l'utilisateur.
+
+endlegend
+
+@enduml
