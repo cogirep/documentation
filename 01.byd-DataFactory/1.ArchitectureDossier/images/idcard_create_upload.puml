@@ -5,7 +5,17 @@ POST **/files/** : Créer un idcard avec upload d'un fichier
 
 end title
 
+|#AntiqueWhite| Front |
 start
+->  **Hypothèse:** \n  - Utilisateur authentifié \n  - Profil Utilisateur BEYOND:  \n    - importer\n    - accéder \n \n **Prérequis:** \n Pour lancer une transformation:  \n    - [DATA-TYPE001]: Fichiers autorisés : \n      - Fichier .LAS ou .LAZ - 3D Model \n      - Fichier .GEOJSON - Geojson \n      - Fichier .JSON - Json 2 yaml \n      - Fichier .ZIP - Pointcloud ou Orthoimage;
+
+-Ouverture de l'interface \n d'upload de fichier dans le module Données \n (Datafactory) \n\n Seuls les fichiers paramétrés dans \n **[DATA-TYPE001]** peuvent être remontés \n
+-Saisie des paramètres de l'ID-CARD \n - Label \n - Groupe propriétaire (calculé) \n - Groupe consommateur (optionnel) \n - Latitude (optionnel) \n - Longitude (optionnel)
+-Sélection d'**UN** fichier sur le poste de l'utilisateur
+-Sélectionner une transformation dans la liste
+-Cliquer sur le bonton\n**Importer des données**
+
+| Back |
 if ( \n Vérifier les droits \n **import** \n)
     -[#red]-> Non ;
     -Retour du code erreur \n **401: UNAUTHORIZED**
