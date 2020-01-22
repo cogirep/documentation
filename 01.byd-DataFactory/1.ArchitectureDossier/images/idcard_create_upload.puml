@@ -1,21 +1,25 @@
-@startuml
+@startuml idcard_create_upload
 
 title
-POST **/files/** : Créer un idcard avec upload d'un fichier
+
+Beyond Datafactory : Créer un idcard avec upload d'un fichier
 
 end title
 
 |#AntiqueWhite| Front |
 start
-->  **Hypothèse:** \n  - Utilisateur authentifié \n  - Profil Utilisateur BEYOND:  \n    - importer\n    - accéder \n \n **Prérequis:** \n Pour lancer une transformation:  \n    - [DATA-TYPE001]: Fichiers autorisés : \n      - Fichier .LAS ou .LAZ - 3D Model \n      - Fichier .GEOJSON - Geojson \n      - Fichier .JSON - Json 2 yaml \n      - Fichier .ZIP - Pointcloud ou Orthoimage;
+->  **Hypothèse:** \n  - Utilisateur authentifié \n  - Profil Utilisateur BEYOND:  \n    - importer\n    - accéder \n \n **Prérequis:** \n Pour lancer une transformation:  \n    - [DATA-TYPE001]: Fichiers autorisés : \n      - Fichier .LAS ou .LAZ - Nuage de points \n      - Fichier .DAE - 3D Model \n      - Fichier .GEOJSON - Geojson \n      - Fichier .JSON - Json 2 yaml \n      - Fichier .ZIP - Visu-Pointcloud ou Visu-Orthoimage ou Visu-3D Model ou Transformation orthoimage;
 
--Ouverture de l'interface \n d'upload de fichier dans le module Données \n (Datafactory) \n\n Seuls les fichiers paramétrés dans \n **[DATA-TYPE001]** peuvent être remontés \n
--Saisie des paramètres de l'ID-CARD \n - Label \n - Groupe propriétaire (calculé) \n - Groupe consommateur (optionnel) \n - Latitude (optionnel) \n - Longitude (optionnel)
+-Ouverture de l'interface \n d'upload de fichier dans Datafactory \n\n Seuls les fichiers paramétrés dans \n **[DATA-TYPE001]** peuvent être remontés \n
+-Saisie des paramètres de l'IDCARD \n - Label \n - Groupe propriétaire (calculé) \n - Groupe consommateur (optionnel) \n - Latitude (optionnel) \n - Longitude (optionnel)
 -Sélection d'**UN** fichier sur le poste de l'utilisateur
 -Sélectionner une transformation dans la liste
--Cliquer sur le bonton\n**Importer des données**
+-Cliquer sur le bouton\n**Importer des données**
 
 | Back |
+note right
+  api "POST **/files/**"
+end note
 if ( \n Vérifier les droits \n **import** \n)
     -[#red]-> Non ;
     -Retour du code erreur \n **401: UNAUTHORIZED**
@@ -30,7 +34,7 @@ partition "Transformation \ndemandée" {
             -Supprimer le fichier reçu
             -Retour du code erreur \n **400: Wrong transformation requested**
             stop
-        elseif ( \n Transformation **ORTHOIMAGE** \n fichier **tileset.json**  est présent dans l'archive \n ) then (Oui) 
+        elseif ( \n Visualisation **ORTHOIMAGE** \n fichier **tileset.json**  est présent dans l'archive \n ) then (Oui) 
             -Supprimer le fichier reçu
             -Retour du code erreur \n **400: Wrong transformation requested**
             stop
@@ -61,14 +65,17 @@ partition "Transformation demandée" {
         else (Non)
         endif
         -Ajout d'un enrichissement
-    elseif (JSON2YML) then (Oui)
+    elseif (Transformation JSON2YML) then (Oui)
         -Lancer la transfo JSON2YML
-    elseif (POINTCLOUD) then (Oui)
+    elseif (Transformation POINTCLOUD) then (Oui)
         -Lancer la transfo POINTCLOUD
-    elseif (3DMODEL) then (Oui)
+        -Ajout d'un enrichissement
+    elseif (Transformation 3DMODEL) then (Oui)
         -Lancer la transfo 3DMODEL
-    elseif (ORTHOIMAGE) then (Oui)
+        -Ajout d'un enrichissement
+    elseif (Transformation ORTHOIMAGE) then (Oui)
         -Lancer la transfo ORTHOIMAGE
+        -Ajout d'un enrichissement
     else (Non)
     endif
 }

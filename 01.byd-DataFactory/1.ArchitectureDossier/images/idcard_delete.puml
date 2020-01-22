@@ -1,21 +1,31 @@
-@startuml
+@startuml idcard_delete
 
 title
-DELETE **/idcard/:id** : Supprimer un idcard
+
+Beyond Datafactory : Supprimer un idcard
 
 end title
 
+|#AntiqueWhite| Front |
 start
+->  **Hypothèse:** \n  - Utilisateur authentifié \n  - Profil Utilisateur BEYOND:  \n    - admin\n    - accéder;
+
+-Être sur Datafactory\nOuverture de l'interface idcard
+-Sélectionner l'idcard que l'on veut supprimer, en cliquant sur l'icône **info (i)** \nUne sidebar apparait à droite détaillant l'idcard\n\nCliquer sur le bouton **Poubelle** en haut à droite \n\nUne popup de confirmation apparait, valider avec \nle bouton "**Suppimer**"
+
+| Back |
+note right
+  api "DELETE **/idcard/:id**"
+end note
 if ( \n Vérifier les droits \n **admin** \n)
 -[#red]-> Non ;
 -Retour du code erreur \n **401: UNAUTHORIZED**
 stop
-elseif ( \n Valide id \n )
+elseif ( \n ID valide \n )
 -[#red]-> Non ;
 -Retour du code erreur \n **406: ID_NOTVALID**
 stop
 endif
-
 
 partition "Suppression de \nl'idcard" {
     -Suppression de l'enrichissement associé

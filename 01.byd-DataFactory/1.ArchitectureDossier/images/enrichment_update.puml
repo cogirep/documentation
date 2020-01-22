@@ -1,17 +1,29 @@
-@startuml
+@startuml enrichment_update
 
 title
-PUT **/enrichment/:id** : Mette à jour un enrichissement
+
+Beyond Manager : Mette à jour un enrichissement
 
 end title
 
+|#AntiqueWhite| Front |
 start
+->  **Hypothèse:** \n  - Utilisateur authentifié \n  - Profil Utilisateur BEYOND:  \n    - accéder ;
+
+-Être sur Beyond Manager, \n- cliquer sur "Enrichissement" dans la sidebar de gauche
+-Ouverture de l'interface enrichissement
+-Sélectionner l'enrichissement que l'on veut supprimer \nCliquer sur le bouton **Poubelle** à droite \n\nUne popup de confirmation apparait, valider avec \nle bouton "**Suppimer**"
+
+| Back |
+note right
+  api "PUT **/enrichment/:id**"
+end note
 if ( \n Vérifier les droits \n **access** \n)
 -[#red]-> Non ;
 -Retour du code erreur \n **401: UNAUTHORIZED**
 stop
 
-elseif ( \n Valide body \n **JSON Schema** \n )
+elseif ( \n Body valide \n **JSON Schema** \n )
 -[#red]-> Non ;
 -Retour du code erreur \n **406: BODY_ERROR**
 stop
@@ -36,6 +48,9 @@ partition "Validation de l'enrichissement" {
 
 partition "Mise à jour de \nl'enrichissement" {
     -Génération du REVISIONID
+    note right
+      Pas encore implémenté
+    end note
     - Mise à jour de l'enrichissement \n templateId \n templateLabel \n idcardId \n idcardRevisionId \n Propriétaire \n ...;
     if ( \n Ecriture OK \n )
     -[#green]-> Oui ;

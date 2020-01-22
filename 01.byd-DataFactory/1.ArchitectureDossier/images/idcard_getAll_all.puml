@@ -1,11 +1,22 @@
-@startuml
+@startuml idcard_getAll_all
 
 title
-GET **/idcard/all** : Récupérer tous les idcards
+
+Beyond Reality : Récupérer tous les idcards
 
 end title
 
+|#AntiqueWhite| Front |
 start
+->  **Hypothèse:** \n  - Utilisateur authentifié \n  - Profil Utilisateur BEYOND:  \n    - accéder;
+
+-Être sur Reality\nOuverture de l'interface avec la carte
+-J'ai besoin d'afficher les éléments sur la carte
+
+| Back |
+note right
+  api "GET **/idcard/all**"
+end note
 if ( \n Vérifier les droits \n **access** \n)
     -[#red]-> Non ;
     -Retour du code erreur \n **401: UNAUTHORIZED**
@@ -22,17 +33,17 @@ partition "GetAll for cesium " {
         stop
     else (Oui)
     endif
-    -Récupère tous les idcards publics et du groupe de \n l'utilisateur ayant le template Cesium et/ou contextData
+    -Récupère toutes les idcards publiques et du groupe de \n l'utilisateur ayant le template Cesium et/ou contextData
     note right
     On peut aussi faire
     * de la recherche
     endnote
 
-    if ( \n Données \n )
-        -[#green]-> Oui ;
+    if ( \n Erreurs \n )
+        -[#green]-> Non ;
         -Retour du code \n **200: SUCCESS** \n avec la donnée
     else
-        -[#red]-> Non ;
+        -[#red]-> Oui ;
         -Retour du code erreur \n **500: INTERNAL_ERROR**
     endif
 }
