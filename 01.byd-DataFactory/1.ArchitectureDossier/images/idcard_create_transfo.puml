@@ -1,17 +1,27 @@
-@startuml
+@startuml idcard_create_transfo
 
 title
-POST **/idcard/** : Créer un idcard
-Utiliser juste après une transformation
+
+Beyond Datafactory : Créer un idcard
+(Utiliser juste après une transformation)
 
 end title
 
+|#AntiqueWhite| Front |
 start
-note
-**Amélioration**:
-Vérifier les droits d'accès au service
-endnote
-if ( \n Valide body \n **JSON Schema** \n )
+->  **Hypothèse:** \n  - Une transformation a été demandé \n \n  - Utilisateur authentifié \n  - Profil Utilisateur BEYOND:  \n    - accéder ;
+
+-Être sur Datafactory, \n- avoir lancé une transformation
+
+| Back |
+note right
+  api "POST **/idcard/**"
+
+  **Amélioration**:
+  Vérifier les droits d'accès au service
+end note
+
+if ( \n Body valide  \n **JSON Schema** \n )
     -[#red]-> Non ;
     -Retour du code erreur \n **406: BODY_ERROR**
     stop

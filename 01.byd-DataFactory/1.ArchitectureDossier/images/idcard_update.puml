@@ -1,16 +1,25 @@
-@startuml
+@startuml idcard_update
 
 title
 PUT **/idcard/:id** : Mise à jour un idcard
 
 end title
 
+|#AntiqueWhite| Front |
 start
+->  **Hypothèse:** \n  - Utilisateur authentifié \n  - Profil Utilisateur BEYOND:  \n    - accéder\n    - admin;
+
+-Être sur Datafactory\nSélectionner l'idcard que l'on veut mettre à jour \nCliquer sur le bouton **Mettre à jour** à droite \n\nJe modifie l'idcard et je valide avec le bouton "Valider"
+
+| Back |
+note right
+  api "PUT **/idcard/:id**"
+end note
 if ( \n Vérifier les droits \n **admin** \n)
     -[#red]-> Non ;
     -Retour du code erreur \n **401: UNAUTHORIZED**
     stop
-elseif ( \n Valide body \n **JSON Schema** \n )
+elseif ( \n Body valide \n **JSON Schema** \n )
     -[#red]-> Non ;
     -Retour du code erreur \n **406: BODY_ERROR**
     stop
@@ -19,6 +28,9 @@ endif
 
 partition "Mise à jour de \nl'idcard" {
     -Génération du REVISIONID
+    note right
+      Pas encore implémenté
+    end note
     -Mise à jour de l'idcard
     if ( \n Ecriture OK \n )
         -[#green]-> Oui ;

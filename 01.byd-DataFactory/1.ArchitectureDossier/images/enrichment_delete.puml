@@ -1,11 +1,23 @@
-@startuml
+@startuml enrichment_delete
 
 title
-DELETE **/enrichment/:id** : Suppression un enrichissement
+
+Beyond Manager : Suppression un enrichissement
 
 end title
 
+|#AntiqueWhite| Front |
 start
+->  **Hypothèse:** \n  - Utilisateur authentifié \n  - Profil Utilisateur BEYOND:  \n    - accéder \n    - admin ;
+
+-Être sur Beyond Manager, \n- cliquer sur "Enrichissement" dans la sidebar de gauche
+-Ouverture de l'interface enrichissement
+-Sélectionner l'enrichissement que l'on veut supprimer \nCliquer sur le bouton **Poubelle** à droite \n\nUne popup de confirmation apparait, valider avec \nle bouton "**Suppimer**"
+
+| Back |
+note right
+  api "DELETE **/enrichment/:id**"
+end note
 if ( \n Vérifier les droits \n **admin** \n)
 -[#red]-> Non ;
 -Retour du code erreur \n **401: UNAUTHORIZED**

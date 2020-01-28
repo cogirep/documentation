@@ -1,17 +1,31 @@
-@startuml
+@startuml enrichment_create
 
 title
-POST **/enrichment/** : Créer un enrichissement
+
+Beyond Manager : Créer un enrichissement
 
 end title
 
+|#AntiqueWhite| Front |
 start
+->  **Hypothèse:** \n  - Utilisateur authentifié \n  - Profil Utilisateur BEYOND:  \n    - accéder \n;
+
+-Être sur Beyond Manager, \n- cliquer sur "Enrichissement" dans la sidebar de gauche\n- cliquer sur le bouton "**Ajouter un enrichissement**" en haut à droite
+-Ouverture de l'interface de création d'un enrichissement dans une modal
+-Saisie des propriétés de l'enrichissement \n \n Tous les champs sont obligatoires\n  - Label\n  - Description\n  - Valeur\n  - Type (liste déroulante)\n    - String\n    - Number\n    - Date
+-Vous pouvez ajouter des propriétés en cliquant sur le bonton **plus (+)**\n \nVous ne pouvez pas : \n  - supprimer une propriété\n  - changer l'ordre des propriétés
+-Cliquer sur le bouton\n**Ajouter**
+
+| Back |
+note right
+  api "POST /enrichment/"
+end note
 if ( \n Vérifier les droits \n **access** \n)
 -[#red]-> Non ;
 -Retour du code erreur \n **401: UNAUTHORIZED**
 stop
 
-elseif ( \n Valide body \n **JSON Schema** \n )
+elseif ( \n Body valide \n **JSON Schema** \n )
 -[#red]-> Non ;
 -Retour du code erreur \n **406: BODY_ERROR**
 stop
@@ -33,7 +47,7 @@ partition "Validation de l'enrichissement" {
     -Retour du code erreur \n **400: TEMPLATE_NOTEXIST**
     stop
 
-    elseif ( \n Propriété valide avec le template \n JSON Schema \n )
+    elseif ( \n Propriétés valides avec le template \n JSON Schema \n )
     -[#red]-> Non ;
     -Retour du code erreur \n **406: BODY_ERROR**
     stop

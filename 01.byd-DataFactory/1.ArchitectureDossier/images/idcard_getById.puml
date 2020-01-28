@@ -1,11 +1,21 @@
-@startuml
+@startuml idcard_getById
 
 title
-GET **/idcard/:id** : Récupérer un idcard
+
+Beyond : Récupérer un idcard
 
 end title
 
+|#AntiqueWhite| Front |
 start
+->  **Hypothèse:** \n  - Utilisateur authentifié \n  - Profil Utilisateur BEYOND:  \n    - accéder;
+
+-Être sur Reality ou sur Datafactory, je sélectionne \nun élément sur la carte ou dans le tableau
+
+| Back |
+note right
+  api "GET **/idcard/:id**"
+end note
 if ( \n Vérifier les droits \n **access** \n)
 -[#red]-> Non ;
 -Retour du code erreur \n **401: UNAUTHORIZED**
@@ -16,22 +26,21 @@ elseif ( \n Id Valide \n )
 stop
 endif
 
-
 partition "GetById " {
     -Récupère l'idcard
     note right
     **Amélioration**: 
     Vérifier le groupe de l'utilisateur pour ne remonter 
-    uniquement l'idcard pour son groupe ou en public
+     le contenu de l'idcard que pour son groupe ou en public
     endnote
     if ( \n Données \n )
         -[#green]-> Oui ;
         -Retour du code \n **200: SUCCESS** \n avec la donnée
-    elseif ( \n Erreur \n )
-        -[#green]-> Non ;
+    elseif ( \n Erreur connue \n )
+        -[#green]-> Oui ;
         -Retour du code \n **400: NOT_FOUND**
     else
-        -[#red]-> Oui ;
+        -[#red]-> Non ;
         -Retour du code erreur \n **500: INTERNAL_ERROR**
     endif
 }
