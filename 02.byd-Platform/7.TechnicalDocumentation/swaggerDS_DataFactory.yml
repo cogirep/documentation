@@ -1,0 +1,605 @@
+################################################################################
+################################################################################
+##                     FULL BIM API    -    IDCARDS                    ##
+################################################################################
+################################################################################
+# Remark :                        Swagger 2.0 to ensure compliance with API Connect
+swagger:                          '2.0'
+info:
+  title:                          'Platform API'
+  description:                    ''
+  version:                        1.0.0
+host:                             'F.Q.D.N_of_the_host'
+consumes:
+  - application/json
+  - multipart/form-data
+produces:
+  - application/json
+basePath:                         '/api/v1'
+schemes:
+  - https
+################################################################################
+
+tags:
+  - name:                         'idcards'
+    description:                  'idcards management APIs'
+  - name:                         'enrichment'
+    description:                  'enrichment management APIs'
+
+################################################################################
+
+paths:
+  #------------------------------------------------------------------------------#
+  '/idcards':
+    post:
+      tags:
+        - idcards
+      summary:                    'create an idcard'
+
+      parameters:
+        - in:                     body
+          name:                   body
+          schema:
+            required:
+              - label
+              - ownerGroup
+              - latitude
+              - longitude
+              - consumerGroup
+              - status
+            properties:
+              label:
+                type:             string
+                example:          "Ma donnée"
+              latitude:
+                type:             string
+                example:          "1.5"
+              longitude:
+                type:             string
+                example:          "1.5"
+              ownerGroup:
+                type:             string
+                example:          "BEYOND"
+              consumerGroup:
+                type:             string
+                example:          "SIXENSE"
+              status:
+                type:             string
+                example:          "ACTIVE"
+
+
+      responses:
+        '200':
+          description:            Success
+          schema:
+            properties:
+              action:
+                type:             string
+                example:          'IDCARD_CREATE_SUCCESS'
+              code:
+                type:             integer
+                example:          200
+              message:
+                type:              string
+                example:           'Success'
+              data:
+                type:             array
+                items:
+                  type:           object
+                  properties:
+                    _id:
+                      type:       string
+                      example:    "5d711d8b2a21ab1627619ad9"
+                    createdAt:
+                      type:       string
+                      example:    "2020-01-15T09:25:51.156+00:00"
+                    beyondId:
+                      type:       string
+                      example:    "Htrhrth4556-rfgregr34-TGTRGTRH43"
+                    status:
+                      type:       string
+                      example:    "ACTIVE"
+                    languageCode:
+                      type:       string
+                      example:    "FR-fr"
+                    labels:
+                      type:       array
+                      items:
+                        type:     object
+                        properties:
+                          languageCode:
+                            type: string
+                            example: "fr-FR"
+                          label:
+                            type: string
+                            example: "Label test"
+                    latitude:
+                      type:       string
+                      example:    "80.5"
+                    longitude:
+                      type:       string
+                      example:    "80.5"
+                    file:
+                      type:       object
+                      properties:
+                        filepath:
+                          type:   string
+                          example: ""
+                        fileHash:
+                          type:   string
+                          example: ""
+                        fileHashMethod:
+                          type:   string
+                          example: ""
+                        tilesetPath:
+                          type:   string
+                          example: ""
+                    ownerGroup:
+                      type:       string
+                      example:    "Groupe "
+                    consumerGroup:
+                      type:       string
+                      example:    "Groupe consommateur"
+                    location:
+                      type:       object
+                      properties:
+                        geometry:
+                          type:   object
+                        projection:
+                          type:   string
+                          example: "GPS"
+
+
+        '406':
+          description:            Query error
+          schema:
+            properties:
+              code:
+                type:             integer
+                example:          406
+              errorCode:
+                type:             string
+                example:          'BODY_NOT_VALID'
+              action:
+                type:             string
+                example:          'IDCARD_CREATE_ERROR'
+              message:
+                type:             string
+                example:          "le contenue de la requete n'est pas valide"
+              languageCode:
+                type:             string
+                example:          'fr-FR'
+        '500':
+          description:            Query error
+          schema:
+            properties:
+              code:
+                type:             integer
+                example:          500
+              errorCode:
+                type:             string
+                example:          'INTERNAL_SERVOR_ERROR'
+              action:
+                type:             string
+                example:          'IDCARD_CREATE_ERROR'
+              message:
+                type:             string
+                example:          "erreur interne"
+              languageCode:
+                type:             string
+                example:          'fr-FR'
+
+  #------------------------------------------------------------------------------#
+
+  '/idcards/{id}':
+    put:
+      tags:
+        - idcards
+      summary:                    'update an idcard'
+
+      parameters:
+        - in:                       path
+          name:                     id
+          type:                     integer
+          required:                 true
+          description:              id of idcard
+
+        - in:                     body
+          name:                   body
+          schema:
+            required:
+              - label
+              - ownerGroup
+              - latitude
+              - longitude
+              - consumerGroup
+              - status
+            properties:
+              label:
+                type:             string
+                example:          "Ma donnée"
+              latitude:
+                type:             string
+                example:          "1.5"
+              longitude:
+                type:             string
+                example:          "1.5"
+              ownerGroup:
+                type:             string
+                example:          "BEYOND"
+              consumerGroup:
+                type:             string
+                example:          "SIXENSE"
+              status:
+                type:             string
+                example:          "ACTIVE"
+
+
+      responses:
+        '200':
+          description:            Success
+          schema:
+            properties:
+              action:
+                type:             string
+                example:          'IDCARD_UPDATE_SUCCESS'
+              code:
+                type:             integer
+                example:          200
+              message:
+                type:              string
+                example:           'Success'
+              data:
+                type:             array
+                items:
+                  type:           object
+                  properties:
+                    _id:
+                      type:       string
+                      example:    "5d711d8b2a21ab1627619ad9"
+                    createdAt:
+                      type:       string
+                      example:    "2020-01-15T09:25:51.156+00:00"
+                    beyondId:
+                      type:       string
+                      example:    "Htrhrth4556-rfgregr34-TGTRGTRH43"
+                    status:
+                      type:       string
+                      example:    "ACTIVE"
+                    languageCode:
+                      type:       string
+                      example:    "FR-fr"
+                    labels:
+                      type:       array
+                      items:
+                        type:     object
+                        properties:
+                          languageCode:
+                            type: string
+                            example: "fr-FR"
+                          label:
+                            type: string
+                            example: "Label test"
+                    latitude:
+                      type:       string
+                      example:    "80.5"
+                    longitude:
+                      type:       string
+                      example:    "80.5"
+                    file:
+                      type:       object
+                      properties:
+                        filepath:
+                          type:   string
+                          example: ""
+                        fileHash:
+                          type:   string
+                          example: ""
+                        fileHashMethod:
+                          type:   string
+                          example: ""
+                        tilesetPath:
+                          type:   string
+                          example: ""
+                    ownerGroup:
+                      type:       string
+                      example:    "Groupe "
+                    consumerGroup:
+                      type:       string
+                      example:    "Groupe consommateur"
+                    location:
+                      type:       object
+                      properties:
+                        geometry:
+                          type:   object
+                        projection:
+                          type:   string
+                          example: "GPS"
+
+
+        '406':
+          description:            Query error
+          schema:
+            properties:
+              code:
+                type:             integer
+                example:          406
+              errorCode:
+                type:             string
+                example:          'BODY_NOT_VALID'
+              action:
+                type:             string
+                example:          'IDCARD_UPDATE_ERROR'
+              message:
+                type:             string
+                example:          "le contenue de la requete n'est pas valide"
+              languageCode:
+                type:             string
+                example:          'fr-FR'
+        '500':
+          description:            Query error
+          schema:
+            properties:
+              code:
+                type:             integer
+                example:          500
+              errorCode:
+                type:             string
+                example:          'INTERNAL_SERVOR_ERROR'
+              action:
+                type:             string
+                example:          'IDCARD_UPDATE_ERROR'
+              message:
+                type:             string
+                example:          "erreur interne"
+              languageCode:
+                type:             string
+                example:          'fr-FR
+
+
+  #------------------------------------------------------------------------------#
+
+  '/enrichment/{id}':
+    put:
+      tags:
+        - enrichment
+      summary:                    'update enrichment'
+      parameters:
+        - in:                     path
+          name:                   id
+          type:                   integer
+          required:               true
+          description:            id of Enrichment
+
+        - in:                     body
+          name:                   body
+          schema:
+            type:                 object
+            required:
+              - templateId
+              - properties
+            properties:
+              templateId:
+                type:             string
+                example:          "5e3a9161578160ddffa7ff2f"
+              properties:
+                type:             object
+                properties:
+                  Nombre d'observations:
+                    type:         number
+                    example:      1
+                  Nombre d'utilisateurs:
+                    type:         number
+                    example:      2
+                  Nombre de documents stockés dans GED:
+                    type:         number
+                    example:        3
+      responses:
+        '200':
+          description:            "Success"
+          schema:
+            properties:
+              code:
+                type:             integer
+                example:          200
+              message:
+                type:             string
+                example:          "Success"
+              action:
+                type:             string
+                example:          "ENRICHMENT_UPDATE_SUCCESS"
+              data:
+                type:             object
+                example:          {
+                                    "createdAt": "2020-02-05T10:02:24.876Z",
+                                    "revisionId": "97356198-9788-4b1a-8071-f4c87a857e7b",
+                                    "status": "ACTIVE",
+                                    "templateLabel": "Enrichissement_DS",
+                                    "templateId": "5e3a9161578160ddffa7ff2f",
+                                    "idcardId": "5e1eda9ff1568c00136ec94a",
+                                    "idcardRevisionId": "7ecaf84c-fd8b-42d2-9fcc-28b59d7e9349",
+                                    "properties": {
+                                        "Nombre d'observations": 1,
+                                        "Nombre d'utilisateurs": 1,
+                                        "Nombre de documents stockés dans GED": 1
+                                    },
+                                    "_id": "5e3a92b012ba0fe0b5ec5796"
+                                  }
+
+        '406':
+          description:            Query error
+          schema:
+            properties:
+              code:
+                type:             integer
+                example:          406
+              errorCode:
+                type:             string
+                example:          'BODY_NOT_VALID'
+              action:
+                type:             string
+                example:          'ENRICHMENT_UPDATE_ERROR'
+              message:
+                type:             string
+                example:          "le contenue de la requete n'est pas valide"
+              languageCode:
+                type:             string
+                example:          'fr-FR'
+        '500':
+          description:            Query error
+          schema:
+            properties:
+              code:
+                type:             integer
+                example:          500
+              errorCode:
+                type:             string
+                example:          'INTERNAL_SERVOR_ERROR'
+              action:
+                type:             string
+                example:          'ENRICHMENT_UPDATE_ERROR'
+              message:
+                type:             string
+                example:          "erreur interne"
+              languageCode:
+                type:             string
+                example:          "fr-FR"
+
+  #------------------------------------------------------------------------------#
+
+  '/enrichment':
+    post:
+      tags:
+        - enrichment
+      summary:                    'create enrichment'
+      parameters:
+        - in:                     body
+          name:                   body
+          schema:
+            type:                 object
+            required:
+              - templateId
+              - properties
+              - idCardId
+            properties:
+              templateId:
+                type:             string
+                example:          "5e3a9161578160ddffa7ff2f"
+              properties:
+                type:             object
+                properties:
+                  Nombre d'observations:
+                    type:         number
+                    example:      1
+                  Nombre d'utilisateurs:
+                    type:         number
+                    example:      2
+                  Nombre de documents stockés dans GED:
+                    type:         number
+                    example:        3
+              idCardId:
+                type:             string
+                example:          "5e1eda9ff1568c00136ec94a"
+      responses:
+        '200':
+          description:            "Success"
+          schema:
+            properties:
+              code:
+                type:             integer
+                example:          200
+              message:
+                type:             string
+                example:          "Success"
+              action:
+                type:             string
+                example:          "ENRICHMENT_CREATE_SUCCESS"
+              data:
+                type:             object
+                example:          {
+                                    "createdAt": "2020-02-05T10:02:24.876Z",
+                                    "revisionId": "97356198-9788-4b1a-8071-f4c87a857e7b",
+                                    "status": "ACTIVE",
+                                    "templateLabel": "Enrichissement_DS",
+                                    "templateId": "5e3a9161578160ddffa7ff2f",
+                                    "idcardId": "5e1eda9ff1568c00136ec94a",
+                                    "idcardRevisionId": "7ecaf84c-fd8b-42d2-9fcc-28b59d7e9349",
+                                    "properties": {
+                                        "Nombre d'observations": 1,
+                                        "Nombre d'utilisateurs": 1,
+                                        "Nombre de documents stockés dans GED": 1
+                                    },
+                                    "_id": "5e3a92b012ba0fe0b5ec5796"
+                                  }
+
+        '406':
+          description:            Query error
+          schema:
+            properties:
+              code:
+                type:             integer
+                example:          406
+              errorCode:
+                type:             string
+                example:          'BODY_NOT_VALID'
+              action:
+                type:             string
+                example:          'ENRICHMENT_CREATE_ERROR'
+              message:
+                type:             string
+                example:          "le contenue de la requete n'est pas valide"
+              languageCode:
+                type:             string
+                example:          'fr-FR'
+        '500':
+          description:            Query error
+          schema:
+            properties:
+              code:
+                type:             integer
+                example:          500
+              errorCode:
+                type:             string
+                example:          'INTERNAL_SERVOR_ERROR'
+              action:
+                type:             string
+                example:          'ENRICHMENT_CREATE_ERROR'
+              message:
+                type:             string
+                example:          "erreur interne"
+              languageCode:
+                type:             string
+                example:          "fr-FR"
+
+
+responses:
+  200Ok:
+    description:                    Successfull
+  201Created:
+    description:                    Created
+  202Accepted:
+    description:                    Accepted
+  203NonAuthoritativeInformation:
+    description:                    Non-Authoritative Information
+  204NoContent:
+    description:                    No Content
+  400BadRequest:
+    description:                    Bad Request
+  401Unauthorized:
+    description:                    Unauthorized
+  403Forbidden:
+    description:                    Forbidden
+  404NotFound:
+    description:                    Not Found
+  409Conflict:
+    description:                    Conflict
+  500InternalServer:
+    description:                    Internal Server Error
+  501NotImplemented:
+    description:                    Not Implemented
+  502BadGateway:
+    description:                    Bad Gateway
+  503ServiceUnavailable:
+    description:                    Service Unavailable
+  504GatewayTimeout:
+    description:                    Gateway Timeout
