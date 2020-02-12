@@ -203,17 +203,10 @@ paths:
           type:                     integer
           required:                 true
           description:              id of idcard
-
+          
         - in:                     body
           name:                   body
           schema:
-            required:
-              - label
-              - ownerGroup
-              - latitude
-              - longitude
-              - consumerGroup
-              - status
             properties:
               label:
                 type:             string
@@ -354,22 +347,25 @@ paths:
                 example:          "erreur interne"
               languageCode:
                 type:             string
-                example:          'fr-FR
-
-
+                example:          'fr-FR'
   #------------------------------------------------------------------------------#
-
-  '/enrichment/{id}':
+  '/idcard/{beyond-id}/enrichment/{enrichment-id}':
     put:
       tags:
         - enrichment
       summary:                    'update enrichment'
       parameters:
         - in:                     path
-          name:                   id
+          name:                   enrichment-id
           type:                   integer
           required:               true
           description:            id of Enrichment
+          
+        - in:                     path
+          name:                   beyond-id
+          type:                   integer
+          required:               true
+          description:            beyond id of idcard
 
         - in:                     body
           name:                   body
@@ -385,15 +381,12 @@ paths:
               properties:
                 type:             object
                 properties:
-                  Nombre d'observations:
-                    type:         number
-                    example:      1
-                  Nombre d'utilisateurs:
-                    type:         number
-                    example:      2
-                  Nombre de documents stockés dans GED:
-                    type:         number
-                    example:        3
+                  key 1:
+                    type:         string
+                    example:      "key 1 value"
+                  key 2:
+                    type:         string
+                    example:      "key 2 value"
       responses:
         '200':
           description:            "Success"
@@ -419,9 +412,8 @@ paths:
                                     "idcardId": "5e1eda9ff1568c00136ec94a",
                                     "idcardRevisionId": "7ecaf84c-fd8b-42d2-9fcc-28b59d7e9349",
                                     "properties": {
-                                        "Nombre d'observations": 1,
-                                        "Nombre d'utilisateurs": 1,
-                                        "Nombre de documents stockés dans GED": 1
+                                        "key 1": "key 1 value",
+                                        "key 2": "key 2 value"
                                     },
                                     "_id": "5e3a92b012ba0fe0b5ec5796"
                                   }
@@ -467,12 +459,18 @@ paths:
 
   #------------------------------------------------------------------------------#
 
-  '/enrichment':
+  '/idcard/{beyond-id}/enrichment/':
     post:
       tags:
         - enrichment
       summary:                    'create enrichment'
       parameters:
+        - in:                     path
+          name:                   beyond-id
+          type:                   integer
+          required:               true
+          description:            beyond id of idcard
+          
         - in:                     body
           name:                   body
           schema:
@@ -480,7 +478,6 @@ paths:
             required:
               - templateId
               - properties
-              - idCardId
             properties:
               templateId:
                 type:             string
@@ -488,18 +485,12 @@ paths:
               properties:
                 type:             object
                 properties:
-                  Nombre d'observations:
-                    type:         number
-                    example:      1
-                  Nombre d'utilisateurs:
-                    type:         number
-                    example:      2
-                  Nombre de documents stockés dans GED:
-                    type:         number
-                    example:        3
-              idCardId:
-                type:             string
-                example:          "5e1eda9ff1568c00136ec94a"
+                  key 1:
+                    type:         string
+                    example:      "key 1 value"
+                  key 2:
+                    type:         string
+                    example:      "key 2 value"
       responses:
         '200':
           description:            "Success"
@@ -525,9 +516,8 @@ paths:
                                     "idcardId": "5e1eda9ff1568c00136ec94a",
                                     "idcardRevisionId": "7ecaf84c-fd8b-42d2-9fcc-28b59d7e9349",
                                     "properties": {
-                                        "Nombre d'observations": 1,
-                                        "Nombre d'utilisateurs": 1,
-                                        "Nombre de documents stockés dans GED": 1
+                                        "key 1": "key 1 value",
+                                        "key 2": "key 2 value",
                                     },
                                     "_id": "5e3a92b012ba0fe0b5ec5796"
                                   }
