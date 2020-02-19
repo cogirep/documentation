@@ -1,0 +1,35 @@
+@startuml seq_transfoVisualization
+
+title Visualization Transformation
+
+actor Datafactory as DF
+participant "MS Idcard" as Idcard
+participant "S3 Bucket" as S3
+participant "RabbitMQ" as RabbitMQ
+participant "MS Consumer" as Consumer
+participant "Visualization Transformation" as Transfo
+
+DF -> Idcard: Upload a file
+Idcard -> S3: Upload file to Raw bucket
+Idcard -> Idcard: Create a Idcard
+DF <-- Idcard: Send response 200 Ok
+
+Idcard -> RabbitMQ: Send a order for transformation
+RabbitMQ -> Consumer: Retrieve the notification
+Consumer -> Consumer: Route to the right queue
+
+Consumer -> Transfo: Send a request for transformation
+Transfo <-> S3: Download the file
+Transfo -> Transfo: Transform
+
+alt sucessful transformation
+  Transfo -> S3: Upload new transformation in the right bucket
+
+  Transfo -> Idcard: Create a enrichment
+  Idcard --> Transfo: Send Response
+  Transfo -> Transfo: delete downloaded and transformed files
+else failure transformation
+  Transfo -> Transfo: delete downloaded files
+end
+
+@enduml
