@@ -96,6 +96,9 @@ paths:
                     beyondId:
                       type:       string
                       example:    "Htrhrth4556-rfgregr34-TGTRGTRH43"
+                    revisiondId:
+                      type:       string
+                      example:    "97356198-9788-4b1a-8071-f4c87a857e7b"
                     status:
                       type:       string
                       example:    "ACTIVE"
@@ -191,7 +194,7 @@ paths:
 
   #------------------------------------------------------------------------------#
 
-  '/idcards/{id}':
+  '/idcards/{beyond-id}':
     put:
       tags:
         - idcards
@@ -199,10 +202,10 @@ paths:
 
       parameters:
         - in:                       path
-          name:                     id
-          type:                     integer
+          name:                     beyond-id
+          type:                     string
           required:                 true
-          description:              id of idcard
+          description:              beyondId of idCard
           
         - in:                     body
           name:                   body
@@ -256,6 +259,9 @@ paths:
                     beyondId:
                       type:       string
                       example:    "Htrhrth4556-rfgregr34-TGTRGTRH43"
+                    revisiondId:
+                      type:       string
+                      example:    "97356198-9788-4b1a-8071-f4c87a857e7b"
                     status:
                       type:       string
                       example:    "ACTIVE"
@@ -349,23 +355,23 @@ paths:
                 type:             string
                 example:          'fr-FR'
   #------------------------------------------------------------------------------#
-  '/idcard/{beyond-id}/enrichment/{enrichment-id}':
+  '/idcards/{beyond-id}/enrichment/{enrichment-id}':
     put:
       tags:
         - enrichment
       summary:                    'update enrichment'
       parameters:
         - in:                     path
-          name:                   enrichment-id
-          type:                   integer
-          required:               true
-          description:            id of Enrichment
-          
-        - in:                     path
           name:                   beyond-id
-          type:                   integer
+          type:                   string
           required:               true
           description:            beyond id of idcard
+          
+        - in:                     path
+          name:                   enrichment-id
+          type:                   string
+          required:               true
+          description:            id of Enrichment
 
         - in:                     body
           name:                   body
@@ -389,34 +395,55 @@ paths:
                     example:      "key 2 value"
       responses:
         '200':
-          description:            "Success"
+          description:              "Success"
           schema:
             properties:
               code:
-                type:             integer
-                example:          200
+                type:               integer
+                example:            200
               message:
-                type:             string
-                example:          "Success"
+                type:               string
+                example:            "Success"
               action:
-                type:             string
-                example:          "ENRICHMENT_UPDATE_SUCCESS"
+                type:               string
+                example:            "ENRICHMENT_UPDATE_SUCCESS"
               data:
-                type:             object
-                example:          {
-                                    "createdAt": "2020-02-05T10:02:24.876Z",
-                                    "revisionId": "97356198-9788-4b1a-8071-f4c87a857e7b",
-                                    "status": "ACTIVE",
-                                    "templateLabel": "Enrichissement_DS",
-                                    "templateId": "5e3a9161578160ddffa7ff2f",
-                                    "idcardId": "5e1eda9ff1568c00136ec94a",
-                                    "idcardRevisionId": "7ecaf84c-fd8b-42d2-9fcc-28b59d7e9349",
-                                    "properties": {
-                                        "key 1": "key 1 value",
-                                        "key 2": "key 2 value"
-                                    },
-                                    "_id": "5e3a92b012ba0fe0b5ec5796"
-                                  }
+                type:               object
+                properties:
+                  createdAt:
+                    type:           string
+                    format:         date
+                    example:        "2020-02-05T10:02:24.876Z"
+                  revisionId:
+                    type:           string
+                    example:        "97356198-9788-4b1a-8071-f4c87a857e7b"
+                  status:
+                    type:           string
+                    example:        "ACTIVE"
+                  templateLabel:
+                    type:           string
+                    example:        "Enrichissement_DS"
+                  templateId:
+                    type:           string
+                    example:        "5e3a9161578160ddffa7ff2f"
+                  idcardId:
+                    type:           string
+                    example:        "5e1eda9ff1568c00136ec94a"
+                  idcardRevisionId:
+                    type:           string
+                    example:        "7ecaf84c-fd8b-42d2-9fcc-28b59d7e9349"
+                  properties:
+                    type:           object
+                    properties:
+                      key 1:
+                        type:       string
+                        example:    "key 1 value"
+                      key 2:
+                        type:       string
+                        example:    "key 2 value"
+                  "—id":
+                    type:           string
+                    example:        "5e3a92b012ba0fe0b5ec5796"
 
         '406':
           description:            Query error
@@ -437,6 +464,7 @@ paths:
               languageCode:
                 type:             string
                 example:          'fr-FR'
+                
         '500':
           description:            Query error
           schema:
@@ -459,7 +487,7 @@ paths:
 
   #------------------------------------------------------------------------------#
 
-  '/idcard/{beyond-id}/enrichment/':
+  '/idcards/{beyond-id}/enrichment':
     post:
       tags:
         - enrichment
@@ -467,7 +495,7 @@ paths:
       parameters:
         - in:                     path
           name:                   beyond-id
-          type:                   integer
+          type:                   string
           required:               true
           description:            beyond id of idcard
           
@@ -493,34 +521,55 @@ paths:
                     example:      "key 2 value"
       responses:
         '200':
-          description:            "Success"
+          description:              "Success"
           schema:
             properties:
               code:
-                type:             integer
-                example:          200
+                type:               integer
+                example:            200
               message:
-                type:             string
-                example:          "Success"
+                type:               string
+                example:            "Success"
               action:
-                type:             string
-                example:          "ENRICHMENT_CREATE_SUCCESS"
+                type:               string
+                example:            "ENRICHMENT_CREATE_SUCCESS"
               data:
-                type:             object
-                example:          {
-                                    "createdAt": "2020-02-05T10:02:24.876Z",
-                                    "revisionId": "97356198-9788-4b1a-8071-f4c87a857e7b",
-                                    "status": "ACTIVE",
-                                    "templateLabel": "Enrichissement_DS",
-                                    "templateId": "5e3a9161578160ddffa7ff2f",
-                                    "idcardId": "5e1eda9ff1568c00136ec94a",
-                                    "idcardRevisionId": "7ecaf84c-fd8b-42d2-9fcc-28b59d7e9349",
-                                    "properties": {
-                                        "key 1": "key 1 value",
-                                        "key 2": "key 2 value",
-                                    },
-                                    "_id": "5e3a92b012ba0fe0b5ec5796"
-                                  }
+                type:               object
+                properties:
+                  createdAt:
+                    type:           string
+                    format:         date
+                    example:        "2020-02-05T10:02:24.876Z"
+                  revisionId:
+                    type:           string
+                    example:        "97356198-9788-4b1a-8071-f4c87a857e7b"
+                  status:
+                    type:           string
+                    example:        "ACTIVE"
+                  templateLabel:
+                    type:           string
+                    example:        "Enrichissement_DS"
+                  templateId:
+                    type:           string
+                    example:        "5e3a9161578160ddffa7ff2f"
+                  idcardId:
+                    type:           string
+                    example:        "5e1eda9ff1568c00136ec94a"
+                  idcardRevisionId:
+                    type:           string
+                    example:        "7ecaf84c-fd8b-42d2-9fcc-28b59d7e9349"
+                  properties:
+                    type:           object
+                    properties:
+                      key 1:
+                        type:       string
+                        example:    "key 1 value"
+                      key 2:
+                        type:       string
+                        example:    "key 2 value"
+                  "—id":
+                    type:           string
+                    example:        "5e3a92b012ba0fe0b5ec5796"
 
         '406':
           description:            Query error
@@ -541,6 +590,7 @@ paths:
               languageCode:
                 type:             string
                 example:          'fr-FR'
+                
         '500':
           description:            Query error
           schema:
