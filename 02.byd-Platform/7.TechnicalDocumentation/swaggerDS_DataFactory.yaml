@@ -259,6 +259,9 @@ paths:
                     beyondId:
                       type:       string
                       example:    "Htrhrth4556-rfgregr34-TGTRGTRH43"
+                    revisiondId:
+                      type:       string
+                      example:    "97356198-9788-4b1a-8071-f4c87a857e7b"
                     status:
                       type:       string
                       example:    "ACTIVE"
