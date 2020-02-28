@@ -4,7 +4,8 @@ header
     <b>BEYOND Platform</b> - Diagramme de composants
 end header
 
-!include /Users/fredericfadda/ffa-dev/C4-PlantUML/C4.puml
+'!include /Users/fredericfadda/ffa-dev/C4-PlantUML/C4.puml
+!include ../../../../../C4-PlantUML/C4.puml
 !include /Users/fredericfadda/ffa-dev/C4-PlantUML/C4_Context.puml
 !include /Users/fredericfadda/ffa-dev/C4-PlantUML/C4_Container.puml
 !include /Users/fredericfadda/ffa-dev/C4-PlantUML/C4_Component.puml
@@ -30,14 +31,19 @@ System_Boundary(BYDPTFM, "BEYOND PLATFORM") {
             Component(BYDDFDataAccessMgrPage, "Data Access Manager", "HMI")
             Component(BYDDFIDCardMgrPage, "ID Card Manager", "HMI")
             Component(BYDDFEnrichmentMgrPage, "ID Card Enrichment Manager", "HMI")
-            Component(BYDDFTagMgrPage, "ID Card Tag Manager", "HMI")
+            Component(BYDDFTagMgrPage, "Tag Manager", "HMI")
+            Component(BYDDFAssociationMgrPage, "Association Manager", "HMI")
+            Component(BYDDFTransfoMgrPage, "Transformation Manager", "HMI")
+
         }
     }
     System(BYDDF, "BEYOND DATA FACTORY"){
         Container(BYDDFId, "BYD DF Identifier", "Node.js") {
             Component(BYDDFIdCardMgr, "ID Card CRUD", "Service")
             Component(BYDDFIdCardEnrichMgr, "ID Card Enrichment CRUD", "Service")
-            Component(BYDDFIdCardTagMgr, "ID Card public Tags CRUD", "Service")
+            Component(BYDDFIdCardTagMgr, "public Tags CRUD", "Service")
+            Component(BYDDFAssociationMgr, "Association CRUD", "Service")
+
         }
         Container(BYDDFTransfoManager, "BYD DF Transformation Mgr", "Node.js") {
             Component(BYDDFTransfoMgr, "BYD DF Transformation Mgr", "Service")
@@ -67,7 +73,8 @@ System_Boundary(BYDPTFM, "BEYOND PLATFORM") {
         ContainerDb(BYDDFDB, "BYD DF\nDB", "MongoDB"){
             Component(BYDDFIDCards, "Id Cards", "collection")
             Component(BYDDFIDCardsEnrichments, "Id Cards Enrichments", "collection")
-            Component(BYDDFIDCardsTags, "Id Cards Public Tags Reference", "collection")
+            Component(BYDDFIDCardsTags, "Public Tags Reference", "collection")
+            Component(BYDDFAssociation, "Associations", "collection")
         }
     }
     System(BYDREALITY, "BEYOND REALITY"){
@@ -83,16 +90,15 @@ System_Boundary(BYDPTFM, "BEYOND PLATFORM") {
         }
     }
     System(BYDIDP, "BEYOND IDENTITY & ACCESS MANAGER", "Identity & access management") {
-        Container(BYDIAM, "BEYOND IAM", "Keycloak") {
+        Container(BYDIAM, "BEYOND IAM", "AWS Cognito") {
             Component(BYDIAMLoginPage, "Login Page", "HMI")
             Component(BYDIAMAuthenticate, "Authentication Service", "Service")
             Component(BYDIAMFederate, "Federation Service", "Service")
             Component(BYDIAMUserMgr, "User Manager APIs", "Service")
 
         }
-        ContainerDb(BYDIAMDB, "BEYOND IAM\nDB", "PostgreSQL")
+        ContainerDb(BYDIAMDB, "BEYOND IAM\nDB", "AWS Cognito User Pool")
     }
-
 }
 System_Ext(IdP, "External Identity Providers", "SSO")
 
@@ -118,6 +124,7 @@ Rel(BYDDFEnrichmentMgrPage, BYDDFIdCardEnrichMgr, "Uses", "HTTPS")
 Rel(BYDDFTagMgrPage, BYDDFIdCardTagMgr, "Uses", "HTTPS")
 Rel(BYDIAMMgrPage, BYDIAMMgr, "Uses", "HTTPS")
 Rel(BYDRTY3DPage, BYDRTY3DSvc, "Uses", "HTTPS")
+Rel(BYDDFAssociationMgrPage, BYDDFAssociationMgr, "Uses", "HTTPS")
 ' - between services
 Rel(BYDIAMAuthenticate, BYDIAMFederate, "Uses")
 Rel(BYDDFDataFeederUpload, BYDDFDataFeederStorage, "Uses")
@@ -143,9 +150,7 @@ Rel(BYDRTYSecuritySvc, BYDRTYUSR, "Uses", "JDBC")
 Rel(BYDDFIdCardMgr, BYDDFIDCards, "Uses")
 Rel(BYDDFIdCardEnrichMgr, BYDDFIDCardsEnrichments, "Uses")
 Rel(BYDDFIdCardTagMgr, BYDDFIDCardsTags, "Uses")
-
-
-
+Rel(BYDDFAssociationMgr, BYDDFAssociation, "Uses")
 ' - between services and systems
 Rel(BYDIAMFederate, IdP, "USes", "OIDC")
 
