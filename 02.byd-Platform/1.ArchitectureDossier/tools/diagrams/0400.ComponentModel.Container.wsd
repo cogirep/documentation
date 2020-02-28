@@ -52,9 +52,9 @@ System_Boundary(BYDPTFM, "BEYOND PLATFORM") {
         }
     }
     System(BYDIDP, "BEYOND IDENTITY & ACCESS MANAGER", "Identity & access management"){
-        Container(BYDIAM, "BEYOND IAM", "Keycloak") {
+        Container(BYDIAM, "BEYOND IAM", "AWS Cognito") {
         }
-        ContainerDb(BYDIAMDB, "BEYOND IAM\nDB", "PostgreSQL")
+        ContainerDb(BYDIAMDB, "BEYOND IAM\nDB", "AWS Cognito User Pool")
     }
 
 }
