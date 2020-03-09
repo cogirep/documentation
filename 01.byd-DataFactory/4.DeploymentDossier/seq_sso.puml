@@ -110,7 +110,7 @@ group "Naviguer entre les applications"
       - Tous les x temps ?
     end note
     SSO -> RB: Pas connecté (token expiré ?) ou pas autorisé
-    RB -> RF: Nope
+    RB -> RF: Eject de la connexion
     RF -> P: Redirection vers la page de connexion du portail
   end
 end
