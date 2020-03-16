@@ -51,7 +51,7 @@ System_Boundary(BYDPTFM, "BEYOND PLATFORM") {
         ContainerDb(BYDRTYDB, "BYD REALITY\nDB", "PostgreSQL"){
         }
     }
-    System(BYDIDP, "BEYOND IDENTITY & ACCESS MANAGER", "Identity & access management"){
+    System(BYDIDP, "BEYOND IDENTITY & ACCESS MANAGER", "Identity & Access Management"){
         Container(BYDIAM, "BEYOND IAM", "AWS Cognito") {
         }
         ContainerDb(BYDIAMDB, "BEYOND IAM\nDB", "AWS Cognito User Pool")
