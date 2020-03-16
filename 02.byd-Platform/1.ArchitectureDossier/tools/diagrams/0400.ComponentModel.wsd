@@ -5,10 +5,10 @@ header
 end header
 
 '!include /Users/fredericfadda/ffa-dev/C4-PlantUML/C4.puml
-!include ../../../../../C4-PlantUML/C4.puml
-!include /Users/fredericfadda/ffa-dev/C4-PlantUML/C4_Context.puml
-!include /Users/fredericfadda/ffa-dev/C4-PlantUML/C4_Container.puml
-!include /Users/fredericfadda/ffa-dev/C4-PlantUML/C4_Component.puml
+!include ../../../../tools/C4-PlantUML/C4.puml
+!include ../../../../tools/C4-PlantUML/C4_Context.puml
+!include ../../../../tools/C4-PlantUML/C4_Container.puml
+!include ../../../../tools/C4-PlantUML/C4_Component.puml
 
 Person(EndUSer, "End user")
 Person(AdminIAM, "Administrator\n(users)")
