@@ -6,7 +6,7 @@ Beyond : Traitement d'une transformation Cesium
 
 end title
 
-|#AntiqueWhite| Front |
+|#AntiqueWhite| RabbitMQ |
 start
 ->  **Hypothèse:** \n  - Utilisateur authentifié \n  - Profil Utilisateur BEYOND:  \n    - transformer;
 
@@ -46,10 +46,13 @@ partition "Transformation" {
      :Log erreur;
     elseif (Création de l'enrichissement) then (**KO**)
      :Log erreur;
-    elseif (Création de l'enrichissement) then (**KO**)
+    elseif (Création de l'association) then (**KO**)
      :Log erreur; 
     endif 
-
+    note left
+      Si erreur,
+      aucun rollback
+    end note
     -Suppression fichiers temporaires
 }
 
