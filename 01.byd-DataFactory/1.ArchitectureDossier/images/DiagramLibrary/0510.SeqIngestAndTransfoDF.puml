@@ -1,9 +1,14 @@
 @startuml
 actor Client
-participant "Beyond Application\n(i.e.: Digital Site)" as AppByd order 1
+participant "User\nNotification" as Notif order 0
+participant "Application Beyond\n(i.e.: Digital Site)" as AppByd order 1
 participant "DF Microservice\nIDcard Manager" as IDcard order 2
 database MongoDB order 3
 collections "DF Buckets\n(COS)" as COS order 4
+participant "Transf. Message \nProducer" as MsgProducer order 5
+collections "Async. Queues\n(Rabbit MQ)" as MoM order 6
+collections "Transf. Message\nConsumer" as MsgConsumer order 7
+collections "Transfo. \nService" as Transfo order 8
 
 Client -> AppByd : initiate upload
 activate AppByd #888888
@@ -53,46 +58,55 @@ deactivate MongoDB
 IDcard --> AppByd: Ok + Identity Card BEYOND ID / Revision ID
 deactivate IDcard 
 deactivate IDcard 
-AppByd --> Client : upload confirmation
-deactivate AppByd
+'AppByd --> Client : upload confirmation
 end
 
-group File Transformation (Handled by the Beyond Application) 
-Client -> AppByd : transform file
-activate AppByd #888888
+group Transformation request
+AppByd -> MsgProducer : append job (IDcard + transfo X)
 note right
-    context : client has selected
-    the file to be transformed
+    Assumption: the client selected
+    the transformation when uploading the file
 end note
-AppByd -> IDcard : get file
-note right
-    Based on BEYOND ID and Revision ID
-end note
-activate IDcard #888888
-IDcard -> MongoDB : get ID Card
-activate MongoDB #888888
-MongoDB --> IDcard : return ID Card (O/W Bucket link)
-deactivate MongoDB
-IDcard -> COS : generate file link [from SAFE BUCKET]
-activate COS #888888
-note right
-    Based on S3 presigned URL object feature
-    TO BE VALIDATED
-end note
-COS --> IDcard : temporary file link
-deactivate COS
-IDcard --> AppByd: temporary file link
-deactivate IDcard
-AppByd -> COS : get file
-activate COS #888888
-COS --> AppByd : return file
-deactivate COS
-AppByd -> AppByd : transform file
-AppByd -> AppByd : store transformed file
-AppByd --> Client : return transformed file
+activate MsgProducer #888888
+MsgProducer -> MsgProducer : create job object
+MsgProducer -> MoM : append job to transf X 
+activate MoM #888888
+MoM --> MsgProducer : Aknowledgement
+MsgProducer --> AppByd : Job Unique ID
+deactivate MsgProducer
+AppByd --> Notif: Transfo X Scheduled
 deactivate AppByd
+MoM -> MoM: route job to queue
+activate MoM
+MoM -> MsgConsumer: push job
+deactivate MoM
+activate MsgConsumer #888888
+MsgConsumer -> Transfo: call transformation engine
+activate Transfo #888888
+Transfo -> Transfo : append job
+Transfo --> MsgConsumer : OK
+deactivate Transfo
+MsgConsumer --> MoM : Aknowledgement
+deactivate MsgConsumer
+deactivate MoM
+deactivate MoM
 
+group File Transformation
+activate Transfo #888888
+Transfo -> Transfo: Start
+activate Transfo #888888
+Transfo -> Transfo: Validate file format support
+Transfo -> COS: Get File
+activate COS #888888
+COS --> Transfo: File
+deactivate COS
+Transfo -> Transfo: Transform
 end
+Transfo -> MsgProducer: task notification: terminated 
+MsgProducer -> MoM: append notification
+end
+
+deactivate AppByd
 
 
 @enduml
