@@ -1,11 +1,11 @@
 @startuml
 actor Client
-participant "User\nNotification" as Notif order 0
+participant "BYD User\nNotification" as Notif order 0
 participant "Application Beyond\n(i.e.: Digital Site)" as AppByd order 1
 participant "DF Microservice\nIDcard Manager" as IDcard order 2
 database MongoDB order 3
 collections "DF Buckets\n(COS)" as COS order 4
-participant "Transf. Message \nProducer" as MsgProducer order 5
+'participant "Transf. Message \nProducer" as IDcard order 5
 collections "Async. Queues\n(Rabbit MQ)" as MoM order 6
 collections "Transf. Message\nConsumer" as MsgConsumer order 7
 collections "Transfo. \nService" as Transfo order 8
@@ -15,98 +15,122 @@ activate AppByd #888888
 AppByd -> Client : form to insert file
 Client -> AppByd : upload file
 AppByd -> IDcard : upload file + data
+
 group Identity Card Creation
-activate IDcard #888888
-IDcard -> IDcard: Check data integrity
-note right
-    compare data with IdCard collection json schema
-end note
-'IDcard -> IDcard : Validate uniqueness
-'IDcard -> MongoDB : check Identity uniqueness
-'activate MongoDB #888888
-'MongoDB --> IDcard : Ok
-'deactivate MongoDB
-'deactivate IDcard
-'activate IDcard 
-IDcard -> IDcard: create identity objects (BEYOND ID, Revision ID)
-note right
-    no uniqueness (on file or data) validation currently
-    data can be duplicated
-end note
-IDcard -> COS : PUT file [RAW BUCKET]
-note right
-    prefixe file name with BEYOND ID
-end note
-activate COS #888888
-COS --> IDcard : file in RAW Bucket OK
-deactivate COS
-note right
-    Currently public COS
-    Todo: use private buckets
-end note
-IDcard -> COS : PUT file [SAFE BUCKET]
-note right
-    prefixe file name with BEYOND ID
-end note
-activate COS #888888
-COS --> IDcard : file in SAFE Bucket OK
-deactivate COS
-IDcard -> MongoDB : Create Identity Card Object
-activate MongoDB #888888
-MongoDB --> IDcard : Ok
-deactivate MongoDB
-IDcard --> AppByd: Ok + Identity Card BEYOND ID / Revision ID
-deactivate IDcard 
-deactivate IDcard 
-'AppByd --> Client : upload confirmation
+    activate IDcard #888888
+    IDcard -> IDcard : Check data integrity
+    note right
+        compare data with IDcard collection json schema
+    end note
+    'IDcard -> IDcard : Validate uniqueness
+    'IDcard -> MongoDB : check Identity uniqueness
+    'activate MongoDB #888888
+    'MongoDB --> IDcard : Ok
+    'deactivate MongoDB
+    'deactivate IDcard
+    'activate IDcard 
+    IDcard -> IDcard : create identity objects (BEYOND ID, Revision ID)
+    note right
+        no uniqueness (on file or data) validation currently
+        data can be duplicated
+    end note
+    IDcard -> COS : PUT file [RAW BUCKET]
+    note right
+        prefixe file name with BEYOND ID
+    end note
+    activate COS #888888
+    COS --> IDcard : file in RAW Bucket OK
+    deactivate COS
+    note right
+        Currently public COS
+        Todo: use private buckets
+    end note
+    IDcard -> COS : PUT file [SAFE BUCKET]
+    note right
+        prefixe file name with BEYOND ID
+    end note
+    activate COS #888888
+    COS --> IDcard : file in SAFE Bucket OK
+    deactivate COS
+    IDcard -> MongoDB : Create Identity Card Object
+    activate MongoDB #888888
+    MongoDB --> IDcard : Ok
+    deactivate MongoDB
+    IDcard --> AppByd : Ok + Identity Card BEYOND ID / Revision ID
+    deactivate IDcard 
+    deactivate IDcard 
+    'AppByd --> Client : upload confirmation
 end
 
 group Transformation request
-AppByd -> MsgProducer : append job (IDcard + transfo X)
-note right
-    Assumption: the client selected
-    the transformation when uploading the file
-end note
-activate MsgProducer #888888
-MsgProducer -> MsgProducer : create job object
-MsgProducer -> MoM : append job to transf X 
-activate MoM #888888
-MoM --> MsgProducer : Aknowledgement
-MsgProducer --> AppByd : Job Unique ID
-deactivate MsgProducer
-AppByd --> Notif: Transfo X Scheduled
-deactivate AppByd
-MoM -> MoM: route job to queue
-activate MoM
-MoM -> MsgConsumer: push job
-deactivate MoM
-activate MsgConsumer #888888
-MsgConsumer -> Transfo: call transformation engine
-activate Transfo #888888
-Transfo -> Transfo : append job
-Transfo --> MsgConsumer : OK
-deactivate Transfo
-MsgConsumer --> MoM : Aknowledgement
-deactivate MsgConsumer
-deactivate MoM
-deactivate MoM
+    AppByd -> IDcard : append job (IDcard + transfo X)
+    note right
+        Assumption: the client selected
+        the transformation when uploading the file
+    end note
+    activate IDcard #888888
+    IDcard -> IDcard : create job object
+    IDcard -> MoM : append job to transf X 
+    activate MoM #888888
+    MoM --> IDcard : Aknowledgement
+    IDcard --> AppByd : Job Unique ID
+    deactivate IDcard
+    AppByd --> Notif : Transfo X Scheduled
+    note left
+        Notification system
+        To be determined
+    end note
+    deactivate AppByd
+    MoM -> MoM : route job to queue
+    'activate MoM
+    MoM -> MsgConsumer : push job
+    'deactivate MoM
+    activate MsgConsumer #888888
+    MsgConsumer -> Transfo : call transformation engine
+    activate Transfo #888888
+    Transfo -> Transfo : append job
+    note right
+        Technical implementation reviewed (async lib)
+    end note
 
-group File Transformation
-activate Transfo #888888
-Transfo -> Transfo: Start
-activate Transfo #888888
-Transfo -> Transfo: Validate file format support
-Transfo -> COS: Get File
-activate COS #888888
-COS --> Transfo: File
-deactivate COS
-Transfo -> Transfo: Transform
-end
-Transfo -> MsgProducer: task notification: terminated 
-MsgProducer -> MoM: append notification
+    Transfo --> MsgConsumer : OK
+    'deactivate Transfo
+    MsgConsumer --> MoM : Aknowledgement
+    deactivate MsgConsumer
+    deactivate MoM
+    'deactivate MoM
 end
 
-deactivate AppByd
+group File Transformation with Transfo X
+    Transfo -> Transfo : Start job
+    'activate Transfo #888888
+    Transfo -> Transfo : Validate file format support
+    Transfo -> COS : Get File
+    activate COS #888888
+    COS --> Transfo : File
+    deactivate COS
+    Transfo -> Transfo : Transform
+    Transfo -> COS : Put Transformed File
+    activate COS #888888
+    COS --> Transfo : File in Transfo X Bucket OK
+    note left
+        Put in a Bucket dedicated
+        to the selected transformation
+    end note
+    deactivate COS
+    note right
+        Create IDCard for transformed file
+        + necessary enrichment
+    end note
+    Transfo -> IDcard : Task notification (terminated) 
+    deactivate Transfo
+    activate IDcard #888888
+    IDcard -> AppByd : File Transformation status
+    deactivate IDcard
+    activate AppByd #888888
+    AppByd -> Notif : Notify end user about file transformation result
+    deactivate AppByd
+end
 
 
 @enduml
