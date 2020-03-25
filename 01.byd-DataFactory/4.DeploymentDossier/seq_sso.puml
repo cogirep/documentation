@@ -4,7 +4,9 @@ Gestion de la cinématique de connexion et de navigation entre les applications
 
 end title
 
+participant "User" as U
 participant "Portal" as P
+participant "IAM Cognito" as  IAM
 participant "SSO" as SSO
 participant "Manager Backend" as M
 participant "Reality Backend" as RB
@@ -42,45 +44,75 @@ group "S'inscrire"
 end
 
 group "Login cognito"
-  
-  P -> SSO: Se connecte (redirection)
+  U -> P: Se connecte
+  P --> U: est redirigé vers le SSO
+  U -> SSO: Redirection
+  SSO --> U: est redirigé via Passport
+  U -> IAM: Redirection
+  IAM --> U: Page d'authentification
+  U -> IAM: Saisi ses identifiants
   alt success
-    SSO -> SSO: Utilisateur existe dans Cognito
-
-    SSO -> SSO: Stocke le token cognito en BDD (PG)
-    SSO -> SSO: Création du token plateforme
-    note right SSO
-      email
-      token cognito ?
-      firstname
-      lastname
-      application ?
-    end note
-    SSO -> SSO: Stocke le token plateforme en session \ndu navigateur
-    SSO -> SSO: Stocke le token plateforme en BDD (PG)
-    
-    SSO -> P: Redirige vers la page d'accueil \net transmet le token plateforme au frontend
-
-    P -> P: Stocke le token sur sa session
-    P -> M: Appel Manager pour récupérer les droits \nhauts pour l'utilisateur
+    IAM -> SSO: Utilisateur authentifié \navec le token Cognito
+    SSO -> M: Vérification de l'utilisateur
     alt success
-      M -> P: Renvoie les doits hauts
+      M -> SSO: Utilisateur est authorisé
+      SSO -> SSO: Stocke le token cognito en BDD (PG)
+    
+      SSO -> SSO: Création du token plateforme
+      note right SSO
+        email
+        token cognito ?
+        firstname
+        lastname
+        application ?
+      end note
+      SSO -> SSO: Stocke le token plateforme en session \ndu navigateur
+      SSO -> SSO: Stocke le token plateforme en BDD (PG)
+
+      SSO --> U: Redirige vers l'application \net transmet le token plateforme au frontend
+
+      U -> U: Stocke le token sur sa session
+      U -> P: Accède à l'application \navec son token plateforme
+      note right U
+        **Question**:
+        Doit-on aussi envoyer le token Cognito ?
+      end note
+      P -> M: Appel Manager pour récupérer les droits \nhauts pour l'utilisateur
+
+      alt success
+        M -> P: Renvoie les droits hauts (applications disponibles)
+        P -> U: Renvoie la page à l'utilisateur
+      else failure
+        note right U
+          **Question**:
+          Peut-on avoir un utilisateur sans droits hauts ?
+        end note
+        M --> U: Retour vers la page de login du SSO
+      end
+
+      note right P
+        Rien n'est encore affiché
+      end note
+
+      note right P
+        **Question**:
+        Gestion des droits haut niveau de manière automatique ?
+      end note
+
+      P -> P: Met à disposition les applications \nauxquelles l'utilisateur à accès
+      P --> U: L'utilisateur peut naviguer \nentre les applications
     else failure
-      M -> P: Retour vers la page de login du SSO
+      M -> SSO: Utilisateur non authorisé
+      SSO --> U: Redirige vers la page d'acceuil du portail avec un message (non authorisé, pas de droits suffisant)
+      note right U
+        **Question**:
+        Doit-on créer son compte sur la plateforme ?
+      end note
     end
-
-    note right P
-      Rien n'est encore affiché
-    end note
-
-    note right P
-      **Question**:
-      Gestion des droits haut niveau de manière automatique ?
-    end note
-
-    P -> P: Met à disposition les applications \nauxquelles l'utilisateur à accès
+    
   else failure
-    SSO -> SSO: Utilisateur non enregistré
+    IAM -> IAM: Utilisateur non authentifié
+    IAM --> U: Erreur de connexion sur la page Cognito
   end
   
 end 
