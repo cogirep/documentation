@@ -53,18 +53,21 @@ group "Login cognito"
   U -> IAM: Saisi ses identifiants
   alt success
     IAM -> SSO: Utilisateur authentifié \navec le token Cognito
-    SSO -> M: Vérification de l'utilisateur
+    SSO -> IAM: Demande de décoder
+    IAM -> SSO: Decode le token Cognito (Passport.js) \n pour récupérer l'email et l'identifiant
+    SSO -> M: Vérification de l'utilisateur grace \nà son email et son/ses identifiant(s) (identities)
     alt success
       M -> SSO: Utilisateur est authorisé
-      SSO -> SSO: Stocke le token cognito en BDD (PG)
     
       SSO -> SSO: Création du token plateforme
       note right SSO
         email
-        token cognito ?
         firstname
         lastname
         application ?
+      end note
+      note right SSO
+        Utiliser un token SSO au lieu du JWT
       end note
       SSO -> SSO: Stocke le token plateforme en session \ndu navigateur
       SSO -> SSO: Stocke le token plateforme en BDD (PG)
