@@ -1,0 +1,105 @@
+@startuml
+
+title
+
+Beyond Core : gestion des utilisateurs / groupes / organisation
+Utilistateur interne
+
+end title
+
+legend bottom
+  Zero or One	|o--
+  Exactly One	||--
+  Zero or Many	}o--
+  One or Many	}|--
+endlegend
+
+entity Account {
+  * pk_id: number <generated>
+  * fk_organisationid: number <FK>
+  ---
+  * email: string
+  * firstname: string
+  * lastname: string
+  * status: string
+  * group: string (old)
+  * providerId: string or UUID
+}
+note top
+  Comment sont gérer les utilisateurs internes et externes 
+  Rattagement de l'utilisateur au IDP
+end note
+
+entity Account_Permission {
+  * pk_fk_accountid: number <FK>
+  * pk_fk_permissionid: number <FK>
+  ---
+  * status: string
+}
+note top
+  Notion de profil ?
+end note
+
+entity Permission {
+  * pk_id: number <generated>
+  ---
+  * code: string
+  * label: string
+  * description: string
+}
+
+entity Organisation {
+  * pk_id: number <generated>
+  ---
+  * label: string
+  * description: string
+}
+
+entity Group_Account {
+  * pk_fk_groupid: number <FK>
+  * pk_fk_accountid: number <FK>
+  ---
+  * status: string
+}
+
+entity Group {
+  * pk_id: number <generated>
+  * fk_organisationid: number <FK>
+  ---
+  * label: string
+  * description: string
+}
+note bottom
+  Multilangue ?
+  Regarder dans Aladin
+end note
+
+entity IDP {
+  * pk_id: number <generated>
+  * fk_organisationid: number <FK>
+  ---
+  * name: string
+  * paternEmail: string or regex
+}
+note left: Next version
+
+
+
+
+' on garde l'existant
+Account ||-o{ Account_Permission: 1 account has \none or many permissions
+' Permission ||-o{ Account_Permission: 1 permission has \nzero or many users
+Account_Permission }o--|| Permission: 1 permission has \nzero or many users
+
+' on ajoute l'aspect organisation et groupe
+Account ||--o{ Organisation: 1 organisation has \n zero or many accounts
+
+Account ||-o{ Group_Account: 1 account has \n zero or many groups
+Group ||-o{ Group_Account: 1 group has \n zero or many users
+
+Organisation ||-o{ Group: 1 orgianisation has \none or many groups
+
+' IDP ||--o{ Organisation
+' IDP ||-o{ Account
+
+@enduml
