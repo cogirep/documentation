@@ -1,0 +1,57 @@
+@startuml idcard_getAll
+
+title
+
+Beyond : Récupérer tous les idcards
+
+end title
+
+|#AntiqueWhite| Front |
+start
+->  **Hypothèse:** \n  - Utilisateur authentifié \n  - Profil Utilisateur BEYOND:  \n    - accéder;
+
+-Être sur Reality ou sur Datafactory
+
+| Back |
+note right
+  api "GET **/idcard/**"
+end note
+if ( \n Vérifier les droits \n **access** \n)
+-[#red]-> Non ;
+-Retour du code erreur \n **401: UNAUTHORIZED**
+stop
+endif
+
+
+partition "GetAll " {
+    -Récupère toutes les idcards \npubliques et du groupe de l'utilisateur
+    note right
+    en fonction
+    * de la pagination
+    * du tri
+    * de la recherche
+    endnote
+
+    if ( \n Données \n )
+        -[#green]-> Oui ;
+        -Retour du code \n **200: SUCCESS** \n avec les données
+    elseif ( \n Erreur sur la Query \n )
+        -[#red]-> Oui ;
+        -Retour du code erreur \n **404: QUERY_ERROR**
+    else
+        -[#red]-> Non ;
+        -Retour du code erreur \n **500: INTERNAL_ERROR**
+    endif
+}
+stop
+
+
+
+legend 
+**Légende**
+
+**Retour du code erreur** : Permet la remontée d'un message d'erreur (localisé) à l'utilisateur.
+
+endlegend
+
+@enduml
