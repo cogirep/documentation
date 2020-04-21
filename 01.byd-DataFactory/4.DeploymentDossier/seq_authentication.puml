@@ -1,0 +1,129 @@
+@startuml seq_authentication
+title 
+Gestion de la cinématique de connexion et de navigation
+entre les applications BEYOND et le portail BEYOND
+end title
+participant "User" as U
+participant "Portal Frontend" as PF
+participant "Portal Backend" as PB
+participant "IAM Cognito" as  IAM
+participant "IDP Externe" as  IDP
+participant "Reality Frontend" as RF
+participant "Reality Backend" as RB
+
+group "Accéder à une application BEYOND"
+  note right U
+    Hypothèse: première connexion
+    (pas de jeton actif)
+  end note
+  U -> RF: Aller vers l'application BEYOND REALITY
+  RF -> RF: Vérification présence jeton Cognito
+  RF --> PF: **Redirection** route d'authentification\navec information sur l'application appelante (champ "State")
+  note right PF
+    Page d'authentification
+    (e-mail seul)
+  end note
+  U -> PF: Saisir son e-mail
+  PF -> PB: Vérification du pattern d'e-mail
+  PB --> PF: Retour sur pattern d'e-mail
+  alt <color Green>Pattern email trouvé</color>
+    PF --> U: **Redirection** vers Cognito avec information IdP
+    U -> IAM: Demande d'authentification via IdP
+    IAM --> U: **Redirection** vers IdP
+    U -> IDP: Saisir E-mail + mot de passe
+    IDP -> IDP: Authentification
+    alt <color Green>Authentification OK</color>
+      IDP --> U: **Redirection** vers Cognito
+      U -> IAM: Envoi du jeton IdP
+      IAM -> IDP: Vérification du jeton IdP
+      note right IAM
+        A voir si nécessaire de conserver
+        ce niveau de détail
+      end note
+      IDP --> IAM: confirmation jeton IdP
+      IAM --> U: **Redirection** vers Call Back URL Portail\navec jeton Cognito
+      U -> PB: Envoi du jeton Cognito
+      PB -> IAM: Vérification du jeton Cognito
+      IAM --> PB: confirmation jeton Cognito
+      PB --> U: **Redirection** vers l'application BEYOND REALITY\navec jeton Cognito
+      U -> RF: Aller vers l'application BEYOND REALITY\navec jeton Cognito
+      RF -> RB: Demande de vérification du jeton Cognito et\nd'extraction des droits utilisateurs
+      RB -> PB: Demande de vérification du jeton Cognito
+      note right PB
+        Centralisation de la vérification
+        du jeton Cognito sur le Backend Portail
+        (pour éviter le partage des informations Cognito)
+      end note
+      note left RB
+        Met-on un cache (type base REDIS)
+        sur les jetons Cognito côté Backend des applications ?
+      end note
+      PB -> IAM: Vérification du jeton Cognito
+      IAM --> PB: jeton Cognito OK
+      PB --> RB: jeton Cognito OK
+      RB -> RB : Vérification des droits de l'utilisateur
+      alt <color Green>Utilisateur connu de l'application</color>
+        RB --> RF: envoi des droits utilisateurs
+        RF --> U: Affichage page demandée de l'application
+        note right RF
+          Note : nécessite que
+          les applications implémentent
+          l'accès direct à une page applicative
+        end note
+      else  <color Red>Utilisateur inconnu de l'application</color>
+        RB --> RF: Utilisateur inconnu
+        RF --> U: **Redirection** vers le portail
+        U -> PF: Aller à la page d'accueil Portail
+      end
+    else  <color Red>Authentification KO</color>
+      IDP --> U: Echec de l'authentification
+    end
+  
+  else  <color Red>Pattern email inconnu</color>
+    PF --> U: Ajout du champ de mot de passe
+    U -> PF: Saisir mot de passe
+    PF -> PB: Transmission e-mail + mot de passe
+    PB -> IAM: Authentifier utilisateur interne
+    note right IAM
+        API Cognito "AdminInitiateAuth"
+    end note
+    IAM --> PB: Retour authentification utilisateur interne
+      alt <color Green>Authentification OK</color>
+        PB --> PF: renvoie jeton Cognito\n + route vers application
+        PF --> U: **Redirection** vers l'application BEYOND REALITY\navec jeton Cognito
+        U -> RF: Aller vers l'application BEYOND REALITY\navec jeton Cognito
+        RF -> RB: Demande de vérification du jeton Cognito et extraction des droits utilisateurs
+        RB -> PB: Demande de vérification du jeton Cognito
+        note right PB
+            Centralisation de la vérification
+            du jeton Cognito sur le Backend Portail
+            (pour éviter le partage des informations Cognito)
+        end note
+        note left RB
+            Met-on un cache (type base REDIS)
+            sur les jetons Cognito côté Backend des applications ?
+        end note
+        PB -> IAM: Vérification du jeton Cognito
+        IAM --> PB: jeton Cognito OK
+        PB --> RB: jeton Cognito OK
+        RB -> RB : Vérification des droits de l'utilisateur
+      alt <color Green>Utilisateur connu de l'application</color>
+        RB --> RF: envoi des droits utilisateurs
+        RF --> U: Affichage de la page demandée de l'application
+        note right RF
+          Note : nécessite que
+          les applications implémentent
+          l'accès direct à une page applicative
+        end note
+      else  <color Red>Utilisateur inconnu de l'application</color>
+        RB --> RF: Utilisateur inconnu
+        RF --> U: **Redirection** vers le portail
+        U -> PF: Aller à la page d'accueil Portail
+      end
+    else  <color Red>Authentification KO</color>
+        PB --> PF: Echec authentification
+        PF --> U: Message d'erreur : échec de l'authentification
+    end
+  end
+end
+@enduml
