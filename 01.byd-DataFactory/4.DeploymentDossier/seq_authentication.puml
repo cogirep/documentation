@@ -18,7 +18,7 @@ group "Accéder à une application BEYOND"
   end note
   U -> RF: Aller vers l'application BEYOND REALITY
   RF -> RF: Vérification présence jeton Cognito
-  RF --> PF: **Redirection** route d'authentification\navec information sur l'application appelante (champ "State")
+  RF --> PF: **Redirection** route d'authentification\navec information sur l'application appelante\n(champ personnalisé de call-back à comparer avec le referer des headers)
   note right PF
     Page d'authentification
     (e-mail seul)
@@ -35,33 +35,37 @@ group "Accéder à une application BEYOND"
     alt <color Green>Authentification OK</color>
       IDP --> U: **Redirection** vers Cognito
       U -> IAM: Envoi du jeton IdP
-      IAM -> IDP: Vérification du jeton IdP
-      note right IAM
-        A voir si nécessaire de conserver
-        ce niveau de détail
-      end note
-      IDP --> IAM: confirmation jeton IdP
       IAM --> U: **Redirection** vers Call Back URL Portail\navec jeton Cognito
       U -> PB: Envoi du jeton Cognito
-      PB -> IAM: Vérification du jeton Cognito
-      IAM --> PB: confirmation jeton Cognito
+      PB -> PB: Vérification du jeton Cognito
+      note right PB
+        la vérification du jeton Cognito se fait sur la base
+         de la clé publique Cognito (jwks) écupérée via l'url 
+        https://cognito-idp.{region}.amazonaws.com/{userPoolId}/.well-known/jwks.json
+      end note
+'      IAM --> PB: confirmation jeton Cognito
       PB --> U: **Redirection** vers l'application BEYOND REALITY\navec jeton Cognito
       U -> RF: Aller vers l'application BEYOND REALITY\navec jeton Cognito
       RF -> RB: Demande de vérification du jeton Cognito et\nd'extraction des droits utilisateurs
-      RB -> PB: Demande de vérification du jeton Cognito
-      note right PB
-        Centralisation de la vérification
-        du jeton Cognito sur le Backend Portail
-        (pour éviter le partage des informations Cognito)
+'      RB -> PB: Demande de vérification du jeton Cognito
+'      note right PB
+'        Centralisation de la vérification
+'        du jeton Cognito sur le Backend Portail
+'        (pour éviter le partage des informations Cognito)
+'      end note
+'      note left RB
+'        Met-on un cache (type base REDIS)
+'        sur les jetons Cognito côté Backend des applications ?
+'      end note
+'      PB -> IAM: Vérification du jeton Cognito
+'      IAM --> PB: jeton Cognito OK
+'      PB --> RB: jeton Cognito OK
+      RB -> RB : Vérification du jeton Cognito et des droits de l'utilisateur
+      note right RB
+        la vérification du jeton Cognito se fait sur la base
+         de la clé publique Cognito (jwks) écupérée via l'url 
+        https://cognito-idp.{region}.amazonaws.com/{userPoolId}/.well-known/jwks.json
       end note
-      note left RB
-        Met-on un cache (type base REDIS)
-        sur les jetons Cognito côté Backend des applications ?
-      end note
-      PB -> IAM: Vérification du jeton Cognito
-      IAM --> PB: jeton Cognito OK
-      PB --> RB: jeton Cognito OK
-      RB -> RB : Vérification des droits de l'utilisateur
       alt <color Green>Utilisateur connu de l'application</color>
         RB --> RF: envoi des droits utilisateurs
         RF --> U: Affichage page demandée de l'application
@@ -92,21 +96,26 @@ group "Accéder à une application BEYOND"
         PB --> PF: renvoie jeton Cognito\n + route vers application
         PF --> U: **Redirection** vers l'application BEYOND REALITY\navec jeton Cognito
         U -> RF: Aller vers l'application BEYOND REALITY\navec jeton Cognito
-        RF -> RB: Demande de vérification du jeton Cognito et extraction des droits utilisateurs
-        RB -> PB: Demande de vérification du jeton Cognito
-        note right PB
-            Centralisation de la vérification
-            du jeton Cognito sur le Backend Portail
-            (pour éviter le partage des informations Cognito)
+        RF -> RB: Demande d'extraction des droits utilisateurs
+'        RB -> PB: Demande de vérification du jeton Cognito
+'        note right PB
+'            Centralisation de la vérification
+'            du jeton Cognito sur le Backend Portail
+'            (pour éviter le partage des informations Cognito)
+'        end note
+'        note left RB
+'            Met-on un cache (type base REDIS)
+'            sur les jetons Cognito côté Backend des applications ?
+'        end note
+'        PB -> IAM: Vérification du jeton Cognito
+'        IAM --> PB: jeton Cognito OK
+'        PB --> RB: jeton Cognito OK
+        RB -> RB : Vérification du jeton Cognito et des droits de l'utilisateur
+        note right RB
+          la vérification du jeton Cognito se fait sur la base
+          de la clé publique Cognito (jwks) écupérée via l'url 
+          https://cognito-idp.{region}.amazonaws.com/{userPoolId}/.well-known/jwks.json
         end note
-        note left RB
-            Met-on un cache (type base REDIS)
-            sur les jetons Cognito côté Backend des applications ?
-        end note
-        PB -> IAM: Vérification du jeton Cognito
-        IAM --> PB: jeton Cognito OK
-        PB --> RB: jeton Cognito OK
-        RB -> RB : Vérification des droits de l'utilisateur
       alt <color Green>Utilisateur connu de l'application</color>
         RB --> RF: envoi des droits utilisateurs
         RF --> U: Affichage de la page demandée de l'application
