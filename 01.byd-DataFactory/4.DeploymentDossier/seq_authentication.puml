@@ -17,7 +17,7 @@ group "Accéder à une application BEYOND"
     Hypothèse: première connexion
     (pas de jeton actif)
   end note
-  U -> RF: Aller vers l'application BEYOND REALITY
+  U -> RF: Aller vers une URL d'une application BEYOND
   RF -> RF: Vérification présence jeton Cognito
   RF --> U: **Redirection** route d'authentification\navec information sur l'application appelante\n(champ personnalisé de call-back à comparer avec le referer des headers)
   U -> PF
@@ -52,19 +52,21 @@ group "Accéder à une application BEYOND"
         https://cognito-idp.{region}.amazonaws.com/{userPoolId}/.well-known/jwks.json
         To do : renouveler la clé publique à intervalle régulier (fréquence : 1h ?)
       end note
-      PB --> U: **Redirection** vers l'application BEYOND REALITY\navec jeton Cognito
-      U -> RF: Aller vers l'application BEYOND REALITY\navec jeton Cognito
-      RF -> RB: Demande de contenu (appel de service applicatif)
+      PB --> U: **Redirection** vers l'application BEYOND\navec jeton Cognito
+      U -> RF: Aller vers l'application BEYOND\navec jeton Cognito
+      RF -> RB: Demande de profil utilisateur
       RB -> RB : Vérification du jeton Cognito
       note right RB
         la vérification du jeton Cognito se fait sur la base
          de la clé publique Cognito (jwks) écupérée via l'url 
         https://cognito-idp.{region}.amazonaws.com/{userPoolId}/.well-known/jwks.json
       end note
-      alt <color Green>Utilisateur connu de l'application</color>
-        RB -> RB : Vérification des droits de l'utilisateur\n(le contenu demandé est-il accessible à l'utilisateur ?)
+      RB -> RB : Récupération du profil de l'utilisateur
+      alt <color Green>l'Utilisateur est connu de l'application</color>
+        RB --> RF: envoi infos de profil
+        RF -> RB: Demande de contenu (appel de service applicatif)
         alt <color Green>l'Utilisateur a les droits dans l'application pour le contenu/service demandé</color>
-          RB --> RF: envoi du contenu demandé (+infos profils si nécessaire)
+          RB --> RF: envoi du contenu demandé
           RF --> U: Affichage page demandée de l'application
           note right RF
             Note : nécessite que
@@ -78,11 +80,14 @@ group "Accéder à une application BEYOND"
       else  <color Red>Utilisateur inconnu de l'application</color>
         RB --> RF: Utilisateur inconnu
         RF --> U: **Redirection** vers le portail
-        U -> PF: Aller à la page d'accueil Portail
         note right PF
-          page d'accueil avec contexte lié à l'erreur sur l'app
+          Page d'accueil Portail avec contexte lié à l'erreur sur l'app
+          A valider avec PO BYD
+          si on souhaite imposer cette Redirection
+          à toutes les applications qui intègreront la Plateforme
         end note
-      end
+        U -> PF: Aller à la page d'accueil Portail
+     end
     else  <color Red>Authentification KO</color>
       IDP --> U: Echec de l'authentification
     end
@@ -98,34 +103,42 @@ group "Accéder à une application BEYOND"
     IAM --> PB: Retour authentification utilisateur interne
       alt <color Green>Authentification OK</color>
         PB --> PF: renvoie jeton Cognito\n + route vers application
-        PF --> U: **Redirection** vers l'application BEYOND REALITY\navec jeton Cognito
-        U -> RF: Aller vers l'application BEYOND REALITY\navec jeton Cognito
-        RF -> RB: Demande de contenu (appel de service applicatif)
+        PF --> U: **Redirection** vers l'application BEYOND\navec jeton Cognito
+        U -> RF: Aller vers l'application BEYOND\navec jeton Cognito
+        RF -> RB: Demande de profil utilisateur
         RB -> RB : Vérification du jeton Cognito
         note right RB
           la vérification du jeton Cognito se fait sur la base
           de la clé publique Cognito (jwks) écupérée via l'url 
           https://cognito-idp.{region}.amazonaws.com/{userPoolId}/.well-known/jwks.json
         end note
-      alt <color Green>Utilisateur connu de l'application</color>
-        RB -> RB : Vérification des droits de l'utilisateur\n(le contenu demandé est-il accessible à l'utilisateur ?)
-        alt <color Green>l'Utilisateur a les droits dans l'application pour le contenu/service demandé</color>
-          RB --> RF: envoi du contenu demandé (+infos profils si nécessaire)
-          RF --> U: Affichage de la page demandée de l'application
-          note right RF
-            Note : nécessite que
-            les applications implémentent
-            l'accès direct à une page applicative
+        RB -> RB : Récupération du profil de l'utilisateur
+        alt <color Green>l'Utilisateur est connu de l'application</color>
+          RB --> RF: envoi infos de profil
+          RF -> RB: Demande de contenu (appel de service applicatif)
+          alt <color Green>l'Utilisateur a les droits dans l'application pour le contenu/service demandé</color>
+            RB --> RF: envoi du contenu demandé
+            RF --> U: Affichage page demandée de l'application
+            note right RF
+              Note : nécessite que
+              les applications implémentent
+              l'accès direct à une page applicative
+            end note
+          else  <color Red>Utilisateur n'a pas les droits dans l'application pour le contenu/service demandé</color>
+            RB --> RF: envoi erreur HTTP 403
+            RF --> U: Affichage du message d'erreur associé
+          end
+        else  <color Red>Utilisateur inconnu de l'application</color>
+          RB --> RF: Utilisateur inconnu
+          RF --> U: **Redirection** vers le portail
+          note right PF
+            Page d'accueil Portail avec contexte lié à l'erreur sur l'app
+            A valider avec PO BYD
+            si on souhaite imposer cette Redirection
+            à toutes les applications qui intègreront la Plateforme
           end note
-        else  <color Red>Utilisateur n'a pas les droits dans l'application pour le contenu/service demandé</color>
-          RB --> RF: envoi erreur HTTP 403
-          RF --> U: Affichage du message d'erreur associé
+          U -> PF: Aller à la page d'accueil Portail
         end
-      else  <color Red>Utilisateur inconnu de l'application</color>
-        RB --> RF: Utilisateur inconnu
-        RF --> U: **Redirection** vers le portail
-        U -> PF: Aller à la page d'accueil Portail
-      end
     else  <color Red>Authentification KO</color>
         PB --> PF: Echec authentification
         PF --> U: Message d'erreur : échec de l'authentification
