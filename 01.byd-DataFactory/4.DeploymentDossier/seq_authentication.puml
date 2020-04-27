@@ -2,14 +2,15 @@
 title 
 Gestion de la cinématique de connexion et de navigation
 entre les applications BEYOND et le portail BEYOND
+Dans un contexte SSO
 end title
 participant "User" as U
 participant "Portal Frontend" as PF
 participant "Portal Backend" as PB
 participant "IAM Cognito" as  IAM
 participant "IDP Externe" as  IDP
-participant "Reality Frontend" as RF
-participant "Reality Backend" as RB
+participant "BYD App Frontend" as RF
+participant "BYD App Backend" as RB
 
 group "Accéder à une application BEYOND"
   note right U
@@ -51,37 +52,29 @@ group "Accéder à une application BEYOND"
         https://cognito-idp.{region}.amazonaws.com/{userPoolId}/.well-known/jwks.json
         To do : renouveler la clé publique à intervalle régulier (fréquence : 1h ?)
       end note
-'      IAM --> PB: confirmation jeton Cognito
       PB --> U: **Redirection** vers l'application BEYOND REALITY\navec jeton Cognito
       U -> RF: Aller vers l'application BEYOND REALITY\navec jeton Cognito
-      RF -> RB: Demande de vérification du jeton Cognito et\nd'extraction des droits utilisateurs
-'      RB -> PB: Demande de vérification du jeton Cognito
-'      note right PB
-'        Centralisation de la vérification
-'        du jeton Cognito sur le Backend Portail
-'        (pour éviter le partage des informations Cognito)
-'      end note
-'      note left RB
-'        Met-on un cache (type base REDIS)
-'        sur les jetons Cognito côté Backend des applications ?
-'      end note
-'      PB -> IAM: Vérification du jeton Cognito
-'      IAM --> PB: jeton Cognito OK
-'      PB --> RB: jeton Cognito OK
-      RB -> RB : Vérification du jeton Cognito et des droits de l'utilisateur
+      RF -> RB: Demande de contenu (appel de service applicatif)
+      RB -> RB : Vérification du jeton Cognito
       note right RB
         la vérification du jeton Cognito se fait sur la base
          de la clé publique Cognito (jwks) écupérée via l'url 
         https://cognito-idp.{region}.amazonaws.com/{userPoolId}/.well-known/jwks.json
       end note
       alt <color Green>Utilisateur connu de l'application</color>
-        RB --> RF: envoi des droits utilisateurs
-        RF --> U: Affichage page demandée de l'application
-        note right RF
-          Note : nécessite que
-          les applications implémentent
-          l'accès direct à une page applicative
-        end note
+        RB -> RB : Vérification des droits de l'utilisateur\n(le contenu demandé est-il accessible à l'utilisateur ?)
+        alt <color Green>l'Utilisateur a les droits dans l'application pour le contenu/service demandé</color>
+          RB --> RF: envoi du contenu demandé (+infos profils si nécessaire)
+          RF --> U: Affichage page demandée de l'application
+          note right RF
+            Note : nécessite que
+            les applications implémentent
+            l'accès direct à une page applicative
+          end note
+        else  <color Red>Utilisateur n'a pas les droits dans l'application pour le contenu/service demandé</color>
+          RB --> RF: envoi erreur HTTP 403
+          RF --> U: Affichage du message d'erreur associé
+        end
       else  <color Red>Utilisateur inconnu de l'application</color>
         RB --> RF: Utilisateur inconnu
         RF --> U: **Redirection** vers le portail
@@ -108,33 +101,27 @@ group "Accéder à une application BEYOND"
         PF --> U: **Redirection** vers l'application BEYOND REALITY\navec jeton Cognito
         U -> RF: Aller vers l'application BEYOND REALITY\navec jeton Cognito
         RF -> RB: Demande d'extraction des droits utilisateurs
-'        RB -> PB: Demande de vérification du jeton Cognito
-'        note right PB
-'            Centralisation de la vérification
-'            du jeton Cognito sur le Backend Portail
-'            (pour éviter le partage des informations Cognito)
-'        end note
-'        note left RB
-'            Met-on un cache (type base REDIS)
-'            sur les jetons Cognito côté Backend des applications ?
-'        end note
-'        PB -> IAM: Vérification du jeton Cognito
-'        IAM --> PB: jeton Cognito OK
-'        PB --> RB: jeton Cognito OK
-        RB -> RB : Vérification du jeton Cognito et des droits de l'utilisateur
+        RF -> RB: Demande de contenu (appel de service applicatif)
+        RB -> RB : Vérification du jeton Cognito
         note right RB
           la vérification du jeton Cognito se fait sur la base
           de la clé publique Cognito (jwks) écupérée via l'url 
           https://cognito-idp.{region}.amazonaws.com/{userPoolId}/.well-known/jwks.json
         end note
       alt <color Green>Utilisateur connu de l'application</color>
-        RB --> RF: envoi des droits utilisateurs
-        RF --> U: Affichage de la page demandée de l'application
-        note right RF
-          Note : nécessite que
-          les applications implémentent
-          l'accès direct à une page applicative
-        end note
+        RB -> RB : Vérification des droits de l'utilisateur\n(le contenu demandé est-il accessible à l'utilisateur ?)
+        alt <color Green>l'Utilisateur a les droits dans l'application pour le contenu/service demandé</color>
+          RB --> RF: envoi du contenu demandé (+infos profils si nécessaire)
+          RF --> U: Affichage de la page demandée de l'application
+          note right RF
+            Note : nécessite que
+            les applications implémentent
+            l'accès direct à une page applicative
+          end note
+        else  <color Red>Utilisateur n'a pas les droits dans l'application pour le contenu/service demandé</color>
+          RB --> RF: envoi erreur HTTP 403
+          RF --> U: Affichage du message d'erreur associé
+        end
       else  <color Red>Utilisateur inconnu de l'application</color>
         RB --> RF: Utilisateur inconnu
         RF --> U: **Redirection** vers le portail
