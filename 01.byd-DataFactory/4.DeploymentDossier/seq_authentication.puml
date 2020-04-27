@@ -100,7 +100,6 @@ group "Accéder à une application BEYOND"
         PB --> PF: renvoie jeton Cognito\n + route vers application
         PF --> U: **Redirection** vers l'application BEYOND REALITY\navec jeton Cognito
         U -> RF: Aller vers l'application BEYOND REALITY\navec jeton Cognito
-        RF -> RB: Demande d'extraction des droits utilisateurs
         RF -> RB: Demande de contenu (appel de service applicatif)
         RB -> RB : Vérification du jeton Cognito
         note right RB
