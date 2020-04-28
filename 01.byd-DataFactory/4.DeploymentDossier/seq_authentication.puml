@@ -43,8 +43,8 @@ group "Accéder à une application BEYOND"
     alt <color Green>Authentification OK</color>
       IDP --> U: **Redirection** vers Cognito avec jeton IdP externe
       U -> IAM: Envoi du jeton IdP
-      IAM --> U: **Redirection** vers Call Back URL Portail\navec jeton Cognito
-      U -> PB: Envoi du jeton Cognito
+      IAM --> U: **Redirection** vers Call Back URL Portail
+      U -> PB: Envoi du jeton Cognito\n(ID Token)
       PB -> PB: Vérification du jeton Cognito
       note right PB
         la vérification du jeton Cognito se fait sur la base
@@ -52,10 +52,10 @@ group "Accéder à une application BEYOND"
         https://cognito-idp.{region}.amazonaws.com/{userPoolId}/.well-known/jwks.json
         To do : renouveler la clé publique à intervalle régulier (fréquence : 1h ?)
       end note
-      PB --> U: **Redirection** vers l'application BEYOND\navec jeton Cognito
-      U -> RF: Aller vers l'application BEYOND\navec jeton Cognito
-      RF -> RB: Demande de profil utilisateur
-      RB -> RB : Vérification du jeton Cognito
+      PB --> U: **Redirection** vers l'application BEYOND\navec jeton Cognito (ID Token)
+      U -> RF: Aller vers l'application BEYOND\navec jeton Cognito (ID Token)
+      RF -> RB: Demande de profil utilisateur\navec jeton Cognito (ID Token)
+      RB -> RB : Vérification du jeton Cognito\n et extraction de l'ID de l'utilisateur
       note right RB
         la vérification du jeton Cognito se fait sur la base
          de la clé publique Cognito (jwks) écupérée via l'url 
@@ -63,7 +63,7 @@ group "Accéder à une application BEYOND"
       end note
       RB -> RB : Récupération du profil de l'utilisateur
       alt <color Green>l'Utilisateur est connu de l'application</color>
-        RB --> RF: envoi infos de profil
+        RB --> RF: envoi infos de profil\navec un jeton applicatif (JWT)
         RF -> RB: Demande de contenu (appel de service applicatif)
         alt <color Green>l'Utilisateur a les droits dans l'application pour le contenu/service demandé</color>
           RB --> RF: envoi du contenu demandé
@@ -102,17 +102,17 @@ group "Accéder à une application BEYOND"
     end note
     IAM --> PB: Retour authentification utilisateur interne
       alt <color Green>Authentification OK</color>
-        PB --> PF: renvoie jeton Cognito\n + route vers application
-        PF --> U: **Redirection** vers l'application BEYOND\navec jeton Cognito
-        U -> RF: Aller vers l'application BEYOND\navec jeton Cognito
+        PB --> PF: renvoie jeton Cognito (ID Token)\n + route vers application
+        PF --> U: **Redirection** vers l'application BEYOND\navec jeton Cognito (ID Token)
+        U -> RF: Aller vers l'application BEYOND\navec jeton Cognito (ID Token)
         RF -> RB: Demande de profil utilisateur
-        RB -> RB : Vérification du jeton Cognito
+        RB -> RB : Vérification du jeton Cognito\n et extraction de l'ID de l'utilisateur
         note right RB
           la vérification du jeton Cognito se fait sur la base
           de la clé publique Cognito (jwks) écupérée via l'url 
           https://cognito-idp.{region}.amazonaws.com/{userPoolId}/.well-known/jwks.json
         end note
-        RB -> RB : Récupération du profil de l'utilisateur
+        RB -> RB : Récupération du profil de l'utilisateur\navec un jeton applicatif (JWT)
         alt <color Green>l'Utilisateur est connu de l'application</color>
           RB --> RF: envoi infos de profil
           RF -> RB: Demande de contenu (appel de service applicatif)
