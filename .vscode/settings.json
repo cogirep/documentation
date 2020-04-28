@@ -1,0 +1,6 @@
+{
+    "plantuml.exportSubFolder": false,
+    "plantuml.exportFormat": "png",
+    "plantuml.exportOutDir": "02.byd-Platform/1.ArchitectureDossier/images/diagrams",
+    "plantuml.diagramsRoot": "02.byd-Platform/1.ArchitectureDossier/images/diagrams"
+}
