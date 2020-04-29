@@ -63,7 +63,12 @@ group "Accéder à une application BEYOND"
       end note
       RB -> RB : Récupération du profil de l'utilisateur
       alt <color Green>l'Utilisateur est connu de l'application</color>
-        RB --> RF: envoi infos de profil\navec un jeton applicatif (JWT)
+        RB --> RF: envoi des informations de profil
+        note right RB
+         Ces informations peuvent être transmises 
+         via un jeton applicatif (JWT)
+         (Option à la main de l'application)
+        end note
         RF -> RB: Demande de contenu (appel de service applicatif)
         alt <color Green>l'Utilisateur a les droits dans l'application pour le contenu/service demandé</color>
           RB --> RF: envoi du contenu demandé
@@ -114,7 +119,12 @@ group "Accéder à une application BEYOND"
         end note
         RB -> RB : Récupération du profil de l'utilisateur
         alt <color Green>l'Utilisateur est connu de l'application</color>
-          RB --> RF: envoi infos de profil\navec un jeton applicatif (JWT)
+          RB --> RF: envoi des informations de profil
+          note right RB
+          Ces informations peuvent être transmises 
+          via un jeton applicatif (JWT)
+          (Option à la main de l'application)
+          end note
           RF -> RB: Demande de contenu (appel de service applicatif)
           alt <color Green>l'Utilisateur a les droits dans l'application pour le contenu/service demandé</color>
             RB --> RF: envoi du contenu demandé
