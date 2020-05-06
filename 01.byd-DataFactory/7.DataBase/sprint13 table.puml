@@ -1,0 +1,194 @@
+@startuml
+
+title
+
+Beyond Core : Plateform
+
+BY-1890, BY-2079
+BY-2050, BY-2006, BY-2045, BY-1979, BY-2025
+
+end title
+
+' hide the spot
+' hide circle
+
+' avoid problems with angled crows feet
+' skinparam linetype ortho
+
+
+' https://gist.github.com/QuantumGhost/0955a45383a0b6c0bc24f9654b3cb561
+
+' uncomment the line below if you're using computer with a retina display
+' skinparam dpi 300
+!define Table(name,desc) class name as "desc" << (T,#FFAAAA) >>
+' we use bold for primary key
+' green color for unique
+' and underscore for not_null
+!define primary_key(x) <b>x</b>
+!define foreign_key(x) <b>x</b>
+!define unique(x) <color:green>x</color>
+!define not_null(x) <u>x</u>
+' other tags available:
+' <i></i>
+' <back:COLOR></color>, where color is a color name or html color code
+' (#FFAACC)
+' see: http://plantuml.com/classes.html#More
+hide methods
+hide stereotypes
+
+Table(account, "account\n(core)") {
+  primary_key(pk_id) BIGSERIAL
+  ---
+  foreign_key(pk_fk_companyid) BIGINT
+  foreign_key(pk_fk_idpid) BIGINT
+  ---
+  not_null(unique(email)) TEXT
+  not_null(firstname) TEXT
+  not_null(lastname) TEXT
+  unique(providerUserId) TEXT
+  not_null(status) BINGINT
+  ' not_null(isSuperAdmin) BOOLEAN
+}
+note bottom
+  Préférence utilisateur ?
+end note
+
+Table(company, "company\n(core)") {
+  primary_key(pk_id) BIGSERIAL
+  ---
+  not_null(unique(label)) TEXT
+  not_null(description) TEXT
+  not_null(isDeleted) BOOLEAN <default: false>
+  not_null(isSuperAdmin) BOOLEAN <default: false>
+}
+note top
+  Super company ?
+end note
+
+Table(companyAccount, "company_account\n(core)") {
+  foreign_key(pk_fk_companyid) BIGINT
+  foreign_key(pk_fk_accountid) BIGINT
+  ---
+  not_null(isAdmin) BOOLEAN
+}
+note left
+  BY-2045
+  Délégation d'administration
+end note
+
+Table(product, "product\n(core)") {
+  primary_key(pk_id) BIGSERIAL
+  ---
+  foreign_key(pk_fk_companyid) BIGINT
+  ---
+  not_null(unique(code)) TEXT
+  not_null(unique(label)) TEXT
+  description JSONB
+  isAdministrationApp BOOLEAN
+  image BINARY or TEXT
+  icon BINARY or TEXT
+  urlApp TEXT
+  urlAdmin TEXT
+  openTab BOOLEAN
+  not_null(status) BINGINT
+}
+note right
+  List:
+  - Reality
+  - Reality Manager ?
+  - Beyond Manger
+  - DigitalSite
+
+  Image = URL ?
+end note
+
+Table(accessProduct, "access_product\n(core)") {
+  primary_key(pk_id) BIGSERIAL
+  foreign_key(pk_fk_productid) BIGINT
+  foreign_key(pk_fk_companyid) BIGINT
+  ---
+  not_null(status) BINGINT
+}
+
+Table(accountAccessProduct, "account_accessproduct\n(core)") {
+  foreign_key(pk_fk_accessproductid) BIGINT
+  foreign_key(pk_fk_accountid) BIGINT
+  ---
+  not_null(isAdmin) TEXT
+  not_null(status) BINGINT
+}
+
+Table(role, "role\n(core)") {
+  primary_key(pk_id) BIGSERIAL
+  ---
+  not_null(unique(label)) TEXT
+  not_null(description) TEXT
+  not_null(status) BINGINT
+}
+
+Table(permission, "permission\n(core)") {
+  primary_key(pk_id) BIGSERIAL
+  ---
+  not_null(unique(code)) TEXT
+  not_null(unique(label)) TEXT
+  not_null(description) TEXT
+  not_null(status) BINGINT
+}
+
+Table(rolePermission, "role_permission\n(core)") {
+  foreign_key(pk_fk_roleid) BIGINT
+  foreign_key(pk_fk_permissionid) BIGINT
+  ---
+  not_null(status) BINGINT
+}
+
+Table(companyRoleAccount, "company_role_account\n(core)") {
+  foreign_key(pk_fk_roleid) BIGINT
+  foreign_key(pk_fk_company) BIGINT
+  foreign_key(pk_fk_accountid) BIGINT
+  ---
+  not_null(status) BINGINT
+}
+
+Table(idp, "idp\n(core)") {
+  primary_key(pk_id) BIGSERIAL
+  ---
+  foreign_key(pk_fk_companyid) BIGINT
+  ---
+  not_null(unique(name)) TEXT
+  not_null(paternEmail) TEXT
+}
+
+' company .[hidden].> companyRoleAccount
+companyAccount .> role
+' companyAccount -[hidden]-> companyRoleAccount
+role "1" ||--o{ "0..N" rolePermission
+rolePermission "0..N" }o--|| "1" permission
+
+
+
+' relationships
+
+accessProduct "0..N" }o--|| "1" product: A product may be \nin many companies
+accessProduct "0..N" }o-|| "1" company: A company may \nhave many products
+account "1" ||-o{ "0..N" accountAccessProduct: An account may \nhave many access product
+accountAccessProduct "0..N" }o-|| "1" accessProduct: An accessProduct may \nbelong to many accounts
+
+' company
+company "1" ||--o{ "0..N" companyAccount : A company may \nhave many accounts
+companyAccount "1" }o--|| "0..N" account : A account may \nhave only one company \nbut can administres many companies
+
+
+legend bottom
+  Zero or One	|o--
+  Exactly One	||--
+  Zero or Many	}o--
+  One or Many	}|--
+  -=-=-=-=-=-=-=-
+  primary_key("primary key")
+  foreign_key("foreign key")
+  unique(unique)
+  not_null("not null")
+endlegend
+
+@enduml
