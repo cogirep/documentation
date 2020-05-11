@@ -36,55 +36,63 @@ end title
 hide methods
 hide stereotypes
 
-Table(account, "account\n(core)") {
+' disposition du diagramme
+
+Table(idp, "idp\n(core)") {
   primary_key(pk_id) BIGSERIAL
   ---
   foreign_key(pk_fk_companyid) BIGINT
-  foreign_key(pk_fk_idpid) BIGINT
   ---
-  not_null(unique(email)) TEXT
-  not_null(firstname) TEXT
-  not_null(lastname) TEXT
-  unique(providerUserId) TEXT
-  not_null(status) BINGINT
-  ' not_null(isSuperAdmin) BOOLEAN
+  not_null(unique(name)) TEXT
+  not_null(paternEmail) TEXT
 }
-note bottom
-  Préférence utilisateur ?
+
+Table(account, "account\n(core)") {
+primary_key(pk_id) BIGSERIAL
+---
+'foreign_key(pk_fk_companyid) BIGINT
+foreign_key(pk_fk_idpid) BIGINT
+---
+not_null(unique(email)) TEXT
+not_null(firstname) TEXT
+not_null(lastname) TEXT
+unique(providerUserId) TEXT
+not_null(status) BINGINT
+'not_null(isAdminSXD) BOOLEAN
+}
+note top of account
+  En tant qu'utilisateur
+  Je suis rattaché à une et une seule compagnie
+end note
+note bottom of account
+  Todo :
+  ajouter les préférences utilisateur
+  au niveau global BYD PLATFORM
 end note
 
 Table(company, "company\n(core)") {
   primary_key(pk_id) BIGSERIAL
   ---
+  not_null(unique(code)) TEXT
   not_null(unique(label)) TEXT
   not_null(description) TEXT
   not_null(isDeleted) BOOLEAN <default: false>
-  not_null(isSuperAdmin) BOOLEAN <default: false>
+  'not_null(isSuperAdmin) BOOLEAN <default: false>
 }
-note top
-  Super company ?
-end note
-
-Table(companyAccount, "company_account\n(core)") {
-  foreign_key(pk_fk_companyid) BIGINT
-  foreign_key(pk_fk_accountid) BIGINT
-  ---
-  not_null(isAdmin) BOOLEAN
-}
-note left
-  BY-2045
-  Délégation d'administration
+note top of company
+  code : identifiant technique pour
+  les logs, les trace d'audit
 end note
 
 Table(product, "product\n(core)") {
   primary_key(pk_id) BIGSERIAL
   ---
-  foreign_key(pk_fk_companyid) BIGINT
-  ---
+  'foreign_key(pk_fk_companyid) BIGINT
+  '---
   not_null(unique(code)) TEXT
   not_null(unique(label)) TEXT
   description JSONB
-  isAdministrationApp BOOLEAN
+  'isAdministrationApp BOOLEAN
   image BINARY or TEXT
   icon BINARY or TEXT
   urlApp TEXT
@@ -92,31 +100,56 @@ Table(product, "product\n(core)") {
   openTab BOOLEAN
   not_null(status) BINGINT
 }
-note right
-  List:
-  - Reality
-  - Reality Manager ?
-  - Beyond Manger
-  - DigitalSite
-
-  Image = URL ?
+note top of product
+  code : identifiant technique pour les logs, les trace d'audit
+end note
+note left of product
+  hypothèses :
+  - un produit inclut (ou non) un module d'administration
+    (DigitalSite et MyAdminSite sont 1 seul produit)
+  - on ne peut supprimer un produit relié à une compagnie
+  - image et icone sont des URLs gérées par le produit
+end note
+note bottom of product
+  Todo : multilinguisme sur la description
 end note
 
-Table(accessProduct, "access_product\n(core)") {
-  primary_key(pk_id) BIGSERIAL
-  foreign_key(pk_fk_productid) BIGINT
+product -right[hidden]- company
+company -right[hidden]- account
+idp -down[hidden]- company
+
+Table(companyProduct, "company_product\n(core)") {
+  primary_key(companyProduct_id) BIGSERIAL
+  ---
   foreign_key(pk_fk_companyid) BIGINT
+  foreign_key(pk_fk_productid) BIGINT
   ---
   not_null(status) BINGINT
+}
+note left of companyProduct
+  un produit est rattaché à une compagnie
+  par un Admin SXD
+end note
+
+Table(companyAccount, "company_account\n(core)") {
+  primary_key(companyAccount_id) BIGSERIAL
+  ---
+  foreign_key(pk_fk_companyid) BIGINT
+  foreign_key(pk_fk_accountid) BIGINT
+  '---
+  'not_null(isAdmin) BOOLEAN
 }
 
-Table(accountAccessProduct, "account_accessproduct\n(core)") {
-  foreign_key(pk_fk_accessproductid) BIGINT
+Table(accountProduct, "account_product\n(core)") {
+  foreign_key(pk_fk_companyProduct_id) BIGINT
   foreign_key(pk_fk_accountid) BIGINT
   ---
-  not_null(isAdmin) TEXT
-  not_null(status) BINGINT
+  not_null(isAdmin) BOOLEAN
+  'not_null(status) BINGINT
 }
+note left
+  BY-2045 : Délégation d'administration
+end note
 
 Table(role, "role\n(core)") {
   primary_key(pk_id) BIGSERIAL
@@ -125,6 +158,21 @@ Table(role, "role\n(core)") {
   not_null(description) TEXT
   not_null(status) BINGINT
 }
+note top of role
+  il ne s'agit que des des rôles dans BEYOND MANAGER :
+  - Admin SXD,
+  - Admin Délégué,
+  - Utilisateur
+end note
+note right of role
+  En tant qu'administrateur SXD je peux :
+  - créer des produits
+  - créer des compagnies
+  - créer des utilisateurs
+  - créer des IdP
+  - créer d'autres Admin SXD
+  - donner les droits d'administration délégué sur une compagnie
+end note
 
 Table(permission, "permission\n(core)") {
   primary_key(pk_id) BIGSERIAL
@@ -141,43 +189,42 @@ Table(rolePermission, "role_permission\n(core)") {
   ---
   not_null(status) BINGINT
 }
+'Table(companyRoleAccount, "company_role_account\n(core)") {
+'  foreign_key(pk_fk_roleid) BIGINT
+'  foreign_key(pk_fk_company) BIGINT
+'  foreign_key(pk_fk_accountid) BIGINT
+'  ---
+'  not_null(status) BINGINT
+'}
 
-Table(companyRoleAccount, "company_role_account\n(core)") {
-  foreign_key(pk_fk_roleid) BIGINT
-  foreign_key(pk_fk_company) BIGINT
-  foreign_key(pk_fk_accountid) BIGINT
-  ---
-  not_null(status) BINGINT
-}
-
-Table(idp, "idp\n(core)") {
-  primary_key(pk_id) BIGSERIAL
-  ---
-  foreign_key(pk_fk_companyid) BIGINT
-  ---
-  not_null(unique(name)) TEXT
-  not_null(paternEmail) TEXT
-}
-
-' company .[hidden].> companyRoleAccount
-companyAccount .> role
-' companyAccount -[hidden]-> companyRoleAccount
-role "1" ||--o{ "0..N" rolePermission
-rolePermission "0..N" }o--|| "1" permission
-
+product -down[hidden]- companyProduct
+company -down[hidden]- companyProduct
+'companyProduct -right[hidden]- accountProduct
 
 
 ' relationships
+'companyProduct "0..N" }o--up--|| "1" product: A product may be \nassociated with many companies
+'companyProduct "0..N" }o--|| "1" product: A product may be \nassociated with many companies
+product "1" ||--o{ "0..N" companyProduct: A product may be \nassociated with many companies
+'companyProduct "0..N" }o--up--|| "1" company: A company may\nhave many products
+'companyProduct "0..N" }o--|| "1" company: A company may\nhave many products
+company "1" ||--o{ "0..N" companyProduct: A company may\nhave many products
 
-accessProduct "0..N" }o--|| "1" product: A product may be \nin many companies
-accessProduct "0..N" }o-|| "1" company: A company may \nhave many products
-account "1" ||-o{ "0..N" accountAccessProduct: An account may \nhave many access product
-accountAccessProduct "0..N" }o-|| "1" accessProduct: An accessProduct may \nbelong to many accounts
+account "1" ||-down--o{ "0..N" accountProduct: An account may\nhave access to many products\nattached to a company
+accountProduct "0..N" }o--|| "1" companyProduct: A product attached to a company may\nbelong to many accounts
 
 ' company
-company "1" ||--o{ "0..N" companyAccount : A company may \nhave many accounts
-companyAccount "1" }o--|| "0..N" account : A account may \nhave only one company \nbut can administres many companies
+company "1" ||-down-o{ "0..N" companyAccount: A company may\nhave many accounts
+companyAccount "1" ||-up-o{ "0..N" account: An account may\nhave only one company
 
+' company .[hidden].> companyRoleAccount
+account "0..N" }o-right-|| "1" role: An account has\nonly one role in BYD MANAGER 
+
+' companyAccount -[hidden]-> companyRoleAccount
+role "1" ||-down-o{ "0..N" rolePermission
+rolePermission "0..N" }o-down-|| "1" permission
+
+idp "0..N" }o-down-|| "1" company: A company may be\nassociated with\n(external) Identity Provider(s)
 
 legend bottom
   Zero or One	|o--
