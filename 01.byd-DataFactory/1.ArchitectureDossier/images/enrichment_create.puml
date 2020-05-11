@@ -1,0 +1,82 @@
+@startuml enrichment_create
+
+title
+
+Beyond Manager : Créer un enrichissement
+
+end title
+
+|#AntiqueWhite| Front |
+start
+->  **Hypothèse:** \n  - Utilisateur authentifié \n  - Profil Utilisateur BEYOND:  \n    - accéder \n;
+
+-Être sur Beyond Manager, \n- cliquer sur "Enrichissement" dans la sidebar de gauche\n- cliquer sur le bouton "**Ajouter un enrichissement**" en haut à droite
+-Ouverture de l'interface de création d'un enrichissement dans une modal
+-Saisie des propriétés de l'enrichissement \n \n Tous les champs sont obligatoires\n  - Label\n  - Description\n  - Valeur\n  - Type (liste déroulante)\n    - String\n    - Number\n    - Date
+-Vous pouvez ajouter des propriétés en cliquant sur le bonton **plus (+)**\n \nVous ne pouvez pas : \n  - supprimer une propriété\n  - changer l'ordre des propriétés
+-Cliquer sur le bouton\n**Ajouter**
+
+| Back |
+note right
+  api "POST /enrichment/"
+end note
+if ( \n Vérifier les droits \n **access** \n)
+-[#red]-> Non ;
+-Retour du code erreur \n **401: UNAUTHORIZED**
+stop
+
+elseif ( \n Body valide \n **JSON Schema** \n )
+-[#red]-> Non ;
+-Retour du code erreur \n **406: BODY_ERROR**
+stop
+
+elseif ( \n Idcard existe \n )
+-[#red]-> Non ;
+-Retour du code erreur \n **400: ID_NOTVALID**
+stop
+
+elseif ( \n Vérifer s'il est déjà présent en base \n )
+-[#red]-> Oui ;
+-Retour du code erreur \n **400: ENRICHMENT_ALREADYEXIST**
+stop
+endif
+
+partition "Validation de l'enrichissement" {
+    if ( \n Template existe\n )
+    -[#red]-> Non ;
+    -Retour du code erreur \n **400: TEMPLATE_NOTEXIST**
+    stop
+
+    elseif ( \n Propriétés valides avec le template \n JSON Schema \n )
+    -[#red]-> Non ;
+    -Retour du code erreur \n **406: BODY_ERROR**
+    stop
+
+    elseif ( \n Erreur interne \n )
+    -[#red]-> Oui ;
+    -Retour du code erreur \n **500: INTERNAL_ERROR**
+    stop
+    endif
+}
+
+partition "Creation de \nl'enrichissement" {
+    -Génération du BEYONDID et du REVISIONID
+    -Création de l'enrichissement \n templateId \n templateLabel \n idcardId \n idcardRevisionId \n Propriétaire \n ...;
+    if ( \n Ecriture OK \n )
+    -[#green]-> Oui ;
+    -Retour du code \n **200: SUCCESS**
+    else
+    -[#red]-> Non ;
+    -Retour du code erreur \n **500: INTERNAL_ERROR**
+    endif
+}
+stop
+
+legend 
+**Légende**
+
+**Retour du code erreur** : Permet la remontée d'un message d'erreur (localisé) à l'utilisateur.
+
+endlegend
+
+@enduml

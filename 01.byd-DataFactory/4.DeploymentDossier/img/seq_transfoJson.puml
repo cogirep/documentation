@@ -1,0 +1,36 @@
+@startuml seq_transfoJson
+
+title JSON 2 YAML Transformation
+
+actor Datafactory as DF
+participant "MS Idcard" as Idcard
+participant "S3 Bucket" as S3
+participant "RabbitMQ" as RabbitMQ
+participant "MS Consumer" as Consumer
+participant "JSON Transformation" as Transfo
+
+DF -> Idcard: Upload a file
+Idcard -> S3: Upload file to Raw bucket
+Idcard -> S3: Transfert from Raw to Safe bucket
+Idcard -> Idcard: Create an Idcard
+DF <-- Idcard: Send response 200 Ok
+
+Idcard -> RabbitMQ: Send an order for transformation
+RabbitMQ -> Consumer: Retrieve the order
+Consumer -> Consumer: Route to the right queue
+
+Consumer -> Transfo: Send a request for transformation
+Transfo <-> S3: Download the file
+Transfo -> Transfo: Transform
+
+alt sucessful transformation
+  Transfo -> S3: Upload new file to the right bucket
+
+  Transfo -> Idcard: Create a new Idcard
+  Idcard --> Transfo: Send Response
+  Transfo -> Transfo: delete downloaded and transformed files
+else failure transformation
+  Transfo -> Transfo: delete downloaded files
+end
+
+@enduml

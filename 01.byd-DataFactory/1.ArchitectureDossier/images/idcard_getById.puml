@@ -1,0 +1,56 @@
+@startuml idcard_getById
+
+title
+
+Beyond : Récupérer un idcard
+
+end title
+
+|#AntiqueWhite| Front |
+start
+->  **Hypothèse:** \n  - Utilisateur authentifié \n  - Profil Utilisateur BEYOND:  \n    - accéder;
+
+-Être sur Reality ou sur Datafactory, je sélectionne \nun élément sur la carte ou dans le tableau
+
+| Back |
+note right
+  api "GET **/idcard/:id**"
+end note
+if ( \n Vérifier les droits \n **access** \n)
+-[#red]-> Non ;
+-Retour du code erreur \n **401: UNAUTHORIZED**
+stop
+elseif ( \n Id Valide \n )
+-[#red]-> Non ;
+-Retour du code erreur \n **406: ID_NOTVALID**
+stop
+endif
+
+partition "GetById " {
+    -Récupère l'idcard
+    note right
+    **Amélioration**: 
+    Vérifier le groupe de l'utilisateur pour ne remonter 
+     le contenu de l'idcard que pour son groupe ou en public
+    endnote
+    if ( \n Données \n )
+        -[#green]-> Oui ;
+        -Retour du code \n **200: SUCCESS** \n avec la donnée
+    elseif ( \n Erreur connue \n )
+        -[#green]-> Oui ;
+        -Retour du code \n **400: NOT_FOUND**
+    else
+        -[#red]-> Non ;
+        -Retour du code erreur \n **500: INTERNAL_ERROR**
+    endif
+}
+stop
+
+legend 
+**Légende**
+
+**Retour du code erreur** : Permet la remontée d'un message d'erreur (localisé) à l'utilisateur.
+
+endlegend
+
+@enduml
