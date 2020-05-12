@@ -43,10 +43,13 @@
 ----
 * Installer l'UI component
     * Suivre la documentation disponible au lien suivant: `https://github.com/sxd-platform/byd-all-documentation/blob/develop/02.byd-Platform/8.DeveloperDossier/UI%20component/uiComponent.md`
+ * Installer le technical component
+   * Suivre la documentation disponible : `Doc à rédiger`
     
 ----
 * .ENV
     * Pour récupérer les .env
-        * ~~Suivre la documentation disponibles au lien suivant : `https://github.com/sxd-platform/byd-all-documentation/blob/develop/02.byd%20-Platform/8.DeveloperDossier/Liste%20des%20.env.md`~~ `le process a changé sujet en cours`
+        * ~~Suivre la documentation disponibles au lien suivant : `https://github.com/sxd-platform/byd-all-documentation/blob/develop/02.byd%20-Platform/8.DeveloperDossier/Liste%20des%20.env.md`~~ 
+            `le process a changé sujet en cours`
 > Contacter un membre de l'équipe pour récupérer les dernières version des .env 
 
