@@ -1,4 +1,4 @@
-@startuml
+@startuml Beyond Manager data model
 
 title
 
@@ -45,7 +45,6 @@ Table(product, "product") {
   ---
   not_null(unique(code)) TEXT
   not_null(unique(label)) TEXT
-  not_null(businessCode) TEXT
   description JSONB
   image BINARY or TEXT
   icon BINARY or TEXT
