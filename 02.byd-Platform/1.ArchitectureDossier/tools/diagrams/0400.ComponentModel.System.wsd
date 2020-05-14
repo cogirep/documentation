@@ -1,4 +1,6 @@
-@startuml component-model-system-level
+@startuml component-model-system-context-level
+
+!includeurl https://raw.githubusercontent.com/skleanthous/C4-PlantumlSkin/master/build/output/c4.puml
 
 header
     <b>BEYOND Platform</b> - Diagramme de composants
@@ -9,22 +11,38 @@ end header
 !include ../../../../tools/C4-PlantUML/C4_Container.puml
 !include ../../../../tools/C4-PlantUML/C4_Component.puml
 
-Person(EndUSer, "End user")
-Person(AdminIAM, "Administrator\n(users)")
-Person(AdminBYDPTF, "Administrator\n(BYD configuration)")
-Person(AdminDF, "Administrator\n(business)")
+
+actor "Administrator\n(BYD Reality)" as AdminBYDAPPREAInt <<Internal Person>>
+actor "Administrator (Delegate)\n(BYD Reality)" as AdminBYDAPPREAExt <<External Person>>
+actor "End User" as EndUSer <<External Person>>
+actor "Administrator\n(BYD Platform)" as AdminBYDPTFInt <<Internal Person>>
+actor "Administrator (Delegate)\n(BYD Platform)" as AdminBYDPTFExt <<External Person>>
+'actor "Administrator\n(BYD Application)" as AdminBYDAPPInt <<Internal Person>>
+'actor "Administrator (Delegate)\n(BYD Application)" as AdminBYDAPPExt <<External Person>>
+'Person(EndUSer, "End user")
+'Person(AdminBYDPTF, "Administrator\n(BYD Platform)")
+'Person(AdminBYDAPP, "Administrator\nBYD Application")
+'Person(AdminBYDAPPREA, "Administrator\nBYD Reality")
 
 
 System_Boundary(BYDPTFM, "BEYOND PLATFORM") {
-    System(BYDMGR, "BYD MANAGER", "Administration & supervision"){
+    System(BYDPORTAL, "BYD PORTAL", "Beyond Portal"){
     }
-    System(BYDDFMGR, "BYD DATA FACTORY MANAGER", "Administration"){
+    System(BYDMGR, "BYD MANAGER", "Administration"){
     }
-    System(BYDDF, "BEYOND DATA FACTORY"){
+    System(BYDDF, "BYD DATA FACTORY", "Common Data"){
     }
-    System(BYDREALITY, "BEYOND REALITY", "BYD APP"){
+    System(BYDDFMGR, "BYD DATA FACTORY MANAGER", "Data Administration"){
     }
-    System(BYDIDP, "BEYOND IDENTITY & ACCESS MANAGER", "Identity & access management"){
+    System(BYDREALITY, "BYD REALITY", "BYD Application"){
+    }
+    System(BYDREAMGR, "BYD REALITY MANAGER", "BYD Reality Administration"){
+    }
+    'System(BYDAPP, "BYD APPLICATION", "BYD Application (Generic)"){
+    '}
+    'System(BYDAPPMGR, "BYD APPLICATION MANAGER", "BYD Application Administration"){
+    ''}
+    System(BYDIDP, "BYD IdP", "Identity Provider\n(Internal)"){
     }
 
 }
@@ -33,18 +51,36 @@ System_Ext(IdP, "External Identity Providers", "SSO")
 
 ' Relations
 ' - with users
-Rel(AdminIAM, BYDPTFM, "Uses", "HTTPS")
-Rel(AdminBYDPTF, BYDPTFM, "Uses", "HTTPS")
-Rel(AdminDF, BYDPTFM, "Uses", "HTTPS")
-Rel(EndUSer, BYDPTFM, "Uses", "HTTPS")
+Rel_D(EndUSer, BYDREALITY, "Uses", "HTTPS")
+Rel_D(EndUSer, BYDPORTAL, "Uses", "HTTPS")
+'Rel(EndUSer, BYDAPP, "Uses", "HTTPS")
+'Lay_L(AdminBYDPTFInt,AdminBYDPTFExt)
+Rel_U(AdminBYDPTFInt, BYDMGR, "Uses", "HTTPS")
+Rel_U(AdminBYDPTFInt, BYDDFMGR, "Uses", "HTTPS")
+Rel_U(AdminBYDPTFExt, BYDMGR, "Uses", "HTTPS")
+Rel_L(AdminBYDPTFExt, BYDDFMGR, "Uses", "HTTPS")
+'Rel_U(AdminBYDAPPInt, BYDAPPMGR, "Uses", "HTTPS")
+'Rel_U(AdminBYDAPPExt, BYDAPPMGR, "Uses", "HTTPS")
+Rel_D(AdminBYDAPPREAInt, BYDREAMGR, "Uses", "HTTPS")
+Rel_D(AdminBYDAPPREAExt, BYDREAMGR, "Uses", "HTTPS")
+
 ' - between services
-Rel(BYDREALITY, BYDIDP, "Uses")
-Rel(BYDREALITY, BYDDF, "Uses")
-Rel(BYDMGR, BYDIDP, "Uses")
-Rel(BYDDFMGR, BYDDF, "Uses")
-Rel(BYDDFMGR, BYDIDP, "Uses")
-Rel(BYDDF, BYDIDP, "Uses")
+Rel_L(BYDPORTAL, BYDREALITY, "Provides\nAuthentication Page")
+Rel_R(BYDREAMGR, BYDREALITY, "Configures")
+Rel_U(BYDMGR, BYDPORTAL, "Configures")
+Rel_U(BYDMGR, BYDIDP, "Configures\n(for internal accounts)")
+'Rel(BYDPORTAL, BYDAPP, "Provides\nAuthentication Page")
+Rel_D(BYDREALITY, BYDDF, "Store/Get Data")
+'Rel(BYDAPP, BYDDF, "Store/Get Data")
+'Rel_R(BYDPORTAL, BYDMGR, "Provides\nAuthentication Page")
+'Rel_R(BYDPORTAL, BYDDFMGR, "Provides\nAuthentication Page")
+'Rel_R(BYDPORTAL, BYDAPPMGR, "Provides\nAuthentication Page")
+'Rel_R(BYDPORTAL, BYDREAMGR, "Provides\nAuthentication Page")
+Rel_U(BYDDFMGR, BYDDF, "Configures")
+'Rel_U(BYDAPPMGR, BYDAPP, "Configures")
+Rel_R(BYDPORTAL, BYDIDP, "Uses")
+
 ' - between systems and external systems
-Rel(BYDIDP, IdP, "USes", "OIDC")
+Rel_R(BYDIDP, IdP, "Uses", "OIDC/OAuth")
 
 @enduml
