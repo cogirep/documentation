@@ -44,17 +44,24 @@ group "Accéder à une application BEYOND"
       IDP --> U: **Redirection** vers Cognito avec jeton IdP externe
       U -> IAM: Envoi du jeton IdP
       IAM --> U: **Redirection** vers Call Back URL Portail
-      U -> PB: Envoi du jeton Cognito\n(ID Token)
+      U -> PB: Envoi des jetons Cognito\n(ID Token + Referesh Token)
       PB -> PB: Vérification du jeton Cognito
       note right PB
         la vérification du jeton Cognito se fait sur la base
          de la clé publique Cognito (jwks) écupérée via l'url 
         https://cognito-idp.{region}.amazonaws.com/{userPoolId}/.well-known/jwks.json
+        
         To do : renouveler la clé publique à intervalle régulier (fréquence : 1h ?)
+        
+        Si l'ID Token est expiré (durée de validité : 1h, non modifiable), alors
+        vérification du Refresh Token (via l'API "AdminInitiateAuth" de Cognito)
+          Si le Refresh Token est valide alors un nouvel ID Token est fourni par Cognito
+          Sinon, l'utilisateur doit se ré-authentifier
+
       end note
-      PB --> U: **Redirection** vers l'application BEYOND\navec jeton Cognito (ID Token)
-      U -> RF: Aller vers l'application BEYOND\navec jeton Cognito (ID Token)
-      RF -> RB: Demande de profil utilisateur\navec jeton Cognito (ID Token)
+      PB --> U: **Redirection** vers l'application BEYOND\navec jetons Cognito (ID Token+ Referesh Token)
+      U -> RF: Aller vers l'application BEYOND\navec jetons Cognito (ID Token+ Referesh Token)
+      RF -> RB: Demande de profil utilisateur\navec jetons Cognito (ID Token+ Referesh Token)
       RB -> RB : Vérification du jeton Cognito\n et extraction de l'ID de l'utilisateur
       note right RB
         la vérification du jeton Cognito se fait sur la base
@@ -107,9 +114,9 @@ group "Accéder à une application BEYOND"
     end note
     IAM --> PB: Retour authentification utilisateur interne
       alt <color Green>Authentification OK</color>
-        PB --> PF: renvoie jeton Cognito (ID Token)\n + route vers application
-        PF --> U: **Redirection** vers l'application BEYOND\navec jeton Cognito (ID Token)
-        U -> RF: Aller vers l'application BEYOND\navec jeton Cognito (ID Token)
+        PB --> PF: renvoie jeton Cognito (ID Token + Referesh Token)\n + route vers application
+        PF --> U: **Redirection** vers l'application BEYOND\navec jetons Cognito (ID Token + Referesh Token)
+        U -> RF: Aller vers l'application BEYOND\navec jetons Cognito (ID Token + Referesh Token)
         RF -> RB: Demande de profil utilisateur
         RB -> RB : Vérification du jeton Cognito\n et extraction de l'ID de l'utilisateur
         note right RB
