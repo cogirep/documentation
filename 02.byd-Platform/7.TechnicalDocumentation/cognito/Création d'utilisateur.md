@@ -61,7 +61,9 @@ Les utilisateurs créés sont avec le statut "**FORCE_CHANGE_PASSWORD**" , cela 
 	}
 
 Dans ce cas l'utilisateur est déjà connu de cognito.
-Cela peut arriver quand l'utilisateur a déjà été créé dans un autre environnement et que nous utilisons le même user Pool pour tous les utilisateurs.
+
+
+Cela peut arriver quand l'utilisateur a déjà été créé dans un autre environnement et vu que nous utilisons le même **userPool** pour tous les environnements cela génere une erreur
 
 La solutions et de chercher l'utilisateur dans cognito (via l'api **listUsers**) et de le sauvegarder dans notre BDD avec son Username.
 
