@@ -40,7 +40,8 @@ hide stereotypes
 Table(product, "product") {
   primary_key(pk_id) BIGSERIAL
   ---
-  foreign_key(productType) BIGINT
+  foreign_key(pk_fk_productTypeId) BIGINT
+  foreign_key(pk_fk_businessCodeId) BIGINT
   ---
   not_null(unique(code)) TEXT
   not_null(unique(label)) TEXT
@@ -53,19 +54,15 @@ Table(product, "product") {
   not_null(status) BINGINT
 }
 note top of product
-  code : identifiant technique pour
-    les logs, les traces d'audit
-  businessCode : code de regroupement de produits
-    à des fins commerciales
-end note
-note left of product
   hypothèses :
   - un produit est opérationnel (DigitalSite)
     ou d'administration (MyAdminSite) ou 'technique' (tbd)
   - on ne peut supprimer un produit relié à une compagnie
   - image et icone sont des URLs gérées par le produit
-end note
-note bottom of product
+  
+  code : identifiant technique pour
+    les logs, les traces d'audit
+
   Todo : multilinguisme sur la description
 end note
 
@@ -79,10 +76,9 @@ Table(company, "company") {
   'not_null(isSuperAdmin) BOOLEAN <default: false>
 }
 note top of company
-  code : identifiant technique pour
+  Code : identifiant technique pour
   les logs, les trace d'audit
-end note
-note left of company
+
   Todo : gérer une hiérarchie de compagnie
 end note
 
@@ -99,22 +95,21 @@ Table(account, "account") {
 primary_key(pk_id) BIGSERIAL
 ---
 foreign_key(pk_fk_companyid) BIGINT
-foreign_key(pk_fk_idpid) BIGINT
+'foreign_key(pk_fk_idpid) BIGINT
 ---
 not_null(unique(email)) TEXT
 not_null(firstname) TEXT
 not_null(lastname) TEXT
 unique(providerUserId) TEXT
 not_null(status) BINGINT
-'not_null(isAdminSXD) BOOLEAN
+'not_null(isAdminBYD) BOOLEAN
 }
 note top of account
   En tant qu'utilisateur
   Je suis rattaché à une et une seule compagnie
-end note
-note bottom of account
+
   Todo :
-  ajouter les préférences utilisateur
+  Ajouter les préférences utilisateur
   au niveau global BYD PLATFORM
 end note
 
@@ -128,7 +123,7 @@ Table(companyProduct, "company_product") {
 }
 note left of companyProduct
   un produit est rattaché à une compagnie
-  par un Admin SXD
+  par un Admin BYD
 end note
 
 'Table(companyAccount, "company_account") {
@@ -161,6 +156,17 @@ note bottom of productType
   - produit "technique" (à préciser)
 end note
 
+Table(businessCode, "business_code") {
+  primary_key(pk_id) BIGSERIAL
+  ---
+  not_null(unique(businessCode)) TEXT
+  not_null(description) TEXT
+}
+note bottom of businessCode
+  Code de regroupement de produits
+  à des fins commerciales
+end note
+
 Table(role, "roleBydManager") {
   primary_key(pk_id) BIGSERIAL
   ---
@@ -168,22 +174,21 @@ Table(role, "roleBydManager") {
   not_null(description) TEXT
   not_null(status) BINGINT
 }
-note top of role
-  il ne s'agit que des des rôles dans
+note right of role
+  Il ne s'agit que des des rôles dans
   BEYOND MANAGER & PORTAL
   - Admin BYD,
   - Admin Délégué,
   - Utilisateur
-end note
-note right of role
-  En tant qu'administrateur SXD je peux :
+  
+  En tant qu'administrateur BYD je peux :
   - créer des produits
   - créer des compagnies
   - créer des utilisateurs
   - créer des IdP
-  - créer d'autres Admin SXD
+  - créer d'autres Admin BYD
   - donner les droits d'administration délégué sur une compagnie
-  
+
   En tant qu'administrateur délégué d'une compagnie, je peux :
   - créer des compagnies filles (-> hiérarchie)
   - créer des utilisateurs rattaché à cette compagnie
@@ -214,8 +219,12 @@ Table(companyRoleAccount, "company_role_account") {
   not_null(status) BINGINT
 }
 note top of companyRoleAccount
-  Un account a un rôle par compagnie
+  Un utilisateur a un rôle par compagnie
   dans BEYOND MANAGER
+
+  corolaire : SIXENSE est une compagnie
+  qui est la seule à utiliser le rôle
+  Admin BYD
 end note
 
 product -right[hidden]- account
@@ -224,13 +233,14 @@ account -right[hidden]- company
 company -right[hidden]- role
 
 idp "0..N" }o-up-|| "1" company: A company may be\nassociated with\n(external) Identity Provider(s)
-idp "1" |o-up-o{ "0..N" account: An account may\nhave only one idp
+'idp "1" |o-up-o{ "0..N" account: An account may\nhave only one idp
 
 ' relationships
 'companyProduct "0..N" }o--up--|| "1" product: A product may be \nassociated with many companies
 'companyProduct "0..N" }o--|| "1" product: A product may be \nassociated with many companies
 product "1" ||-down-o{ "0..N" companyProduct: A product may be \nassociated with many companies
 product }o-down-|| "1" productType: A product has one type
+product }o-left-|| "1" businessCode: A product has one business code
 'companyProduct "0..N" }o--up--|| "1" company: A company may\nhave many products
 'companyProduct "0..N" }o--|| "1" company: A company may\nhave many products
 company "1" ||-down-o{ "0..N" companyProduct: A company may\nhave many products
@@ -241,7 +251,7 @@ accountProduct "0..N" }o-down-|| "1" companyProduct: A product attached to a com
 ' company
 'company "1" ||-down-o{ "0..N" companyAccount: A company may\nhave many accounts
 'companyAccount "1" ||-up-o{ "0..N" account: An account may\nhave only one company
-company "1" ||--o{ "0..N" account: An account is linked to\none company
+company "1" ||-left-o{ "0..N" account: An account is linked to\none company
 
 ' company .[hidden].> companyRoleAccount
 'account "0..N" }o-right-|| "1" role: An account has\nonly one role in BYD MANAGER for a company
