@@ -1,17 +1,17 @@
 # Création d'utilisateur
 **Contexte:** un utilisateur plateforme est un utilisateur qui est connu à la fois de cognito mais aussi de la plateforme.
-les utilisateurs plateformes sont créés par les administrateurs de la plateforme sur le module **beyond Manager**.
+les utilisateurs plateforme sont créés par les administrateurs de la plateforme sur le module **Beyond Manager**.
 
 ## Api cognito
-Cognito propose plusieurs solutions pour la création d'utilisateur .
+Cognito propose plusieurs solutions pour la création d'utilisateurs .
 Dans la plateforme nous avons choisi d'utiliser l'api "**adminCreateUser**".
-Cette api a été choisie car elle permet de valider les utilisateurs automatiquement sans avoir à les activer 1 par 1 dans l'ihm cognito/
+elle permet de valider les utilisateurs automatiquement sans avoir à les activer 1 par 1 dans l'ihm cognito.
 
 **prérequis**:
 - Utilisation du package **aws-sdk** (version: **2.660.0**) pour appeler les apis cognito
-- Récuperation des "**developer credentials**", ils sont requis afin d'utiliser l'api et pour la configuration du package aws-sdk
+- Récuperation des "**developer credentials**". Ils sont requis afin d'utiliser l'api et pour la configuration du package aws-sdk
 - La configuration de cognito doit autoriser l'utilisation de cette api
-> le detail de la configuration cognito sera présente dans la doc IT sur cognito.
+> le détail de la configuration cognito sera présente dans la doc IT sur cognito.
 
 **corps de la requête**:
 
@@ -46,7 +46,7 @@ Cette api a été choisie car elle permet de valider les utilisateurs automatiqu
 	}
 Une fois la création de l'utilisateur correcte , il faut enregistrer dans nos BDD le champs **Username** pour faire le mapping entre la plateforme et cognito.
 
-Les utilisateurs créés sont avec le statut "**FORCE_CHANGE_PASSWORD**" , cela signifie qu'ils seront contraints de changer leur mot de passe temporaire (reçu par email) pour un nouveau mot de passe personnel.
+Les utilisateurs sont créés sous le statut "**FORCE_CHANGE_PASSWORD**" , cela signifie qu'ils seront contraints de changer leur mot de passe temporaire (reçu par email) pour un nouveau mot de passe personnel.
 
 **Erreurs connues**:
 
@@ -63,9 +63,9 @@ Les utilisateurs créés sont avec le statut "**FORCE_CHANGE_PASSWORD**" , cela 
 Dans ce cas l'utilisateur est déjà connu de cognito.
 
 
-Cela peut arriver quand l'utilisateur a déjà été créé dans un autre environnement et vu que nous utilisons le même **userPool** pour tous les environnements cela génere une erreur
+Cela peut arriver quand l'utilisateur a déjà créé dans un autre environnement et puisque nous utilisons le même **userPool** pour tous les environnements cela génere une erreur
 
-La solutions et de chercher l'utilisateur dans cognito (via l'api **listUsers**) et de le sauvegarder dans notre BDD avec son Username.
+La solution est de chercher l'utilisateur dans cognito (via l'api **listUsers**) et de le sauvegarder dans notre BDD avec son Username.
 
 ---
 	{
