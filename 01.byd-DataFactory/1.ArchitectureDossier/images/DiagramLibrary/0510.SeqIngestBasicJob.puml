@@ -1,0 +1,60 @@
+@startuml
+actor Client
+participant "Beyond Application\n(i.e.: Digital Site)" as AppByd order 1
+participant "DF Microservice\nIDcard Manager" as IDcard order 2
+database MongoDB order 3
+collections "DF Buckets\n(COS)" as COS order 4
+
+Client -> AppByd : initiate upload
+activate AppByd #888888
+AppByd -> Client : form to insert file
+Client -> AppByd : upload file
+AppByd -> IDcard : upload file + data
+group Identity Card Creation
+activate IDcard #888888
+IDcard -> IDcard: Check data integrity
+note right
+    compare data with IdCard collection json schema
+end note
+'IDcard -> IDcard : Validate uniqueness
+'IDcard -> MongoDB : check Identity uniqueness
+'activate MongoDB #888888
+'MongoDB --> IDcard : Ok
+'deactivate MongoDB
+'deactivate IDcard
+'activate IDcard 
+IDcard -> IDcard: create identity objects (BEYOND ID, Revision ID)
+note right
+    no uniqueness (on file or data) validation currently
+    data can be duplicated
+end note
+IDcard -> COS : PUT file [RAW BUCKET]
+note right
+    prefixe file name with BEYOND ID
+end note
+activate COS #888888
+COS --> IDcard : file in RAW Bucket OK
+deactivate COS
+note right
+    Currently public COS
+    Todo: use private buckets
+end note
+IDcard -> COS : PUT file [SAFE BUCKET]
+note right
+    prefixe file name with BEYOND ID
+end note
+activate COS #888888
+COS --> IDcard : file in SAFE Bucket OK
+deactivate COS
+IDcard -> MongoDB : Create Identity Card Object
+activate MongoDB #888888
+MongoDB --> IDcard : Ok
+deactivate MongoDB
+IDcard --> AppByd: Ok + Identity Card BEYOND ID / Revision ID
+deactivate IDcard 
+deactivate IDcard 
+AppByd --> Client : upload confirmation
+deactivate AppByd
+end
+
+@enduml

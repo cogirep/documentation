@@ -1,0 +1,171 @@
+@startuml seq_authentication
+title 
+Gestion de la cinématique de connexion et de navigation
+entre les applications BEYOND et le portail BEYOND
+Dans un contexte SSO
+end title
+participant "User" as U
+participant "Portal Frontend" as PF
+participant "Portal Backend" as PB
+participant "IAM Cognito" as  IAM
+participant "IDP Externe" as  IDP
+participant "BYD App Frontend" as RF
+participant "BYD App Backend" as RB
+
+group "Accéder à une application BEYOND"
+  note right U
+    Hypothèse: première connexion
+    (pas de jeton actif)
+  end note
+  U -> RF: Aller vers une URL d'une application BEYOND
+  RF -> RF: Vérification présence jeton Cognito
+  RF --> U: **Redirection** route d'authentification\navec information sur l'application appelante\n(champ personnalisé de call-back à comparer avec le referer des headers)
+  U -> PF
+  note right PF
+    Page d'authentification
+    (e-mail seul)
+  end note
+  U -> PF: Saisir son e-mail
+  PF -> PB: Vérification du pattern d'e-mail
+  note right PB
+    On regarde si ce pattern d'e-mail
+    est associé à un IdP externe
+  end note
+  PB --> PF: Retour sur pattern d'e-mail
+  alt <color Green>matching Pattern email / IdP externe trouvé</color>
+    PF --> U: **Redirection** vers Cognito avec information IdP
+    U -> IAM: Demande d'authentification via IdP externe
+    IAM --> U: **Redirection** vers IdP externe
+    U -> IDP:
+    IDP --> U: page d'authentification
+    U -> IDP: Saisir E-mail + mot de passe
+    IDP -> IDP: Authentification
+    alt <color Green>Authentification OK</color>
+      IDP --> U: **Redirection** vers Cognito avec jeton IdP externe
+      U -> IAM: Envoi du jeton IdP
+      IAM --> U: **Redirection** vers Call Back URL Portail
+      U -> PB: Envoi des jetons Cognito\n(ID Token + Referesh Token)
+      PB -> PB: Vérification du jeton Cognito
+      note right PB
+        la vérification du jeton Cognito se fait sur la base
+         de la clé publique Cognito (jwks) écupérée via l'url 
+        https://cognito-idp.{region}.amazonaws.com/{userPoolId}/.well-known/jwks.json
+        
+        To do : renouveler la clé publique à intervalle régulier (fréquence : 1h ?)
+        
+        Si l'ID Token est expiré (durée de validité : 1h, non modifiable), alors
+        vérification du Refresh Token (via l'API "AdminInitiateAuth" de Cognito)
+          Si le Refresh Token est valide alors un nouvel ID Token est fourni par Cognito
+          Sinon, l'utilisateur doit se ré-authentifier
+
+      end note
+      PB --> U: **Redirection** vers l'application BEYOND\navec jetons Cognito (ID Token+ Referesh Token)
+      U -> RF: Aller vers l'application BEYOND\navec jetons Cognito (ID Token+ Referesh Token)
+      RF -> RB: Demande de profil utilisateur\navec jetons Cognito (ID Token+ Referesh Token)
+      RB -> RB : Vérification du jeton Cognito\n et extraction de l'ID de l'utilisateur
+      note right RB
+        la vérification du jeton Cognito se fait sur la base
+         de la clé publique Cognito (jwks) écupérée via l'url 
+        https://cognito-idp.{region}.amazonaws.com/{userPoolId}/.well-known/jwks.json
+      end note
+      RB -> RB : Récupération du profil de l'utilisateur
+      alt <color Green>l'Utilisateur est connu de l'application</color>
+        RB --> RF: envoi des informations de profil
+        note right RB
+         Ces informations peuvent être transmises 
+         via un jeton applicatif (JWT)
+         (Option à la main de l'application)
+        end note
+        RF -> RB: Demande de contenu (appel de service applicatif)
+        alt <color Green>l'Utilisateur a les droits dans l'application pour le contenu/service demandé</color>
+          RB --> RF: envoi du contenu demandé
+          RF --> U: Affichage page demandée de l'application
+          note right RF
+            Note : nécessite que
+            les applications implémentent
+            l'accès direct à une page applicative
+          end note
+        else  <color Red>Utilisateur n'a pas les droits dans l'application pour le contenu/service demandé</color>
+          RB --> RF: envoi erreur HTTP 403
+          RF --> U: Affichage du message d'erreur associé
+        end
+      else  <color Red>Utilisateur inconnu de l'application</color>
+        RB --> RF: Utilisateur inconnu
+        RF --> U: **Redirection** vers le portail
+        note right PF
+          Page d'accueil Portail avec contexte lié à l'erreur sur l'app
+          A valider avec PO BYD
+          si on souhaite imposer cette Redirection
+          à toutes les applications qui intègreront la Plateforme
+        end note
+        U -> PF: Aller à la page d'accueil Portail
+     end
+    else  <color Red>Authentification KO</color>
+      IDP --> U: Echec de l'authentification
+    end
+  
+  else  <color Red>matching Pattern email / IdP externe KO</color>
+    PF --> U: Ajout du champ de mot de passe
+    U -> PF: Saisir mot de passe
+    PF -> PB: Transmission e-mail + mot de passe
+    PB -> IAM: Authentifier utilisateur interne
+    note right IAM
+        API Cognito "AdminInitiateAuth"
+    end note
+    IAM --> PB: Retour authentification utilisateur interne
+      alt <color Green>Authentification OK</color>
+        PB --> PF: renvoie jeton Cognito (ID Token + Referesh Token)\n + route vers application
+        PF --> U: **Redirection** vers l'application BEYOND\navec jetons Cognito (ID Token + Referesh Token)
+        U -> RF: Aller vers l'application BEYOND\navec jetons Cognito (ID Token + Referesh Token)
+        RF -> RB: Demande de profil utilisateur
+        RB -> RB : Vérification du jeton Cognito\n et extraction de l'ID de l'utilisateur
+        note right RB
+          la vérification du jeton Cognito se fait sur la base
+          de la clé publique Cognito (jwks) écupérée via l'url 
+          https://cognito-idp.{region}.amazonaws.com/{userPoolId}/.well-known/jwks.json
+        end note
+        RB -> RB : Récupération du profil de l'utilisateur
+        alt <color Green>l'Utilisateur est connu de l'application</color>
+          RB --> RF: envoi des informations de profil
+          note right RB
+          Ces informations peuvent être transmises 
+          via un jeton applicatif (JWT)
+          (Option à la main de l'application)
+          end note
+          RF -> RB: Demande de contenu (appel de service applicatif)
+          alt <color Green>l'Utilisateur a les droits dans l'application pour le contenu/service demandé</color>
+            RB --> RF: envoi du contenu demandé
+            RF --> U: Affichage page demandée de l'application
+            note right RF
+              Note : nécessite que
+              les applications implémentent
+              l'accès direct à une page applicative
+            end note
+          else  <color Red>Utilisateur n'a pas les droits dans l'application pour le contenu/service demandé</color>
+            RB --> RF: envoi erreur HTTP 403
+            RF --> U: Affichage du message d'erreur associé
+          end
+        else  <color Red>Utilisateur inconnu de l'application</color>
+          RB --> RF: Utilisateur inconnu
+          RF --> U: **Redirection** vers le portail
+          note right PF
+            Page d'accueil Portail avec contexte lié à l'erreur sur l'app
+            A valider avec PO BYD
+            si on souhaite imposer cette Redirection
+            à toutes les applications qui intègreront la Plateforme
+          end note
+          U -> PF: Aller à la page d'accueil Portail
+        end
+    else  <color Red>Authentification KO</color>
+        PB --> PF: Echec authentification
+        PF --> U: Message d'erreur : échec de l'authentification
+        note right PF
+          on recommence la séquence de base ; c-à-d :
+          on affiche que le champ email
+          (en cas d'erreur sur l'email,
+          possiblité de vérification du pattern d'e-mail)
+        end note
+    end
+  end
+end
+@enduml

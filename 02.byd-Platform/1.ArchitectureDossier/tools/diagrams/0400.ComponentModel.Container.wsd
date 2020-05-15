@@ -4,10 +4,10 @@ header
     <b>BEYOND Platform</b> - Diagramme de composants
 end header
 
-!include /Users/fredericfadda/ffa-dev/C4-PlantUML/C4.puml
-!include /Users/fredericfadda/ffa-dev/C4-PlantUML/C4_Context.puml
-!include /Users/fredericfadda/ffa-dev/C4-PlantUML/C4_Container.puml
-!include /Users/fredericfadda/ffa-dev/C4-PlantUML/C4_Component.puml
+!include ../../../../tools/C4-PlantUML/C4.puml
+!include ../../../../tools/C4-PlantUML/C4_Context.puml
+!include ../../../../tools/C4-PlantUML/C4_Container.puml
+!include ../../../../tools/C4-PlantUML/C4_Component.puml
 
 Person(EndUSer, "End user")
 Person(AdminIAM, "Administrator\n(users)")
@@ -51,10 +51,10 @@ System_Boundary(BYDPTFM, "BEYOND PLATFORM") {
         ContainerDb(BYDRTYDB, "BYD REALITY\nDB", "PostgreSQL"){
         }
     }
-    System(BYDIDP, "BEYOND IDENTITY & ACCESS MANAGER", "Identity & access management"){
-        Container(BYDIAM, "BEYOND IAM", "Keycloak") {
+    System(BYDIDP, "BEYOND IDENTITY & ACCESS MANAGER", "Identity & Access Management"){
+        Container(BYDIAM, "BEYOND IAM", "AWS Cognito") {
         }
-        ContainerDb(BYDIAMDB, "BEYOND IAM\nDB", "PostgreSQL")
+        ContainerDb(BYDIAMDB, "BEYOND IAM\nDB", "AWS Cognito User Pool")
     }
 
 }
