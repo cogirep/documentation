@@ -1,0 +1,6 @@
+{
+    "plantuml.exportOutDir": "",
+    "plantuml.exportSubFolder": false,
+    "plantuml.render": "PlantUMLServer",
+    "plantuml.server": "http://localhost:10971"
+}
