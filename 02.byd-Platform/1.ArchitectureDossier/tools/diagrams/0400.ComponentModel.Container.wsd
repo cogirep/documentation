@@ -5,7 +5,7 @@ header
 end header
 
 !includeurl https://raw.githubusercontent.com/skleanthous/C4-PlantumlSkin/master/build/output/c4.puml
-
+'included files = 106+102+59+56 = 323 lines
 !include ../../../../tools/C4-PlantUML/C4.puml
 !include ../../../../tools/C4-PlantUML/C4_Context.puml
 !include ../../../../tools/C4-PlantUML/C4_Container.puml
@@ -21,13 +21,11 @@ skinparam Arrow {
 
 '!define SYSTEM_BG_COLOR #FFFFFF
 
-
 actor "Administrator\n(BYD Reality)" as AdminBydAppRtyInt <<Internal Person>>
 actor "Administrator (Delegate)\n(BYD Reality)" as AdminBydAppRtyExt <<External Person>>
 actor "End User" as EndUSer <<External Person>>
 actor "Administrator\n(BYD Platform)" as AdminBydPtfInt <<Internal Person>>
 actor "Administrator (Delegate)\n(BYD Platform)" as AdminBydPtfExt <<External Person>>
-
 
 System_Boundary(BydPlatform, "BEYOND PLATFORM") {
     System(BydPortal, "BYD PORTAL", "Beyond Portal"){
@@ -35,7 +33,13 @@ System_Boundary(BydPlatform, "BEYOND PLATFORM") {
         }
         Container(BydMgrFrontEnd, "BYD MGR\nFrontEnd", "Angular") {
         }
-        Container(BydPortalServices, "BYD PORTAL\nServices", "Node.js") {
+        System(BydPortalServices, "BYD PORTAL\nServices") {
+            Container(BydPortalSVCUsrMgt, "BYD PORTAL\nUser Management", "Node.js"){
+            }
+            Container(BydPortalSVCCompanyMgt, "BYD PORTAL\nCompany Management", "Node.js"){
+            }
+            Container(BydPortalSVCProductMgt, "BYD PORTAL\nProduct Management", "Node.js"){
+            }
         }
          ContainerDb(BydPortalDB, "BYD PORTAL\nDB", "PostgreSQL"){
         }
@@ -43,7 +47,7 @@ System_Boundary(BydPlatform, "BEYOND PLATFORM") {
     System(BydReality, "BEYOND REALITY"){
         Container(BydRtyFrontEnd, "BYD REALITY\nFrontEnd", "Angular") {
         }
-         Container(BydRtyMgrFrontEnd, "BYD REALITY MANAGER\nFrontEnd", "Angular") {
+        Container(BydRtyMgrFrontEnd, "BYD REALITY MANAGER\nFrontEnd", "Angular") {
         }
         System(BydRtyServices, "BYD REALITY\nServices"){
             Container(BydRtySVCUsrMgt, "BYD REALITY\nUser Management", "Node.js"){
@@ -57,16 +61,25 @@ System_Boundary(BydPlatform, "BEYOND PLATFORM") {
     System(BydDf, "BEYOND DATA FACTORY"){
         Container(BydDfMgrFrontEnd, "BYD DF MNGR\nFrontEnd", "Angular") {
         }
-        Container(BydDfSvcIdCard, "BYD DF Id Card", "Node.js") {
-        }
-        Container(BydDfSvcTransfoMgr, "BYD DF\nTransformation Manager", "Node.js") {
+        System(BydDfServices, "BYD DF\nServices") {
+            Container(BydDfSvcIdCard, "BYD DF Id Card", "Node.js") {
+            }
+            Container(BydDfSvcTransfoMgr, "BYD DF\nTransformation Manager", "Node.js") {
+            }
+            Container(BydDfSvcTransfoDispatcher, "BYD DF\nTransformation Dispatcher", "Node.js") {
+            }
+            Container(BydDfSvcTransfoQueue, "BYD DF\nTransformation Queue", "RabbitMQ") {
+            }
+            Container(BydDfSvcTransfoConsumer, "BYD DF\nTransformation Consumer", "Node.js") {
+            }
+            Container(BydDfSvcTransfoService, "BYD DF\nTransformation Service", "Node.js") {
+            }
         }
         ContainerDb(BydDfCOS, "BYD DF File Storage", "Cloud Object Storage") {
         }
-        ContainerDb(BydDfDB, "BYD DF\nDB", "MongoDB"){
+        ContainerDb(BydDfDB, "BYD DF\nDB", "MongoDB") {
         }
         'ContainerDb(BydDfDBGeo, "BYD DF\nGeo Spatial DB", "PostgreSQL + PostGIS")
-
     }
     System(BydIdP, "BEYOND IDP", "Identity Provider\n(internal)"){
         Container(BydIaM, "BEYOND IAM", "AWS Cognito") {
@@ -77,14 +90,17 @@ System_Boundary(BydPlatform, "BEYOND PLATFORM") {
 }
 
 System_Ext(IdP, "External Identity Providers", "SSO")
+System_Ext(FME, "External Transformations Provider")
 
 ' Relations
 ' - between systems
 Lay_R(BydReality,BydPortal)
 Lay_R(BydPortal,BydIaM)
 Lay_D(BydRtyDB,BydDf)
-Lay_L(BydIaM,IdP)
-
+Lay_L(BydPlatform,IdP)
+Lay_D(BydPlatform,FME)
+Lay_D(BydDfServices,BydDfDB)
+Lay_D(BydDfServices,BydDfCOS)
 
 
 ' - with users
@@ -99,15 +115,16 @@ Rel_D(AdminBydAppRtyExt, BydRtyMgrFrontEnd, "Uses", "HTTPS")
 
 Lay_L(AdminBydPtfExt,AdminBydPtfInt)
 
-
 ' - between pages
 'Rel(BydPortalFrontEnd, BydRtyFrontEnd, "Includes")
 'Rel(BydMgrFrontEnd, BydDfMgrFrontEnd, "Includes")
 'Rel(BydMgrFrontEnd, BydRtyMGRFrontEnd, "Includes")
 
 ' - between pages and services
-Rel_D(BydPortalFrontEnd, BydPortalServices, "Uses", "HTTPS")
-Rel_D(BydMgrFrontEnd, BydPortalServices, "Uses", "HTTPS")
+Rel_D(BydPortalFrontEnd, BydPortalSVCUsrMgt, "Uses", "HTTPS")
+Rel_D(BydMgrFrontEnd, BydPortalSVCUsrMgt, "Uses", "HTTPS")
+'Rel_D(BydMgrFrontEnd, BydPortalSVCCompanyMgt, "Uses", "HTTPS")
+'Rel_D(BydMgrFrontEnd, BydPortalSVCProductMgt, "Uses", "HTTPS")
 Rel_D(BydRtyFrontEnd, BydRtySVCUsrMgt, "Uses", "HTTPS")
 Rel_D(BydRtyFrontEnd, BydRtySVCIdCardMgt, "Uses", "HTTPS")
 Rel_D(BydRtyMgrFrontEnd, BydRtySVCUsrMgt, "Uses", "HTTPS")
@@ -119,20 +136,29 @@ Rel_D(BydDfMgrFrontEnd, BydDfSvcTransfoMgr, "Uses", "HTTPS")
 'Rel(BydMgrFrontEnd, BydIaM, "Uses", "HTTPS")
 
 ' - between services
-Rel_D(BydPortalServices, BydPortalDB, "Uses")
-Rel_D(BydRtyServices, BydRtyDB, "Uses")
+Rel_D(BydPortalSVCUsrMgt, BydPortalDB, "Uses")
+Rel_D(BydPortalSVCCompanyMgt, BydPortalDB, "Uses")
+Rel_D(BydPortalSVCProductMgt, BydPortalDB, "Uses")
+Rel_D(BydRtySVCUsrMgt, BydRtyDB, "Uses")
+Rel_L(BydRtySVCUsrMgt, BydPortalSVCUsrMgt, "Uses")
 Rel_D(BydRtySVCIdCardMgt, BydDfSvcIdCard, "Uses")
 Rel_D(BydRtySVCIdCardMgt, BydDfSvcTransfoMgr, "Uses")
+Rel_D(BydRtySVCIdCardMgt, BydDfSvcTransfoDispatcher, "Uses")
+Rel_D(BydDfSvcTransfoDispatcher, BydDfSvcTransfoQueue, "Uses")
+Rel_U(BydDfSvcTransfoConsumer,BydDfSvcTransfoQueue, "Listens")
+Rel_D(BydDfSvcTransfoConsumer, BydDfSvcTransfoService, "Uses")
 Lay_R(BydRtySVCUsrMgt,BydRtySVCIdCardMgt)
 
 ' - between services and containers
 Rel_D(BydDfSvcIdCard, BydDfDB, "Uses")
 'Rel_D(BydDfSvcIdCard, BydDfDBGeo, "Uses")
 Rel_D(BydDfSvcIdCard, BydDfCOS, "Uses")
-Rel_D(BydDfSvcTransfoMgr, BydDfCOS, "Uses")
+Rel_D(BydDfSvcTransfoService, BydDfCOS, "Uses")
 Rel_D(BydIaM, BydIaMDB, "Uses", "JDBC")
 
 ' - between services and systems
 Rel_L(BydIaM, IdP, "USes", "OIDC")
+Rel_R(BydDfSvcTransfoService, FME, "USes", "OIDC")
+
 
 @enduml
