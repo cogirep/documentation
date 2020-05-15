@@ -10,6 +10,7 @@ elle permet de valider les utilisateurs automatiquement sans avoir à les active
 **prérequis**:
 - Utilisation du package **aws-sdk** (version: **2.660.0**) pour appeler les apis cognito
 - Récuperation des "**developer credentials**". Ils sont requis afin d'utiliser l'api et pour la configuration du package aws-sdk
+>ils sont à recuperer sur AWS (accessKeyId et secretAccessKey)
 - La configuration de cognito doit autoriser l'utilisation de cette api
 > le détail de la configuration cognito sera présente dans la doc IT sur cognito.
 
@@ -20,7 +21,7 @@ elle permet de valider les utilisateurs automatiquement sans avoir à les active
 	  UserPoolId: "userPoolId de l'application",  
 	  Username: email de l'utilisateur,  
 	  DesiredDeliveryMediums: ['EMAIL'],  
-	  TemporaryPassword: "mot de passe temporaire de l'utilisateur (il est généré aléatoirement)" ,  
+	  TemporaryPassword: "mot de passe temporaire de l'utilisateur (il est généré aléatoirement), ce champs n'est pas obligatoire, on peux l'enlever pour donner la main à cognito pour sa création ,  
 	  UserAttributes: [   (attribut de l'utilisateur défini dans la config cognito)
 	                    {  
 	                      Name: 'email',  
@@ -44,6 +45,12 @@ elle permet de valider les utilisateurs automatiquement sans avoir à les active
 	    UserStatus: 'FORCE_CHANGE_PASSWORD'
 	  }
 	}
+
+un email est envoyé à l'utilisateur suite à sa création dans cognito afin de lui transmettre son mot de passe temporaire.
+
+La configuration de cette email est possible dans la configuration de cognito.
+
+
 Une fois la création de l'utilisateur correcte , il faut enregistrer dans nos BDD le champs **Username** pour faire le mapping entre la plateforme et cognito.
 
 Les utilisateurs sont créés sous le statut "**FORCE_CHANGE_PASSWORD**" , cela signifie qu'ils seront contraints de changer leur mot de passe temporaire (reçu par email) pour un nouveau mot de passe personnel.
