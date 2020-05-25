@@ -34,6 +34,8 @@ System_Boundary(BydPlatform, "BEYOND PLATFORM") {
         Container(BydMgrFrontEnd, "BYD MGR\nFrontEnd", "Angular") {
         }
         System(BydPortalServices, "BYD PORTAL\nServices") {
+            Container(BydPortalSVCUsrAuth, "BYD PORTAL\nUser Authentication", "Node.js"){
+            }
             Container(BydPortalSVCUsrMgt, "BYD PORTAL\nUser Management", "Node.js"){
             }
             Container(BydPortalSVCCompanyMgt, "BYD PORTAL\nCompany Management", "Node.js"){
@@ -101,6 +103,10 @@ Lay_L(BydPlatform,IdP)
 Lay_D(BydPlatform,FME)
 Lay_D(BydDfServices,BydDfDB)
 Lay_D(BydDfServices,BydDfCOS)
+Lay_D(BydMgrFrontEnd,BydPortalSVCUsrAuth)
+Lay_D(BydPortalSVCUsrAuth,BydPortalSVCUsrMgt)
+Lay_D(BydPortalSVCUsrAuth,BydPortalSVCCompanyMgt)
+Lay_D(BydPortalSVCUsrAuth,BydPortalSVCProductMgt)
 
 
 ' - with users
@@ -116,13 +122,16 @@ Rel_D(AdminBydAppRtyExt, BydRtyMgrFrontEnd, "Uses", "HTTPS")
 Lay_L(AdminBydPtfExt,AdminBydPtfInt)
 
 ' - between pages
-'Rel(BydPortalFrontEnd, BydRtyFrontEnd, "Includes")
-'Rel(BydMgrFrontEnd, BydDfMgrFrontEnd, "Includes")
-'Rel(BydMgrFrontEnd, BydRtyMGRFrontEnd, "Includes")
+'Rel(BydMgrFrontEnd, BydPortalFrontEnd, "Redirects")
+'Rel(BydRtyFrontEnd, BydPortalFrontEnd, "Redirects")
+'Rel(BydRtyMGRFrontEnd, BydPortalFrontEnd, "Redirects")
+'Rel(BydDfMgrFrontEnd, BydPortalFrontEnd, "Redirects")
 
 ' - between pages and services
 Rel_D(BydPortalFrontEnd, BydPortalSVCUsrMgt, "Uses", "HTTPS")
 Rel_D(BydMgrFrontEnd, BydPortalSVCUsrMgt, "Uses", "HTTPS")
+Rel_D(BydPortalFrontEnd, BydPortalSVCUsrAuth, "Uses", "HTTPS")
+Rel_D(BydMgrFrontEnd, BydPortalSVCUsrAuth, "Uses", "HTTPS")
 'Rel_D(BydMgrFrontEnd, BydPortalSVCCompanyMgt, "Uses", "HTTPS")
 'Rel_D(BydMgrFrontEnd, BydPortalSVCProductMgt, "Uses", "HTTPS")
 Rel_D(BydRtyFrontEnd, BydRtySVCUsrMgt, "Uses", "HTTPS")
@@ -136,6 +145,7 @@ Rel_D(BydDfMgrFrontEnd, BydDfSvcTransfoMgr, "Uses", "HTTPS")
 'Rel(BydMgrFrontEnd, BydIaM, "Uses", "HTTPS")
 
 ' - between services
+Rel_L(BydPortalSVCUsrAuth, BydIaM, "uses")
 Rel_D(BydPortalSVCUsrMgt, BydPortalDB, "Uses")
 Rel_D(BydPortalSVCCompanyMgt, BydPortalDB, "Uses")
 Rel_D(BydPortalSVCProductMgt, BydPortalDB, "Uses")
