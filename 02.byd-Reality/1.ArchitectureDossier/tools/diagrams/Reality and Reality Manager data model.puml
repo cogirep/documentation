@@ -1,8 +1,8 @@
-@startuml Reality Manager data model
+@startuml Reality and Reality Manager data model
 
 title
 
-Beyond : Reality Manager
+Beyond : Reality + Reality Manager
 
 BY-1747, BY-1762, BY-1763, BY-1981,
 BY-2009 -> BY-2014
@@ -67,25 +67,28 @@ not_null(unique(email)) TEXT
 not_null(status) BINGINT
 }
 note top of account
-  En tant qu'utilisateur
-  Je suis rattaché à une et une seule compagnie
+  La récupération des informations complémentaires (prenom/nom, compagnie de rattachement)
+  sur les utilisateurs "administrables" dans RTY MGR se fait via une API de BYD MGR
 
-  - La récupération des informations complémentaires sur les utilisateurs
-  (prenom/nom) utiles sur RTY MGR se fait via une API de BYD MGR
+  La récupération des compagnies pour lesquelles l'utilisateur accédant à
+  RTY MGR est administrateur (délégué) se fait via une API de BYD MGR
+
+  La récupération de la compagnie de l'utilisateur accédant à Reality se fait via une API de BYD MGR
+  (en tant qu'utilisateur de Reality, je suis rattaché à une et une seule compagnie)
 
   Todo :
   Ajouter des préférences utilisateur ?
 end note
 
-Table(role, "role") {
+Table(profile, "profile") {
   primary_key(pk_id) BIGSERIAL
   ---
   not_null(unique(label)) TEXT
   not_null(description) TEXT
   not_null(status) BINGINT
 }
-note right of role
-  Il s'agit des des rôles dans
+note right of profile
+  Il s'agit des profils (ou "rôles") dans
   REALITY MANAGER & REALITY
   - Admin RTY,
   - Admin RTY Délégué,
@@ -100,9 +103,9 @@ note right of role
   - donner les droits d'administration délégué sur une compagnie
 
   En tant qu'administrateur délégué d'une compagnie, je peux :
-  - créer des utilisateurs rattaché à cette compagnie
+  - créer des utilisateurs rattachés à cette compagnie
   - affecter des profils applicatifs à des utilisateurs des compagnies
-  - donner les droits d'administration délégué sur cette compagnie
+  - donner les droits d'administration déléguée sur cette compagnie
 
 end note
 
@@ -115,21 +118,21 @@ Table(permission, "permission") {
   not_null(status) BINGINT
 }
 
-Table(rolePermission, "role_permission") {
-  foreign_key(pk_fk_roleid) BIGINT
+Table(profilePermission, "profile_permission") {
+  foreign_key(pk_fk_profileid) BIGINT
   foreign_key(pk_fk_permissionid) BIGINT
   ---
   not_null(status) BINGINT
 }
 
-Table(companyRoleAccount, "company_role_account") {
+Table(companyProfileAccount, "company_profile_account") {
   foreign_key(pk_fk_accountid) BIGINT
   foreign_key(pk_fk_companyid) BIGINT
-  foreign_key(pk_fk_roleid) BIGINT
+  foreign_key(pk_fk_profileid) BIGINT
   ---
   not_null(status) BINGINT
 }
-note top of companyRoleAccount
+note top of companyProfileAccount
   Un utilisateur a des profils par compagnie
   dans RTY / RTY MGR
 
@@ -141,17 +144,27 @@ end note
 ' relationships
 
 account -right[hidden]- company
-company -right[hidden]- role
+company -right[hidden]- profile
 
-company "1" ||-left-o{ "0..N" account: An account is linked to\none company
+'company "1" ||-left-o{ "0..N" account: An account is linked to\none company
 
-company "1" ||-up-o{ "0..N" companyRoleAccount
-account "1" ||-up-o{ "0..N" companyRoleAccount
-role "1" ||-up-o{ "0..N" companyRoleAccount
+company "1" ||-up-o{ "0..N" companyProfileAccount
+account "1" ||-up-o{ "0..N" companyProfileAccount
+profile "1" ||-up-o{ "0..N" companyProfileAccount
 
-role "1" ||-down-o{ "0..N" rolePermission
-rolePermission "0..N" }o-down-|| "1" permission
+profile "1" ||-down-o{ "0..N" profilePermission
+profilePermission "0..N" }o-down-|| "1" permission
 
+Table(enrichmentTemplate, "enrichmentTemplate") {
+  primary_key(pk_id) BIGSERIAL
+  ---
+  not_null(unique(templateName)) TEXT
+  not_null(templateSchema) JSONB
+}
+note bottom of enrichmentTemplate
+  Table de stockage des templates d'enrichissement de Reality
+  pour la Data Factory, si besoin de les recharger
+end note
 
 legend bottom
   Zero or One	|o--
