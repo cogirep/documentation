@@ -1,4 +1,4 @@
-@startuml component-model-containers
+@startuml component-model-components
 
 header
     <b>BEYOND Platform</b> - Diagramme de composants

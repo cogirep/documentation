@@ -1,4 +1,5 @@
 @startuml system-context
+!includeurl https://raw.githubusercontent.com/skleanthous/C4-PlantumlSkin/master/build/output/c4.puml
 header
     <b>BEYOND Platform</b> - Diagramme de contexte
 end header
@@ -6,22 +7,24 @@ end header
 !include ../../../../tools/C4-PlantUML/C4.puml
 !include ../../../../tools/C4-PlantUML/C4_Context.puml
 
-Person(EndUSer, "End user")
-Person(AdminIAM, "Administrator\n(users)")
-Person(AdminBYDPTF, "Administrator\n(BYD configuration)")
-Person(AdminDF, "Administrator\n(business)")
+actor "Administrator\n(BYD App)" as AdminBYDAPPREAInt <<Internal Person>>
+actor "Administrator (Delegate)\n(BYD App)" as AdminBYDAPPREAExt <<External Person>>
+actor "End User" as EndUSer <<External Person>>
+actor "Administrator\n(BYD Platform)" as AdminBYDPTFInt <<Internal Person>>
+actor "Administrator (Delegate)\n(BYD Platform)" as AdminBYDPTFExt <<External Person>>
 
-System_Boundary(BYDPTFM, "BEYOND PLATFORM") {
+System(BYDPTFM, "BEYOND PLATFORM") {
 }
 
 System_Ext(IdP, "External Identity Providers", "SSO")
 
 ' Relations
 ' - with users
-Rel(AdminIAM, BYDPTFM, "Uses", "HTTPS")
-Rel(AdminBYDPTF, BYDPTFM, "Uses", "HTTPS")
-Rel(AdminDF, BYDPTFM, "Uses", "HTTPS")
+Rel(AdminBYDAPPREAInt, BYDPTFM, "Uses", "HTTPS")
+Rel(AdminBYDAPPREAExt, BYDPTFM, "Uses", "HTTPS")
 Rel(EndUSer, BYDPTFM, "Uses", "HTTPS")
+Rel(AdminBYDPTFInt, BYDPTFM, "Uses", "HTTPS")
+Rel(AdminBYDPTFExt, BYDPTFM, "Uses", "HTTPS")
 ' - between systems and external systems
 Rel(BYDPTFM, IdP, "USes", "OIDC")
 
