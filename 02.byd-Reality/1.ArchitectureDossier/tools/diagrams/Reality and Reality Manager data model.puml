@@ -88,13 +88,18 @@ Table(profile, "profile") {
   not_null(status) BINGINT
 }
 note right of profile
-  Il s'agit des profils (ou "rôles") PAR compagnie dans
-  REALITY MANAGER & REALITY
-  - Administrateur,
+  Il s'agit des profils (ou "rôles") PAR compagnie dans REALITY MANAGER & REALITY :
+  - Administrateur RTY,
+  - Administrateur (délégué),
   - Utilisateur profil 1,
   - Utilisateur profil n,
   - etc...
-  
+
+  En tant qu'administrateur RTY je peux :
+  - créer des utilisateurs (Dans BYD MGR via une API) [PAS EN VERSION INITIALE]
+  - créer des compagnies (Dans BYD MGR via une API) [PAS EN VERSION INITIALE]
+  - créer des administrateurs délégués sur les compagnies
+
   En tant qu'administrateur d'une compagnie, je peux :
   - créer des utilisateurs rattachés à cette compagnie
   - créer des profils applicatifs pour cette compagnie
@@ -129,6 +134,10 @@ Table(companyProfileAccount, "company_profile_account") {
 note top of companyProfileAccount
   Un utilisateur a des profils par compagnie
   dans RTY / RTY MGR
+
+  corollaire : SIXENSE est une compagnie
+  c'est la seule à utiliser le rôle Administrateur RTY
+  (ayant la permission d'affecter le rôle d'administrateur délégué à un utilisateur)
 
 end note
 
