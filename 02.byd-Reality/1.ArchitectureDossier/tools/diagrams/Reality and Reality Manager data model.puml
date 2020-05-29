@@ -44,7 +44,7 @@ Table(company, "company") {
   not_null(unique(code)) TEXT
   not_null(isDeleted) BOOLEAN <default: false>
 }
-note bottom of company
+note left of company
   Code : identifiant technique partagé par les produits
   - La référence étant dans Beyond Manager
   - La récupération des informations complémentaires sur les compagnies
@@ -126,8 +126,7 @@ Table(profilePermission, "profile_permission") {
 
 Table(companyProfileAccount, "company_profile_account") {
   foreign_key(pk_fk_accountid) BIGINT
-  foreign_key(pk_fk_companyid) BIGINT
-  foreign_key(pk_fk_profileid) BIGINT
+  foreign_key(pk_fk_companyprofileid) BIGINT
   ---
   not_null(status) BINGINT
 }
@@ -138,8 +137,31 @@ note top of companyProfileAccount
   corollaire : SIXENSE est une compagnie
   c'est la seule à utiliser le rôle Administrateur RTY
   (ayant la permission d'affecter le rôle d'administrateur délégué à un utilisateur)
-
 end note
+
+Table(companyProfile, "company_profile") {
+  primary_key(companyprofile_id) BIGSERIAL
+  ---
+  foreign_key(pk_fk_companyid) BIGINT
+  foreign_key(pk_fk_profileid) BIGINT
+  ---
+  not_null(status) BINGINT
+}
+note right of companyProfile
+  un profile est rattaché à une compagnie
+  par un Administrateur
+
+  Le profile Admnistrateur REALTIY est rattaché
+  uniquement à la compagnie Sixense
+end note
+
+'Table(companyAccount, "company_account") {
+'  primary_key(companyAccount_id) BIGSERIAL
+'  ---
+'  foreign_key(pk_fk_companyid) BIGINT
+'  foreign_key(pk_fk_accountid) BIGINT
+'}
+
 
 ' relationships
 
@@ -148,9 +170,11 @@ company -right[hidden]- profile
 
 'company "1" ||-left-o{ "0..N" account: An account is linked to\none company
 
-company "1" ||-up-o{ "0..N" companyProfileAccount
+company "1" ||-up-o{ "0..N" companyProfile
+profile "1" ||-up-o{ "0..N" companyProfile
+
 account "1" ||-up-o{ "0..N" companyProfileAccount
-profile "1" ||-up-o{ "0..N" companyProfileAccount
+companyProfile "1" ||-up-o{ "0..N" companyProfileAccount
 
 profile "1" ||-down-o{ "0..N" profilePermission
 profilePermission "0..N" }o-down-|| "1" permission
@@ -166,7 +190,7 @@ note bottom of enrichmentTemplate
   pour la Data Factory, si besoin de les recharger
 end note
 
-legend bottom
+legend right
   Zero or One	|o--
   Exactly One	||--
   Zero or Many	}o--
