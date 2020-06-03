@@ -58,13 +58,13 @@ end note
 Table(account, "account") {
 primary_key(pk_id) BIGSERIAL
 ---
-'foreign_key(pk_fk_companyid) BIGINT
+foreign_key(pk_fk_statusid) BIGINT
 ---
 not_null(unique(email)) TEXT
 'not_null(firstname) TEXT
 'not_null(lastname) TEXT
 'unique(providerUserId) TEXT
-not_null(status) BINGINT
+'not_null(status) BINGINT
 }
 note top of account
   La récupération des informations complémentaires (prenom/nom, compagnie de rattachement)
@@ -80,12 +80,21 @@ note top of account
   Ajouter des préférences utilisateur ?
 end note
 
+Table(status, "status") {
+  primary_key(pk_id) BIGSERIAL
+  ---
+  not_null(unique(code)) TEXT
+  not_null(unique(label)) TEXT
+}
+
 Table(profile, "profile") {
   primary_key(pk_id) BIGSERIAL
   ---
+  foreign_key(pk_fk_statusid) BIGINT
+  ---
   not_null(unique(label)) TEXT
   not_null(description) TEXT
-  not_null(status) BINGINT
+  'not_null(status) BINGINT
 }
 note right of profile
   Il s'agit des profils (ou "rôles") PAR compagnie dans REALITY MANAGER & REALITY :
@@ -111,24 +120,26 @@ end note
 Table(permission, "permission") {
   primary_key(pk_id) BIGSERIAL
   ---
+  foreign_key(pk_fk_statusid) BIGINT
+  ---
   not_null(unique(code)) TEXT
   not_null(unique(label)) TEXT
   not_null(description) TEXT
-  not_null(status) BINGINT
+  'not_null(status) BINGINT
 }
 
 Table(profilePermission, "profile_permission") {
   foreign_key(pk_fk_profileid) BIGINT
   foreign_key(pk_fk_permissionid) BIGINT
-  ---
-  not_null(status) BINGINT
+  foreign_key(pk_fk_statusid) BIGINT
+  'not_null(status) BINGINT
 }
 
 Table(companyProfileAccount, "company_profile_account") {
   foreign_key(pk_fk_accountid) BIGINT
   foreign_key(pk_fk_companyprofileid) BIGINT
-  ---
-  not_null(status) BINGINT
+  foreign_key(pk_fk_statusid) BIGINT
+  'not_null(status) BINGINT
 }
 note top of companyProfileAccount
   Un utilisateur a des profils par compagnie
@@ -144,8 +155,8 @@ Table(companyProfile, "company_profile") {
   ---
   foreign_key(pk_fk_companyid) BIGINT
   foreign_key(pk_fk_profileid) BIGINT
-  ---
-  not_null(status) BINGINT
+  foreign_key(pk_fk_statusid) BIGINT
+  'not_null(status) BINGINT
 }
 note right of companyProfile
   un profile est rattaché à une compagnie
@@ -174,6 +185,12 @@ company "1" ||-up-o{ "0..N" companyProfile
 profile "1" ||-up-o{ "0..N" companyProfile
 
 account "1" ||-up-o{ "0..N" companyProfileAccount
+status "1" ||-up-o{ "0..N" account
+status "1" ||-up-o{ "0..N" companyProfileAccount
+status "1" ||-up-o{ "0..N" companyProfile
+status "1" ||-up-o{ "0..N" profile
+status "1" ||-up-o{ "0..N" profilePermission
+status "1" ||-up-o{ "0..N" permission
 companyProfile "1" ||-up-o{ "0..N" companyProfileAccount
 
 profile "1" ||-down-o{ "0..N" profilePermission
