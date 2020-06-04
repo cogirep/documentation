@@ -1,0 +1,222 @@
+@startuml Reality and Reality Manager data model
+
+title
+
+Beyond : Reality + Reality Manager
+
+BY-1747, BY-1762, BY-1763, BY-1981,
+BY-2009 -> BY-2014
+
+end title
+
+' hide the spot
+' hide circle
+
+' avoid problems with angled crows feet
+' skinparam linetype ortho
+
+
+' https://gist.github.com/QuantumGhost/0955a45383a0b6c0bc24f9654b3cb561
+
+' uncomment the line below if you're using computer with a retina display
+' skinparam dpi 300
+!define Table(name,desc) class name as "desc" << (T,#FFAAAA) >>
+' we use bold for primary key
+' green color for unique
+' and underscore for not_null
+!define primary_key(x) <b>x</b>
+!define foreign_key(x) <b>x</b>
+!define unique(x) <color:green>x</color>
+!define not_null(x) <u>x</u>
+' other tags available:
+' <i></i>
+' <back:COLOR></color>, where color is a color name or html color code
+' (#FFAACC)
+' see: http://plantuml.com/classes.html#More
+hide methods
+hide stereotypes
+
+' disposition du diagramme
+
+Table(company, "company") {
+  primary_key(pk_id) BIGSERIAL
+  ---
+  not_null(unique(code)) TEXT
+  not_null(isDeleted) BOOLEAN <default: false>
+}
+note left of company
+  Code : identifiant technique partagé par les produits
+  - La référence étant dans Beyond Manager
+  - La récupération des informations complémentaires sur les compagnies
+  se fait via une API de BYD MGR
+
+  Todo :
+  Ajouter les hiérarchies de compagnies ?
+
+end note
+
+Table(account, "account") {
+primary_key(pk_id) BIGSERIAL
+---
+foreign_key(pk_fk_statusid) BIGINT
+---
+not_null(unique(email)) TEXT
+'not_null(firstname) TEXT
+'not_null(lastname) TEXT
+'unique(providerUserId) TEXT
+'not_null(status) BINGINT
+}
+note top of account
+  La récupération des informations complémentaires (prenom/nom, compagnie de rattachement)
+  sur les utilisateurs "administrables" dans RTY MGR se fait via une API de BYD MGR
+
+  La récupération des compagnies pour lesquelles l'utilisateur accédant à
+  RTY MGR est administrateur (délégué) se fait via une API de BYD MGR
+
+  La récupération de la compagnie de l'utilisateur accédant à Reality se fait via une API de BYD MGR
+  (en tant qu'utilisateur de Reality, je suis rattaché à une et une seule compagnie)
+
+  Todo :
+  Ajouter des préférences utilisateur ?
+end note
+
+Table(status, "status") {
+  primary_key(pk_id) BIGSERIAL
+  ---
+  not_null(unique(code)) TEXT
+  not_null(unique(label)) TEXT
+}
+
+Table(profile, "profile") {
+  primary_key(pk_id) BIGSERIAL
+  ---
+  foreign_key(pk_fk_statusid) BIGINT
+  ---
+  not_null(unique(label)) TEXT
+  not_null(description) TEXT
+  'not_null(status) BINGINT
+}
+note right of profile
+  Il s'agit des profils (ou "rôles") PAR compagnie dans REALITY MANAGER & REALITY :
+  - Administrateur RTY,
+  - Administrateur (délégué),
+  - Utilisateur profil 1,
+  - Utilisateur profil n,
+  - etc...
+
+  En tant qu'administrateur RTY je peux :
+  - créer des utilisateurs (Dans BYD MGR via une API) [PAS EN VERSION INITIALE]
+  - créer des compagnies (Dans BYD MGR via une API) [PAS EN VERSION INITIALE]
+  - créer des administrateurs délégués sur les compagnies
+
+  En tant qu'administrateur d'une compagnie, je peux :
+  - créer des utilisateurs rattachés à cette compagnie
+  - créer des profils applicatifs pour cette compagnie
+  - affecter des profils applicatifs d'une compagnie à des utilisateurs de cette même compagnie
+  - donner les droits d'administration déléguée sur cette compagnie
+
+end note
+
+Table(permission, "permission") {
+  primary_key(pk_id) BIGSERIAL
+  ---
+  foreign_key(pk_fk_statusid) BIGINT
+  ---
+  not_null(unique(code)) TEXT
+  not_null(unique(label)) TEXT
+  not_null(description) TEXT
+  'not_null(status) BINGINT
+}
+
+Table(profilePermission, "profile_permission") {
+  foreign_key(pk_fk_profileid) BIGINT
+  foreign_key(pk_fk_permissionid) BIGINT
+  foreign_key(pk_fk_statusid) BIGINT
+  'not_null(status) BINGINT
+}
+
+Table(companyProfileAccount, "company_profile_account") {
+  foreign_key(pk_fk_accountid) BIGINT
+  foreign_key(pk_fk_companyprofileid) BIGINT
+  foreign_key(pk_fk_statusid) BIGINT
+  'not_null(status) BINGINT
+}
+note top of companyProfileAccount
+  Un utilisateur a des profils par compagnie
+  dans RTY / RTY MGR
+
+  corollaire : SIXENSE est une compagnie
+  c'est la seule à utiliser le rôle Administrateur RTY
+  (ayant la permission d'affecter le rôle d'administrateur délégué à un utilisateur)
+end note
+
+Table(companyProfile, "company_profile") {
+  primary_key(companyprofile_id) BIGSERIAL
+  ---
+  foreign_key(pk_fk_companyid) BIGINT
+  foreign_key(pk_fk_profileid) BIGINT
+  foreign_key(pk_fk_statusid) BIGINT
+  'not_null(status) BINGINT
+}
+note right of companyProfile
+  un profile est rattaché à une compagnie
+  par un Administrateur
+
+  Le profile Admnistrateur REALTIY est rattaché
+  uniquement à la compagnie Sixense
+end note
+
+'Table(companyAccount, "company_account") {
+'  primary_key(companyAccount_id) BIGSERIAL
+'  ---
+'  foreign_key(pk_fk_companyid) BIGINT
+'  foreign_key(pk_fk_accountid) BIGINT
+'}
+
+
+' relationships
+
+account -right[hidden]- company
+company -right[hidden]- profile
+
+'company "1" ||-left-o{ "0..N" account: An account is linked to\none company
+
+company "1" ||-up-o{ "0..N" companyProfile
+profile "1" ||-up-o{ "0..N" companyProfile
+
+account "1" ||-up-o{ "0..N" companyProfileAccount
+status "1" ||-up-o{ "0..N" account
+status "1" ||-up-o{ "0..N" companyProfileAccount
+status "1" ||-up-o{ "0..N" companyProfile
+status "1" ||-up-o{ "0..N" profile
+status "1" ||-up-o{ "0..N" profilePermission
+status "1" ||-up-o{ "0..N" permission
+companyProfile "1" ||-up-o{ "0..N" companyProfileAccount
+
+profile "1" ||-down-o{ "0..N" profilePermission
+profilePermission "0..N" }o-down-|| "1" permission
+
+Table(enrichmentTemplate, "enrichmentTemplate") {
+  primary_key(pk_id) BIGSERIAL
+  ---
+  not_null(unique(templateName)) TEXT
+  not_null(templateSchema) JSONB
+}
+note bottom of enrichmentTemplate
+  Table de stockage des templates d'enrichissement de Reality
+  pour la Data Factory, si besoin de les recharger
+end note
+
+legend right
+  Zero or One	|o--
+  Exactly One	||--
+  Zero or Many	}o--
+  One or Many	}|--
+  -=-=-=-=-=-=-=-
+  primary_key("primary key")
+  foreign_key("foreign key")
+  unique(unique)
+  not_null("not null")
+endlegend
+
+@enduml
