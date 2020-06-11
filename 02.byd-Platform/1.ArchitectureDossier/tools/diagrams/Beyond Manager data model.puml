@@ -135,12 +135,15 @@ end note
 Table(accountProduct, "account_product") {
   foreign_key(pk_fk_companyProduct_id) BIGINT
   foreign_key(pk_fk_accountid) BIGINT
-  ---
-  not_null(isAdmin) BOOLEAN
+ ' ---
+  'not_null(isAdmin) BOOLEAN
   'not_null(status) BINGINT
 }
 note left of accountProduct
   BY-2045 : Délégation d'administration
+  Si le produit est de type administration,
+  Alors l'utilisateur visualise le lien vers ce produit
+  dans BYD MGR
 end note
 
 Table(productType, "product_type") {
