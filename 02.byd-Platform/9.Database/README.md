@@ -1,3 +1,3 @@
 # Current MDD
 
-![](./v1.png)
+![](./v2.png)
