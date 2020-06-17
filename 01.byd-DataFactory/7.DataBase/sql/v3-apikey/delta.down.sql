@@ -1,5 +1,0 @@
-BEGIN;
-
-DROP TABLE beyond.apikey CASCADE;
-
-END;
