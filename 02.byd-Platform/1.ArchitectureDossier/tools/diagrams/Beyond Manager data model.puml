@@ -131,6 +131,9 @@ Table(accountProduct, "account_product") {
 }
 note left of accountProduct
   BY-2045 : Délégation d'administration
+  Si le produit est de type administration,
+  Alors l'utilisateur visualise le lien vers ce produit
+  dans BYD MGR
 end note
 
 Table(productType, "product_type") {
