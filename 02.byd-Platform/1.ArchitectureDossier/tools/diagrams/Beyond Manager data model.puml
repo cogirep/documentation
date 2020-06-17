@@ -232,17 +232,26 @@ Table(apikey, "apikey") {
   not_null(status) BINGINT
 }
 note bottom of apikey
-  Une clé d'api à un rôle qui peut être provider 
-  ou client
+  Une clé d'api peut être utilisée par un produit qui 
+  a un rôle soit de fournisseur d'api, soit de client 
+  d'api
 
   Par exemple: 
-  - Beyond Manager sera un fournisseur (de 
-  service), on pourra gérer la clé d'api
-  - MailJet sera un client, il nous donné une
-  clé d'api
+  - Beyond Manager sera fournisseur du service de gestion 
+  des utilisateur ; on doit générer la clé d'api correspondante
+  - Beyond Manager pourrait utiliser des api de MailJet ; 
+  il sera client de MailJet, la clé d'api fournie sera insérée
+  dans cette table
 
-  apikey_name aura le code du produit ou le 
-  nom du service tierce
+le champ 'code' permet de faire la correspondance entre 
+le code applicatif utilisant la clé d'api et la définition
+de la clé dans cette table
+
+Lorsque la clé d'api est générée côté BEYOND (rôle "provider" du 
+service) le champ apikey_name aura comme valeur le code du 
+produit + le nom du microservice
+Par exemple: 
+  BYD-RTY-RTYMGR
 end note
 
 product -right[hidden]- account
