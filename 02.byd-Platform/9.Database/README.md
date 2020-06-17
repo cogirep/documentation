@@ -1,3 +1,3 @@
 # Current MDD
 
-![](./v2-apikey/mdd.png)
+![](./sql/v2-apikey/mdd.png)
