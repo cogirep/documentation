@@ -11,7 +11,7 @@ WITH vars AS (
   AND status.code = 'ACTIF'
 )
 INSERT INTO beyond_core.apikey
-  (fk_product, code, apikey_name, "role", status, created_by, updated_by)
+  (fk_product, code, apikey_name, "role", fk_statusid, created_by, updated_by)
 VALUES 
   ((SELECT pk_id FROM beyond_core.product WHERE label = 'BEYOND MANAGER'), 'BEYOND_MANAGER', 'Beyond Manager API Key', 'PROVIDER', ((SELECT statusid FROM vars)), (SELECT accountid FROM vars), (SELECT accountid FROM vars)),
   ((SELECT pk_id FROM beyond_core.product WHERE label = 'REALITY MANAGER'), 'REALITY_MANAGER', 'Reality Manager API Key', 'PROVIDER', ((SELECT statusid FROM vars)), (SELECT accountid FROM vars), (SELECT accountid FROM vars));
