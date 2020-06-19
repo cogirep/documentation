@@ -7,7 +7,7 @@ CREATE  TABLE beyond_core.apikey (
 	apikey_name     text  NOT NULL,
 	apikey_value    text  NOT NULL DEFAULT md5(random()::text || clock_timestamp()::text)::uuid,
 	"role"          text  NOT NULL CHECK ("role" IN ('CLIENT', 'PROVIDER')),
-	status          bigint  NOT NULL,
+	fk_statusid     bigint  NOT NULL,
 	created_at      timestamptz DEFAULT current_timestamp NOT NULL,
 	created_by      bigint  NOT NULL,
 	updated_at      timestamptz DEFAULT current_timestamp NOT NULL,
