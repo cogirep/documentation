@@ -1,5 +1,5 @@
 BEGIN;
 
-DROP TABLE beyond.apikey CASCADE;
+DROP TABLE beyond_core.apikey CASCADE;
 
 END;
