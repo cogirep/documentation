@@ -3,8 +3,8 @@ header
 <b>BEYOND Platform</b> - Diagramme de contexte
 end header
 
-!include /Users/fredericfadda/ffa-dev/C4-PlantUML/C4.puml
-!include /Users/fredericfadda/ffa-dev/C4-PlantUML/C4_Context.puml
+!include ../../../../tools/C4-PlantUML/C4.puml
+!include ../../../../tools/C4-PlantUML/C4_Context.puml
 
 ( \n\n BEYOND PLATEFORME\n\n  ) as SYSTEM
 
