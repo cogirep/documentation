@@ -1,0 +1,61 @@
+@startuml
+
+header
+<b>BEYOND - Platform</b> Sequence Diagram for Beyond Portal home page content retrieval (TILES).
+end header
+
+actor Client
+participant "BYD Portal\n(Front End)" as BydPortal order 1
+participant "BYD MS User" as BydMsUser order 2
+participant "Cognito" as Cognito order 3
+participant "BYD MS Product" as BydMsProduct order 4
+database PostgreSQL order 5
+
+Client -> BydPortal : access home page
+activate BydPortal #888888
+note right
+    Assumptions:
+     - user is already authenticated and token is valid
+     - BYD Portal cient API Key is valid
+end note
+BydPortal -> BydMsUser : GET /users/{user-id}/products
+activate BydMsUser #888888
+'BydMsUser -> BydMsUser : Check client API Key
+BydMsUser -> PostgreSQL : retrieve client API Key
+note right
+    Check client API Key
+end note
+activate PostgreSQL #888888
+PostgreSQL --> BydMsUser : client API Key retrieved (OK)
+deactivate PostgreSQL
+'activate BydMsUser #888888
+BydMsUser -> Cognito : get Cognito public key
+note right
+    URL: https://cognito-idp.eu-west-1.amazonaws.com/eu-west-1_8nXdjbs7X/.well-known/jwks.json
+    -> to be retrieved in MS configuration
+end note
+activate Cognito #888888
+Cognito --> BydMsUser : Cognito public key\n(based on region and userpool id parameters)
+deactivate Cognito
+BydMsUser -> BydMsUser : retrieve user ID in the token
+'activate BydMsUser #888888
+note right
+    To do : check permissions
+end note
+BydMsUser -> BydMsProduct : GET /products?user={user.id}
+activate BydMsProduct #888888
+BydMsProduct -> PostgreSQL : retrieve all products for user
+activate PostgreSQL #888888
+PostgreSQL --> BydMsProduct : return all products associated with user
+deactivate PostgreSQL
+BydMsProduct --> BydMsUser : return all products associated with user
+note right
+    Product list is ordered by product type ? (to be validated)
+end note
+deactivate BydMsProduct
+BydMsUser --> BydPortal : return all products associated with user
+deactivate BydMsUser
+BydPortal -> BydPortal : build home page
+deactivate BydPortal
+
+@enduml
