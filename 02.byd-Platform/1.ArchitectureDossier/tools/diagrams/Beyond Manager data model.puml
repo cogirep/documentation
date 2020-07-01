@@ -46,8 +46,10 @@ Table(product, "product") {
   not_null(unique(code)) TEXT
   not_null(unique(label)) TEXT
   description JSONB
-  image BINARY or TEXT
-  icon BINARY or TEXT
+  image TEXT
+  icon TEXT
+  authLogo TEXT
+  authBackgroundImage TEXT
   urlApp TEXT
   openTab BOOLEAN
   not_null(status) BINGINT
@@ -57,8 +59,10 @@ note top of product
   - un produit est opérationnel (DigitalSite)
     ou d'administration (MyAdminSite) ou 'technique' (tbd)
   - on ne peut supprimer un produit relié à une compagnie
-  - image et icone sont des URLs gérées par le produit
-  
+  - image est l'image sur la tuile correspondant au produit sur Beyond Portal
+  - authLogo et authBackgroundImage sont utilisées sur la page d'authentification (BY-2355)
+  - image, icone, authLogo et authBackgroundImage sont des URLs gérées par le produit
+
   code : identifiant technique pour
     les logs, les traces d'audit
 
