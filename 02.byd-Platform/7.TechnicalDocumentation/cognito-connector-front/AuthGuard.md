@@ -6,6 +6,8 @@ Si l’utilisateur est authentifié (Token en local storage), il est redirigé v
 
 Si l’utilisateur n’est pas authentifié (Token invalide ou inexistant en local storage), alors les données en local storage sont supprimés et il est redirigé vers la page de connexion du portail.
 
+![](AuthGuard.png)
+
 ##Syntaxe
 
     CognitoConnectorModule.forRoot(environment, AuthService)
