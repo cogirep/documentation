@@ -4,7 +4,7 @@ Le AuthGuard Angular est un service indiquant au routeur s’il doit autoriser o
 
 Si l’utilisateur est authentifié (Token en local storage), il est redirigé vers la page demandé.
 
-Si l’utilisateur n’est pas authentifié, alors les données en local storage sont supprimés et il est redirigé vers la page de connexion du portail.
+Si l’utilisateur n’est pas authentifié (Token invalide ou inexistant en local storage), alors les données en local storage sont supprimés et il est redirigé vers la page de connexion du portail.
 
 ##Syntaxe
 
@@ -12,8 +12,8 @@ Si l’utilisateur n’est pas authentifié, alors les données en local storage
 
 **Paramètres**
 
-`environment` : variables d’environnement.  
-`AuthService` : Service d’authentification contenant 
+`environment` : variables d’environnement contenant les URLs des differents enviroments  
+`AuthService` : Service d’authentification
 
 ##Exemple
 
