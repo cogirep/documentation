@@ -50,7 +50,7 @@ Table(product, "product") {
   icon TEXT
   authLogo TEXT
   authBackgroundImage TEXT
-  urlApp TEXT
+  not_null(unique(urlApp)) TEXT
   openTab BOOLEAN
   not_null(status) BINGINT
 }
@@ -62,6 +62,7 @@ note top of product
   - image est l'image sur la tuile correspondant au produit sur Beyond Portal
   - authLogo et authBackgroundImage sont utilisées sur la page d'authentification (BY-2355)
   - image, icone, authLogo et authBackgroundImage sont des URLs gérées par le produit
+  - l'URL de base du produit est unique pour différencier les produits
 
   code : identifiant technique pour
     les logs, les traces d'audit
