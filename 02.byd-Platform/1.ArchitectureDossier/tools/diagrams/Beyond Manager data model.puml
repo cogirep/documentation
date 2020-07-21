@@ -130,22 +130,15 @@ note left of companyProduct
   par un Admin BYD
 end note
 
-'Table(companyAccount, "company_account") {
-'  primary_key(companyAccount_id) BIGSERIAL
-'  ---
-'  foreign_key(pk_fk_companyid) BIGINT
-'  foreign_key(pk_fk_accountid) BIGINT
-'}
-
 Table(accountProduct, "account_product") {
   foreign_key(pk_fk_companyProduct_id) BIGINT
   foreign_key(pk_fk_accountid) BIGINT
-  ---
-  not_null(isAdmin) BOOLEAN
-  'not_null(status) BINGINT
 }
 note left of accountProduct
   BY-2045 : Délégation d'administration
+  Si le produit est de type administration,
+  Alors l'utilisateur visualise le lien vers ce produit
+  dans BYD MGR
 end note
 
 Table(productType, "product_type") {
@@ -231,6 +224,44 @@ note top of companyRoleAccount
   Admin BYD
 end note
 
+
+Table(apikey, "apikey") {
+  primary_key(pk_id) BIGSERIAL
+  foreign_key(fk_product) BIGINT
+  ---
+  not_null(code) TEXT
+  not_null(apikey_name) TEXT
+  not_null(apikey_value) TEXT
+  not_null(role) TEXT
+  not_null(created_at) TIMESTAMPTZ
+  not_null(created_by) BIGINT
+  not_null(updated_at) TIMESTAMPTZ
+  not_null(updated_by) BIGINT
+  not_null(status) BINGINT
+}
+note bottom of apikey
+  Une clé d'api peut être utilisée par un produit qui 
+  a un rôle soit de fournisseur d'api, soit de client 
+  d'api
+
+  Par exemple: 
+  - Beyond Manager sera fournisseur du service de gestion 
+  des utilisateur ; on doit générer la clé d'api correspondante
+  - Beyond Manager pourrait utiliser des api de MailJet ; 
+  il sera client de MailJet, la clé d'api fournie sera insérée
+  dans cette table
+
+le champ 'code' permet de faire la correspondance entre 
+le code applicatif utilisant la clé d'api et la définition
+de la clé dans cette table
+
+Lorsque la clé d'api est générée côté BEYOND (rôle "provider" du 
+service) le champ apikey_name aura comme valeur le code du 
+produit + le nom du microservice
+Par exemple: 
+  BYD-RTY-RTYMGR
+end note
+
 product -right[hidden]- account
 'idp -right[hidden]- account
 account -right[hidden]- company
@@ -240,31 +271,18 @@ idp "0..N" }o-up-|| "1" company: A company may be\nassociated with\n(external) I
 'idp "1" |o-up-o{ "0..N" account: An account may\nhave only one idp
 
 ' relationships
-'companyProduct "0..N" }o--up--|| "1" product: A product may be \nassociated with many companies
-'companyProduct "0..N" }o--|| "1" product: A product may be \nassociated with many companies
 product "1" ||-down-o{ "0..N" companyProduct: A product may be \nassociated with many companies
 product }o-down-|| "1" productType: A product has one type
 product }o-left-|| "1" businessCode: A product has one business code
-'companyProduct "0..N" }o--up--|| "1" company: A company may\nhave many products
-'companyProduct "0..N" }o--|| "1" company: A company may\nhave many products
 company "1" ||-down-o{ "0..N" companyProduct: A company may\nhave many products
+product "1" ||-down-o{ "0..N" apikey: A product may\nhave many apikey
 
 account "1" ||-down--o{ "0..N" accountProduct: An account may\nhave access to many products\nattached to a company
 accountProduct "0..N" }o-down-|| "1" companyProduct: A product attached to a company may\nbelong to many accounts
 
 ' company
-'company "1" ||-down-o{ "0..N" companyAccount: A company may\nhave many accounts
-'companyAccount "1" ||-up-o{ "0..N" account: An account may\nhave only one company
 company "1" ||-left-o{ "0..N" account: An account is linked to\none company
 
-' company .[hidden].> companyRoleAccount
-'account "0..N" }o-right-|| "1" role: An account has\nonly one role in BYD MANAGER for a company
-'product -down[hidden]- companyProduct
-'productType -down[hidden]- product
-'company -down[hidden]- companyProduct
-'company -up[hidden]- companyRoleAccount
-'role -up[hidden]- companyRoleAccount
-'account -up[hidden]- companyRoleAccount
 
 company "1" ||-up-o{ "0..N" companyRoleAccount
 account "1" ||-up-o{ "0..N" companyRoleAccount

@@ -1,0 +1,9 @@
+@startuml
+actor Utilisateur
+Utilisateur -> AuthGuard: Accède à Reality
+alt authentifié
+    AuthGuard -> Reality: Redirigé vers Reality
+else non authentifié
+    AuthGuard -> Portail: Redirigé vers Portail
+end
+@enduml
