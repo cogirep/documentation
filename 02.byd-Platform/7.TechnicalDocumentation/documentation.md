@@ -4,14 +4,14 @@
 
 La connexion à la plateforme BEYOND ce fait par l'intermédiaire du portail pour tout les produits qui la constituent.
 
-Le portal permet deux type de connexion:
+Le portal permet deux types de connexion:
 - via les utilisateurs connu de cognito
 - via un IDP externe connu
 
 
 Seul les utilisateurs connu de la bdd de la plateforme peuvent se connecter.
 
-> La page de connexion du portail peut etre customisé avec le logo et une image correspondant au produit dont l'utilisateurs provient cf: document de customisation du portail.
+> La page de connexion du portail peut etre customisé avec le logo et une image correspondant au produit dont l'utilisateur provient cf: document de customisation du portail.
 
 ## utilisation
 
@@ -21,7 +21,7 @@ cette documentation à pour but d'expliquer comment utiliser le portal pour les 
 
 **1 - accès à un produit**
 
-Quand un utilisateur veut acceder a un produit de la plateforme , le produit dois immédiatement vérifié que l'utilisateur est connecté. Pour cela le produit dois vérifié si l'utilisateur possede un token et que celui ci soit **valide !** .
+Quand un utilisateur veut acceder à un produit de la plateforme , le produit dois immédiatement vérifié que l'utilisateur est connecté. Pour cela le produit dois vérifié si l'utilisateur possede un token et que celui ci soit **valide !** .
 
 il existe 3 cas possible:
 
