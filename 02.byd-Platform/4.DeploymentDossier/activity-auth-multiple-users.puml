@@ -45,8 +45,8 @@ else
   -[#red]-> **NO**;
   if (\nIs there already one ID token in BYD App 1 local storage?\n) then
     -[#green]-> **YES**;
-  '  if (\nIs <b>shared env</b> (value: True) available in BYD App 1 local storage?\n) then
-  '    -[#green]-> **YES**;
+    if (\nIs <b>shared env</b> (value: True) available in BYD App 1 local storage?\n) then
+      -[#green]-> **YES**;
       :Compare ID token from local storage with user info in central cache;
       note left
         Call Micro Service SSO
@@ -64,15 +64,15 @@ else
         :Redirect User to Authentication Page;
         stop;
     endif
-  '  else
-  '    -[#red]-> **NO**;
-  '    :Access page content;
-  '    note right
-  '      Asumption is that the current user
-  '      is the one he claims to be...
-  '    end note
-  '    stop;
-  '  endif
+    else
+      -[#red]-> **NO**;
+      :Access page content;
+      note right
+        Asumption is that the current user
+        is the one he claims to be...
+      end note
+      stop;
+    endif
   else
     -[#red]-> **NO**;
     :Redirect User to Authentication Page;
@@ -80,6 +80,6 @@ else
   endif
 endif  
 
-'stop
+stop
 
 @enduml
