@@ -1,0 +1,57 @@
+@startuml seq_global_deconnection
+title 
+Gestion de la cinématique de déconnexion globale
+entre les applications BEYOND et le portail BEYOND
+Dans un contexte SSO
+end title
+participant "User A" as U1 order 1
+participant "User B" as U2 order 2
+participant "Portal Frontend" as PFE order 3
+participant "Portal Backend" as PBE order 4
+participant "IAM Cognito" as  IAM order 5
+participant "Portal Cache" as  PREDIS order 5
+participant "BYD App1 Frontend" as App1FE order 6
+participant "BYD App1 Backend" as App1BE order 7
+'participant "BYD App2 Frontend" as App2FE order 8
+'participant "BYD App2 Backend" as App2BE order 9
+'participant "BYD App3 Frontend" as App3FE order 10
+'participant "BYD App3 Backend" as App3BE order 11
+
+group Accéder à une application BEYOND\nen mode environnement partagé
+  note right U1
+    Hypothèse: première connexion
+    (pas de jeton actif)
+  end note
+  U1 -> App1FE: Aller vers une URL d'une application BEYOND
+  activate App1FE
+  App1FE -> App1FE: Vérification présence jeton Cognito
+  App1FE --> U1: redirection portail
+  deactivate App1FE
+  U1 -> PFE
+  activate PFE
+  'PFE -> PBE
+  'activate PBE
+  'PBE --> PFE: formulaire d'authentification
+  'deactivate PBE
+  PFE --> U1: formulaire d'authentification
+  deactivate PFE
+  U1 -> PFE: credentials + shared env (True)
+  activate PFE
+  PFE -> PBE: credentials + shared env (True)
+  activate PBE
+  PBE -> IAM: authentification
+  activate IAM
+  IAM --> PBE: authentification OK
+  deactivate IAM
+  PBE -> PREDIS: store (User-ID or ID token? TbC ; user-agent ; IP address)
+  activate PREDIS
+  PREDIS --> PBE: store (User-ID or ID token? TbC ; user-agent ; IP address) -> OK
+  deactivate PREDIS
+  PBE --> PFE: redirect user + shared env (True)
+  deactivate PBE
+  PFE --> U1: redirect user
+  deactivate PFE
+  U1 -> App1FE: (shared env shared env (True))
+  App1FE -> App1BE: 
+end
+@enduml

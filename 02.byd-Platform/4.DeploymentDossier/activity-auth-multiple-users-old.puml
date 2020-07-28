@@ -1,0 +1,41 @@
+@startuml
+header
+<b>Beyond Platform</b>
+Authentication process and multiple users
+end header
+skinparam defaultTextAlignment center
+
+start
+note left
+Assumption: user is authenticated on BYD Portal
+and is redirected from BYD Portal to BYD App 1
+with his ID Token
+end note
+:Access BYD App 1;
+
+if (\nIs ID token included in the request valid?\n) then
+  -[#green]-> **YES**;
+  :Check ID token in App 1 local storage;
+  if (\nIs there already one ID token in App 1 local storage?\n) then
+    -[#green]-> **YES**;
+    :Remove existing ID token and replace with the one from the request;
+    :refresh content;
+    note left
+      to be checked if necessary
+    end note
+    stop;
+  else
+    -[#red]-> **NO**;
+    :Add ID token in App 1 local storage;
+    :Access page content;
+    stop;
+  endif
+else
+    -[#red]-> **NO**;
+    :Redirect User to Authentication Page;
+    stop;
+endif
+
+'stop
+
+@enduml
