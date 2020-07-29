@@ -61,6 +61,8 @@ else
         stop;
       else
         -[#red]-> **NO**;
+        :Remove <b>shared env</b> from BYD App 1 local storage;
+        :Remove ID token from BYD App 1 local storage;
         :Redirect User to Authentication Page;
         stop;
     endif
