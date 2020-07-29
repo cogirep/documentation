@@ -45,35 +45,55 @@ else
   -[#red]-> **NO**;
   if (\nIs there already one ID token in BYD App 1 local storage?\n) then
     -[#green]-> **YES**;
-    if (\nIs <b>shared env</b> (value: True) available in BYD App 1 local storage?\n) then
+    if (\nIs the ID token in BYD App 1 local storage expired?\n) then
       -[#green]-> **YES**;
-      :Compare ID token from local storage with user info in central cache;
+      :Remove ID token from BYD App 1 local storage;
+      note right
+        In this case, the user didn't disconnect
+        But the ID token expired (timeout: 1h)
+      end note
+      :Remove user information in central cache;
       note left
         Call Micro Service SSO
-        to retrieve a user ID Token with:
+        to remove in a cache (REDIS? TbD) the following info:
+        - User-ID (or ID token? TbC)
         - user-agent
         - IP address
-        to be equal to current device
       end note
-      if (\nIs the user with ID token in BYD App 1 local storage still connected to BYD Portal?\n) then
+      :Redirect User to Authentication Page;
+      stop;
+    else    
+      -[#red]-> **NO**;
+      if (\nIs <b>shared env</b> (value: True) available in BYD App 1 local storage?\n) then
         -[#green]-> **YES**;
-        :Access page content;
-        stop;
+        :Compare ID token from local storage with user info in central cache;
+        note left
+          Call Micro Service SSO
+          to retrieve a user ID Token with:
+          - user-agent
+          - IP address
+          to be equal to current device
+        end note
+        if (\nIs the user with ID token in BYD App 1 local storage still connected to BYD Portal?\n) then
+          -[#green]-> **YES**;
+          :Access page content;
+          stop;
+        else
+          -[#red]-> **NO**;
+          :Remove <b>shared env</b> from BYD App 1 local storage;
+          :Remove ID token from BYD App 1 local storage;
+          :Redirect User to Authentication Page;
+          stop;
+        endif
       else
         -[#red]-> **NO**;
-        :Remove <b>shared env</b> from BYD App 1 local storage;
-        :Remove ID token from BYD App 1 local storage;
-        :Redirect User to Authentication Page;
+        :Access page content;
+        note right
+          Asumption is that the current user
+          is the one he claims to be...
+        end note
         stop;
-    endif
-    else
-      -[#red]-> **NO**;
-      :Access page content;
-      note right
-        Asumption is that the current user
-        is the one he claims to be...
-      end note
-      stop;
+      endif
     endif
   else
     -[#red]-> **NO**;
@@ -82,6 +102,6 @@ else
   endif
 endif  
 
-stop
+'stop
 
 @enduml
