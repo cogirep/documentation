@@ -1,0 +1,60 @@
+@startuml
+actor Client
+participant "Beyond Reality\n(Cesium)" as AppByd order 1
+participant "DF Microservice\nIDcard Manager" as IDcard order 2
+participant "DF Microservice\nPROXY-S3" as PROXY order 3
+participant "DF Microservice\nUser Manager" as UsrMgr order 4
+participant "CDN" as CDN order 5
+database MongoDB order 6
+collections "DF Buckets\n(COS)" as COS order 7
+
+Client -> AppByd : show map
+note right
+    initial assumtion
+    user already identified
+end note
+activate AppByd #888888
+AppByd -> IDcard : get ID Cards to display on map
+activate IDcard #888888
+IDcard -> MongoDB : Retrieve ID Cards information
+activate MongoDB #888888
+MongoDB --> IDcard : Return ID Cards information\n(including tileset.json URL)
+deactivate MongoDB
+IDcard --> AppByd : Return ID Cards information
+deactivate IDcard
+AppByd -> PROXY : get tileset.json file from Bucket
+activate PROXY #888888
+PROXY -> UsrMgr : check user rights\n(bucket access)
+activate UsrMgr #888888
+UsrMgr -> MongoDB : check user rights
+activate MongoDB #888888
+MongoDB --> UsrMgr : return user rights
+deactivate MongoDB
+UsrMgr --> PROXY : confirm user rigts
+deactivate UsrMgr
+PROXY -> CDN : retrieve tileset.json file
+activate CDN #888888
+note right
+    Question:
+    can the CDN be only accessed by PROXY?
+end note
+CDN -> CDN : is file already in cache?
+group bucket files not in cache
+CDN -> COS : retrieve tileset.json file from bucket
+activate COS #888888
+note right
+    Question:
+    can the CDN access secured buckets?
+end note
+COS --> CDN : provide tileset.json file from bucket
+deactivate COS
+CDN -> CDN : put tileset.json file in cache
+end
+CDN --> PROXY : provide file
+deactivate CDN
+PROXY --> AppByd : provide tileset.json file
+deactivate PROXY
+AppByd --> Client : display object on map
+deactivate AppByd
+
+@enduml
