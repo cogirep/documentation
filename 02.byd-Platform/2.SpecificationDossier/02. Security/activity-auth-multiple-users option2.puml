@@ -1,0 +1,120 @@
+@startuml
+header
+<b>Beyond Platform</b>
+Authentication process and multiple users
+end header
+'skinparam defaultTextAlignment center
+
+start
+note left
+Assumption: user accesses to BYD App 1
+end note
+:Access BYD App 1;
+:Check BYD App 1 URL headers;
+note left
+  - If an ID token is in the headers (<b>YES</b>),
+    user comes from BYD Portal (tile selection or redirection)
+  - If no ID token in the headers (<b>NO</b>),
+    user directly accesses BYD App 1
+end note
+if (\nIs there an ID token included in the request headers?\n) then
+  -[#green]-> **YES**;
+  if (\nIs this ID token valid?\n) then
+    -[#green]-> **YES**;
+    :Check ID token in BYD App 1 local storage;
+    if (\nIs there already one ID token in BYD App 1 local storage?\n) then
+      -[#green]-> **YES**;
+      :Remove existing ID token and replace with the one from the request;
+      :refresh content;
+      note left
+        to be checked if necessary
+      end note
+      stop;
+    else
+      -[#red]-> **NO**;
+      :Add ID token in BYD App 1 local storage;
+      :Access page content;
+      stop;
+    endif
+  else
+      -[#red]-> **NO**;
+      :Redirect User to Authentication Page;
+      stop;
+  endif
+else
+  -[#red]-> **NO**;
+  if (\nIs there already one ID token in BYD App 1 local storage?\n) then
+    -[#green]-> **YES**;
+    if (\nIs the ID token in BYD App 1 local storage expired?\n) then
+      -[#green]-> **YES**;
+      :Remove ID token from BYD App 1 local storage;
+      note right
+        In this case, the user didn't disconnect
+        But the ID token expired (timeout: 1h)
+      end note
+      ' :Remove user information in central cache;
+      ' note left
+      '   Call Micro Service SSO
+      '   to remove in a cache (REDIS? TbD) the following info:
+      '   - User-ID (or ID token? TbC)
+      '   - user-agent
+      '   - IP address
+      ' end note
+      :Black list user token in central cache;
+      note left
+        Call Micro Service SSO
+        To black list in a cache (REDIS) the ID token
+        Use a TTL of 1 hour on REDIS
+        (equals Cognito id token timeout)
+      end note
+      :Redirect User to Authentication Page;
+      stop;
+    else    
+      -[#red]-> **NO**;
+      if (\nIs <b>shared env</b> (value: True) available in BYD App 1 local storage?\n) then
+        -[#green]-> **YES**;
+        ' :Compare ID token from local storage with user info in central cache;
+        ' note left
+        '   Call Micro Service SSO
+        '   to retrieve a user ID Token with:
+        '   - user-agent
+        '   - IP address
+        '   to be equal to current device
+        ' end note
+        :Check if ID token from local storage is black listed in central cache;
+        note left
+          Call Micro Service SSO
+          to check if the a user ID Token
+          is included in the black list cache
+        end note
+        if (\nIs the user with ID token in BYD App 1 local storage still connected to BYD Portal?\n) then
+          -[#green]-> **YES**;
+          :Access page content;
+          stop;
+        else
+          -[#red]-> **NO**;
+          :Remove <b>shared env</b> from BYD App 1 local storage;
+          :Remove ID token from BYD App 1 local storage;
+          :Redirect User to Authentication Page;
+          stop;
+        endif
+      else
+        -[#red]-> **NO**;
+        :Access page content;
+        note right
+          Asumption is that the current user
+          is the one he claims to be...
+        end note
+        stop;
+      endif
+    endif
+  else
+    -[#red]-> **NO**;
+    :Redirect User to Authentication Page;
+    stop;
+  endif
+endif  
+
+'stop
+
+@enduml
