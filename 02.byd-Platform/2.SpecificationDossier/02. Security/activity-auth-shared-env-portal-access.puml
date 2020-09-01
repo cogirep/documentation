@@ -17,14 +17,14 @@ note left
 end note
 if (\nIs <b>shared env</b> option selected?\n) then
   -[#green]-> **YES**;
-  :Store user information in central cache;
-  note left
-    Call Micro Service SSO
-    to store in a cache (REDIS? TbD) the following info:
-     - User-ID (or ID token? TbC)
-     - user-agent
-     - IP address
-  end note
+  ' :Store user information in central cache;
+  ' note left
+  '   Call Micro Service SSO
+  '   to store in a cache (REDIS? TbD) the following info:
+  '    - User-ID (or ID token? TbC)
+  '    - user-agent
+  '    - IP address
+  ' end note
   :Store <b>shared env option (value: True)</b> in local storage;
   :Store user information in local storage;
 else

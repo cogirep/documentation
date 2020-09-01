@@ -28,13 +28,12 @@ note left
 end note
 if (\nIs <b>shared env</b> option value True?\n) then
   -[#green]-> **YES**;
-  :Remove user information in central cache;
+  ' :Remove user information in central cache;
+  :Black list user token in central cache;
   note left
     Call Micro Service SSO
-    to remove in a cache (REDIS? TbD) the following info:
-     - User-ID (or ID token? TbC)
-     - user-agent
-     - IP address
+    To black list in a cache (REDIS) the following info ID token
+    Use a TTL of 1 hour on REDIS for the token black listing
   end note
 endif
 :Remove BYD Portal data from local storage;
