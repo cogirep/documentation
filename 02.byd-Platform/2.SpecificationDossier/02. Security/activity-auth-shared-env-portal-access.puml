@@ -1,0 +1,48 @@
+@startuml
+header
+<b>Beyond Platform</b>
+Authentication process in shared environment
+App is accessed through Portal
+end header
+skinparam defaultTextAlignment center
+|BYD Portal|
+start
+note left
+  Assumptions:
+  User is authenticated on BYD Portal
+  User selected "<b>shared environment</b>" option
+  User is redirected from BYD Portal to BYD App 1
+  (or user selected the BYD App1 tile on Portal)
+  with his ID Token
+end note
+if (\nIs <b>shared env</b> option selected?\n) then
+  -[#green]-> **YES**;
+  :Store user information in central cache;
+  note left
+    Call Micro Service SSO
+    to store in a cache (REDIS? TbD) the following info:
+     - User-ID (or ID token? TbC)
+     - user-agent
+     - IP address
+  end note
+  :Store <b>shared env option (value: True)</b> in local storage;
+  :Store user information in local storage;
+else
+  -[#red]-> **NO**;
+endif
+:Redirect User to BYD App 1;
+note left
+  Add shared env option as header
+  if value is True
+end note
+|BYD App 1|
+if (\nIs <b>shared env (value: True)</b> available in headers?\n) then
+  -[#green]-> **YES**;
+  :Store <b>shared env</b> option (value: True) in local storage;
+else
+  -[#red]-> **NO**;
+endif
+
+stop
+
+@enduml
