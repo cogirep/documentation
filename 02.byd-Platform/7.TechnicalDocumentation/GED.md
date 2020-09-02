@@ -42,7 +42,7 @@ Un connecteur est un ensemble de données qui permettent de se connecter à une 
 {
     id: "string", //Identifiant unique de l'instance de GED
     product: "string", //Type de GED, nuxeo par exemple
-    companie: "string", //Compagnie de rattachement de la GED
+    company: "string", //Compagnie de rattachement de la GED
     "client-id": "string", //Nom du client Beyond comme déclaré dans la GED
     baseUrl: "string", //L’URL de base de l’instance de GED, utilisée pour l’affichage des documents
     authorizationEndpoint: "string", //L’URL du serveur d’autorisation oauth2 de la GED
