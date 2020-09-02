@@ -1,7 +1,9 @@
 # Auth Guard
 **Contexte :** L'auth guard permet de vérifier que chaque personne sollicitant une API dispose bien d'une authentification valide
 
-#### Fonctionnement
+## Fonctionnement
+
+![sequence diagrame](./sequence.png)
 
 Afin de vérifier si un utilisateur peut utiliser, ou non, une API, voici les différentes vérifications réalisées :
 

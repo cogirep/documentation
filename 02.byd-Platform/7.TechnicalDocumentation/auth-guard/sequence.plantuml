@@ -1,0 +1,35 @@
+@startuml
+  actor Client as c
+  collections Server as s
+  entity "AuthGuard \nMiddleware" as m
+  entity "Controller" as co
+
+  c -> s: Send request with headers
+  s --> m
+
+  m -> m: Check api key 
+  alt api key errors
+    m --> s
+    s -> c: Response a 401 error (or 500)
+  end
+
+  m -> m: check token
+  alt token errors
+    m --> s
+    s -> c: Response a 401 error (or 500)
+  end
+
+  m -> m: check user exists
+  alt user errors
+    m --> s
+    s -> c: Response a 404 error (or 500)
+  end
+
+  m --> co: call next()
+
+  co -> co: Processing
+  co --> s
+  s -> c: Response
+
+
+@enduml
