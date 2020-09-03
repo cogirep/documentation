@@ -1,9 +1,7 @@
 # Auth Guard
-**Contexte :** L'auth guard permet de vérifier que chaque personne sollicitant une API dispose bien d'une authentification valide
+**Contexte :** L'auth guard est un middleware qui permet de vérifier que chaque personne sollicitant une API dispose bien d'une authentification valide
 
 ## Fonctionnement
-
-![sequence diagrame](./sequence.png)
 
 Afin de vérifier si un utilisateur peut utiliser, ou non, une API, voici les différentes vérifications réalisées :
 
@@ -87,5 +85,20 @@ Si l'ensemble des étapes présentées ci-dessus sont validées, l'utilisateur p
                    ]
 }
 ```
+
+<br/>
+Voici un diagramme permettant d'illustrer le fonctionnement :
+
+![sequence diagrame](./sequence.png)
+
+## Cas particulier
+
+En l'espèce, certaines situations nécessitent un accès à une information sans pour autant disposer de toutes les informations liées à l'utilisateur (*ex*: vérifier que le produit de la plateforme sollicité, lorsqu'un utilisateur se connecte, existe bien) 
+
+Dans ce cas, en identifiant le service concerné, il est possible d'ajouter (côté code) dans le corps de la requête un champ supplémentaire appelé `securityOptions`
+
+Ce dernier permet de préciser que seul un contrôle de `l'api-key` est nécessaire. Dès lors, le middleware prendra en compte cette spécificité pour valider l'accès à la ressource demandée.
+
+Dans le cas contraire, l'ensemble des contrôles cités dans la section précédente sera réalisé.
 
 |001|Version Initiale|ANTAL Steven|
