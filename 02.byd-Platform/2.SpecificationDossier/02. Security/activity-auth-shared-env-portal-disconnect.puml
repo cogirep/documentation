@@ -1,4 +1,4 @@
-@startuml
+@startuml activity-auth-shared-env-portal-disconnect
 header
 <b>Beyond Platform</b>
 Disconnection process in shared environment
@@ -31,8 +31,8 @@ if (\nIs <b>shared env</b> option value True?\n) then
   ' :Remove user information in central cache;
   :Black list user token in central cache;
   note left
-    Call Micro Service SSO
-    To black list in a cache (REDIS) the following info ID token
+    Call Micro Service byd-manager-user
+    To black list in a cache (REDIS) the user ID token
     Use a TTL of 1 hour on REDIS for the token black listing
   end note
 endif
