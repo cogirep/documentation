@@ -87,7 +87,7 @@ else
           to check if the a user ID Token
           is included in the black list cache
         end note
-        if (\nIs the user ID token preset in the blacklist?\n) then
+        if (\nIs the user ID token in the central blacklist?\n) then
           -[#red]-> **NO**;
           :Access page content;
           stop;
