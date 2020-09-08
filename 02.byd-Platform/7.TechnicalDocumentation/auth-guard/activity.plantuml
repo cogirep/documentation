@@ -1,0 +1,44 @@
+@startuml
+
+' skinparam linetype polyline
+
+(*) --> Verification security options
+  --> "1. Check API Key"
+  note right
+    Request DB
+  end note
+
+  if "API Key OK ?" then
+    ->[No] Send 401 error \n (Bad api key)
+    -> (*)
+  else
+
+    if "Security option \n = api key only ?" then
+      -->[Yes] next()
+    else
+      -->[No] 2. Check User Token
+      note right
+        Retrieve cognito public key
+        And decode token
+      end note
+
+      if "Cognito public \n key refuse ?" then
+        -->[No] Send 401 error \n (Bad user token)
+        -> (*)
+      else
+        ->[Yes] Check user into database
+        if "User exists \n on db ?" then
+          -->[Yes] Retrieve user's rights
+          --> next()
+          --> (*)
+        else
+          -->[No] Send 404 error \n (User not found)
+          -> (*)
+        endif
+      endif
+    endif
+
+    
+  endif
+
+@enduml

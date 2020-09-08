@@ -91,6 +91,12 @@ Voici un diagramme permettant d'illustrer le fonctionnement :
 
 ![sequence diagrame](./sequence.png)
 
+<br/>
+
+Pour compléter le diagrame de séquence ci-dessus, vous trouverez ci-dessous un diagramme d'activité.
+
+![activity diagrame](./activity.png)
+
 ## Cas particulier
 
 En l'espèce, certaines situations nécessitent un accès à une information sans pour autant disposer de toutes les informations liées à l'utilisateur (*ex*: vérifier que le produit de la plateforme sollicité, lorsqu'un utilisateur se connecte, existe bien) 
@@ -101,4 +107,7 @@ Ce dernier permet de préciser que seul un contrôle de `l'api-key` est nécessa
 
 Dans le cas contraire, l'ensemble des contrôles cités dans la section précédente sera réalisé.
 
+| Verion | Description | Auteur |
+|---|---|---|
 |001|Version Initiale|ANTAL Steven|
+|002|Ajout Diagramme|ANTAL Steven & WYFFELS Ludovic|
