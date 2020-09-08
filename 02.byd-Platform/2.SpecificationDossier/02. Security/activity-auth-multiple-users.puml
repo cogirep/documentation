@@ -1,4 +1,4 @@
-@startuml
+@startuml activity-auth-multiple-users
 header
 <b>Beyond Platform</b>
 Authentication process and multiple users
@@ -62,8 +62,8 @@ else
       ' end note
       :Black list user token in central cache;
       note left
-        Call Micro Service SSO
-        To black list in a cache (REDIS) the ID token
+        Call Micro Service byd-manager-user
+        To black list in a cache (REDIS) the user ID token
         Use a TTL of 1 hour on REDIS
         (equals Cognito id token timeout)
       end note
@@ -83,18 +83,17 @@ else
         ' end note
         :Check if ID token from local storage is black listed in central cache;
         note left
-          Call Micro Service SSO
+          Call Micro Service byd-manager-user
           to check if the a user ID Token
           is included in the black list cache
         end note
-        if (\nIs the user with ID token in BYD App 1 local storage still connected to BYD Portal?\n) then
-          -[#green]-> **YES**;
+        if (\nIs the user ID token in the central blacklist?\n) then
+          -[#red]-> **NO**;
           :Access page content;
           stop;
         else
-          -[#red]-> **NO**;
-          :Remove <b>shared env</b> from BYD App 1 local storage;
-          :Remove ID token from BYD App 1 local storage;
+          -[#green]-> **YES**;
+          :Remove BYD App 1 local storage content;
           :Redirect User to Authentication Page;
           stop;
         endif
