@@ -17,16 +17,22 @@
       -->[Yes] next()
     else
       -->[No] 2. Check User Token
-      note right
-        Retrieve cognito public key
-        And decode token
-      end note
+      --> Retrieve Congito public key
+      ' note right
+      '   Retrieve cognito public key
+      '   And decode token
+      ' end note
 
-      if "Cognito public \n key refuse ?" then
-        -->[No] Send 401 error \n (Bad user token)
+      if "retrieve Cognito \n public key ?" then
+        ->[No] Send 500 error
         -> (*)
       else
-        ->[Yes] Check user into database
+        -->[Yes] Decode token
+        --> if "\nCognito \n public key \n refused ? \n (not valid \n or expired)" then
+        -->[Yes] Send 401 error \n (Bad user token)
+        -> (*)
+      else
+        ->[No] Check user into database
         if "User exists \n on db ?" then
           -->[Yes] Retrieve user's rights
           --> next()
@@ -36,6 +42,9 @@
           -> (*)
         endif
       endif
+      endif
+
+      
     endif
 
     
