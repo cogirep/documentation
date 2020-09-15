@@ -2,7 +2,7 @@
 
 ' skinparam linetype polyline
 
-(*) --> Verification security options
+(*) --> Check security options
   --> "1. Check API Key"
   note right
     Request DB
@@ -17,11 +17,7 @@
       -->[Yes] next()
     else
       -->[No] 2. Check User Token
-      --> Retrieve Congito public key
-      ' note right
-      '   Retrieve cognito public key
-      '   And decode token
-      ' end note
+      --> Retrieve Cognito public key
 
       if "retrieve Cognito \n public key ?" then
         ->[No] Send 500 error
