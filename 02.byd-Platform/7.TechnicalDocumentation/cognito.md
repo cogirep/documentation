@@ -2,7 +2,7 @@
 
 ## 1 - Introduction  
 
-Cette documentation à pour but d'expliquer comment utiliser le portail de la plateforme et de rediriger sur les documentations techniques plus detaillées pour l'ensemble des points.
+Cette documentation a pour but d'expliquer comment utiliser le portail de la plateforme et de diriger sur les documentations techniques plus detaillées pour l'ensemble des points.
 
 ## 2- La connexion à la plateforme
 
@@ -15,7 +15,7 @@ le diagramme de séquence spécifiant toutes les interactions entre le portail e
 
 > https://github.com/sxd-platform/byd-all-documentation/blob/develop/02.byd-Platform/2.SpecificationDossier/images/diagrams/seq_authentication.png
 
-Il est possible d'ajouter de nouveau idp externe. Pour cela il faut faire une demande à l'it afin que celui-ci soit configurer dans cognito.
+Il est possible d'ajouter de nouveau idp externe. Pour cela il faut faire une demande à l'it afin que celui-ci soit configuré dans cognito.
 
 > https://sixense-platform-solutions.atlassian.net/servicedesk/customer/portal/4/group/27
 
