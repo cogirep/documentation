@@ -8,7 +8,7 @@ Cette documentation à pour but d'expliquer comment utiliser le portail de la pl
 
 Il existe deux manières de s'authentifier à la plateforme soit via un utilisateur connu de cognito, soit par un idp externe.
 
-la documentations technique sur la connexion à un produit se trouve ici
+la documentation technique sur la connexion à un produit se trouve ici
 > https://github.com/sxd-platform/byd-all-documentation/blob/develop/02.byd-Platform/7.TechnicalDocumentation/documentation.md
 
 le diagramme de séquence spécifiant toutes les interactions entre le portail et les différents éléments de la plateforme est disponible sur ce lien.
