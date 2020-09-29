@@ -19,11 +19,11 @@ Il est possible d'ajouter de nouveau idp externe. Pour cela il faut faire une de
 
 > https://sixense-platform-solutions.atlassian.net/servicedesk/customer/portal/4/group/27
 
-Une fois cognito configuré, il faut ajouter le nouveau idp dans la table idp de notre bdd postgres et lui spécifier un pattern d'email (regex).
+Une fois cognito configuré, il faut ajouter le nouvel idp dans la table idp de notre bdd postgres et lui spécifier un pattern d'email (regex).
 
 > @steven proccess à définir
 
-Si le mail de l'utilisateur correspond au pattern de l'idp externe celui-ci sera automatiquement redirigé sur la page d'authentification de l'idp en question.
+Si le mail de l'utilisateur correspond au pattern de l'idp externe celui-ci sera automatiquement dirigé sur la page d'authentification de l'idp en question.
 
 ## 3 - La déconnexion à la plateforme
 
@@ -66,7 +66,7 @@ celui-ci comprend :
 
 ### 6 - Ajout d'un nouveau produit au portail
 
-Pour ajouter un produit au portail il faut ajouter le produit en question à la table products de notre BDD postgres .
+Pour ajouter un produit au portail il faut ajouter le produit en question à la table product de notre BDD postgres .
 
 il nous faudra les champs suivants pour ajouter le produit:
 
