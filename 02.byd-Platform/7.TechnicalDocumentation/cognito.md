@@ -19,7 +19,7 @@ Il est possible d'ajouter de nouveau idp externe. Pour cela il faut faire une de
 
 > https://sixense-platform-solutions.atlassian.net/servicedesk/customer/portal/4/group/27
 
-Une fois cognito configurer, il faut ajouter le nouveau idp dans la table idp de notre bdd postgres et lui spécifier un pattern d'email (regex).
+Une fois cognito configuré, il faut ajouter le nouveau idp dans la table idp de notre bdd postgres et lui spécifier un pattern d'email (regex).
 
 > @steven proccess à définir
 
