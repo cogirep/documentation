@@ -17,8 +17,27 @@ Avant toute chose, il faudra vérifier que le service FME soit disponible. Pour 
 Une fois actif, on pourra interagir avec ce dernier de la manière suivante:
 - Envoi d'un fichier pour lequel une transformation est nécessaire
 - Demande de transformation liée à ce fichier
-- Récupération du résultat
+- Récupération du résultat (statut, logs et/ou fichiers)
 - Suppression des fichiers présents sur FME
+
+Pour demander une transformation à FME, il sera nécessaire lors de l'appel API (méthode POST) de fournir les chemins d'entrée et de sortie qui seront regroupés dans le corps de la requête sous le champ `publishedParameters` comme suit :
+
+```json
+{
+  "publishedParameters": [
+    {
+      "name": "SourceDataset_REVIT",
+      "value": [
+        "$(FME_SHAREDRESOURCE_DATA)/test/cesium/input/BATIMENT SOLIBRI.ifc"
+      ]
+    },
+    {
+      "name": "DestDataset_CESIUM3DTILES",
+      "value": "$(FME_SHAREDRESOURCE_DATA)/test/cesium/output"
+    }
+  ]
+}
+```
 
 Afin d'assurer la persistance du bon fonctionnement, un stockage en base de données des différents statuts de la transformation sera effectué (`Not Started`, `Send`, `Queued`, `Finished`). Ce suivi permettra aux cron job, chargés de l'asynchrone, de pouvoir vérifier l'ensemble des tâches non terminées et de les envoyer sur FME au besoin.
 
