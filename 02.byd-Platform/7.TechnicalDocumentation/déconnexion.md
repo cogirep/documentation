@@ -8,15 +8,15 @@ La déconnexion de la plateforme se fait en deux étapes.
 
 ## La déconnexion d'un produit
 
-Pour déconnecter l'utilisateur d'un produit il suffit de supprimer sa session et toutes les informations de l'utilisateur du client.
+Pour déconnecter l'utilisateur d'un produit il suffit de supprimer sa session et toutes les informations de l'utilisateur du navigateur.
 
-Il faudra par exemple pour REALITY , uniquement clear le local storage du client afin de supprimer toutes les informations de l'utilisateur et ses données de navigation.
+Par exemple pour le produit REALITY , on vide le local storage du navigateur afin de supprimer toutes les informations de l'utilisateur et ses données de navigation
 
-Selon les produits et les choix pris, la méthode peux être différente d'un produit à l'autre.
+Selon les produits et les choix pris, la méthode de déconnexion de l’application peux être différente
 
 ## Déconnexion du portail
 
-une fois l'utilisateur déconnecté d'un produit, il faut le rediriger sur le endpoint /disconnect du portail.
+Une fois l'utilisateur déconnecté d'un produit, il faut le rediriger sur le endpoint /disconnect du portail.
 
 Ce endpoint a pour but de supprimer les informations de connexion sur le portail, mais aussi de révoquer tous les "refresh_token" de l'utilisateur en question.
 
