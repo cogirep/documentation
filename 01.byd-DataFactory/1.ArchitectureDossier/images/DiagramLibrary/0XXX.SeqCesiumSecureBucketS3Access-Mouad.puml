@@ -1,0 +1,86 @@
+@startuml SecureBucketAccesCesium
+actor Client
+participant "Beyond Reality\n(Cesium)" as AppByd order 1
+participant "DF Microservice\nIDcard Manager" as IDcard order 2
+participant "DF Microservice\nGateway-S3" as Gateway order 3
+participant "DF Microservice\nUser Manager" as UsrMgr order 4
+database "cache\n(REDIS)" as cache order 5
+database PostgreSQL order 6
+database COS order 7
+
+Client -> AppByd : show map
+activate AppByd #888888
+AppByd -> IDcard : get ID Cards to display on map
+activate IDcard #888888
+IDcard -> MongoDB : Retrieve ID Cards information
+activate MongoDB #888888
+MongoDB --> IDcard : Return ID Cards information\n(including tileset.json URL)
+deactivate MongoDB
+IDcard --> AppByd : Return ID Cards information
+deactivate IDcard
+AppByd -> Gateway : get object file (tileset.json) from Bucket
+activate Gateway #888888
+Gateway -> cache : check user rights in cache
+group user rights not in cache
+    Gateway -> UsrMgr : check user rights\n(bucket access)
+    activate UsrMgr #888888
+    UsrMgr -> MongoDB : check user rights
+    activate MongoDB #888888
+    MongoDB --> UsrMgr : return user rights
+    deactivate MongoDB
+    UsrMgr --> Gateway : confirm user rigts
+    deactivate UsrMgr
+    Gateway -> cache : store user rights in cache
+end
+Gateway -> cache : check if file stored in cache
+activate cache #888888
+group bucket files not in cache
+    Gateway -> COS : get object file from bucket
+    activate COS #888888
+    COS --> Gateway : retrieve file from bucket
+    deactivate COS
+    Gateway --> AppByd : provide tileset.json file
+    Gateway -> cache : put object file in cache
+end
+deactivate Gateway
+deactivate cache
+'AppByd --> Client : display object on map
+deactivate AppByd
+
+Loop on tileset.json (to retrieve cesium files)
+    AppByd -> Gateway : get object file (tileset.json) from Bucket
+    activate Gateway #888888
+    Gateway -> cache : check user rights in cache
+    note right
+        Assumption: a pattern is used
+        to easily validate the user rights
+        to the requested file(s)
+        TO BE DISCUSSED
+    end note
+    ' group user rights not in cache
+    '     Gateway -> UsrMgr : check user rights\n(bucket access)
+    '     activate UsrMgr #888888
+    '     UsrMgr -> MongoDB : check user rights
+    '     activate MongoDB #888888
+    '     MongoDB --> UsrMgr : return user rights
+    '     deactivate MongoDB
+    '     UsrMgr --> Gateway : confirm user rigts
+    '     deactivate UsrMgr
+    '     Gateway -> cache : store user rights in cache
+    ' end
+    Gateway -> cache : check if file stored in cache
+    activate cache #888888
+    group bucket files not in cache
+        Gateway -> COS : get object file from bucket
+        activate COS #888888
+        COS --> Gateway : retrieve file from bucket
+        deactivate COS
+        Gateway --> AppByd : provide object file
+        Gateway -> cache : put object file in cache
+    end
+    deactivate Gateway
+    deactivate cache
+    AppByd --> Client : display object on map
+    deactivate AppByd
+end
+@enduml
