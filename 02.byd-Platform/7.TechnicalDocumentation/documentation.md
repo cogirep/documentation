@@ -27,9 +27,9 @@ Il existe 3 cas possibles :
 
 - Le token est présent et valide => l’utilisateur peut continuer sa navigation
 
-- Le token est présent mais pas valide => un système de refresh des tokens est présent dans l'application afin de permettre à l’utilisateur de poursuivre leur session
+- Le token est présent mais pas valide => un système de refresh des tokens est présent dans l'application afin de permettre à l’utilisateur de poursuivre sa session
 
-- Pas de token ou impossible de le refresh => déconnexion de l'utilisateur et redirection sur le portail
+- Pas de token ou impossible de le refresh => déconnexion de l'utilisateur et redirection sur la page d'accueil du portail
 
 > les tokens dans la plateforme ont une durée de 1 heure non modifiable.
 
@@ -42,9 +42,9 @@ Vous trouverez dans les packages des outils pour vous aider dans tous les cas ci
 
 **2 - Redirection sur le portal**
 
-Si l'utilisateur ne dispose pas de token ou que le token ne peux être refresh , le produit doit rediriger l'utilisateur sur le portal comme dis précédemment.
+Si l'utilisateur ne dispose pas de token ou que le token ne peux être refresh , le produit doit rediriger l'utilisateur sur le portal comme dit précédemment.
 
-Il est possible de mettre dans l'URL du portail un paramètre **redirect_uri** .
+Si l'utilisateur s'authentifie correctement au niveau de la plate-forme, il est possible de rediriger l'utilisateur depuis le portail vers la page du produit gérant l'authentifiction et la gestion des droits utilisateur.
 
 Ce paramètre permet de dire au portail qu'il faut rediriger sur l'url inscrit dans le paramètre une fois que l'utilisateur est connecté.
 
@@ -54,7 +54,7 @@ Exemple :
 
 > Après la connexion, l'utilisateur sera redirigé sur monitoring
 
-Le redirect_uri est soumis à quelques règles, le produit doit être connu de la plateforme et son url enregistré dans notre BDD, sinon le portail ne permettra pas la redirection.
+Note importante : l'usage du paramètre redirect_uri est soumis à la règle suivante ; le produit doit être enregistré dans la plateforme (son url est déclarée dans la base de données de la plate-forme). Dans le cas contraire, le portail ne permettra pas la redirection.
 
 Si l'utilisateur est déjà connecté sur le portail, il sera immédiatement redirigé sur l'URL exacte du produit qu'il avait demandé. Le portail ajoute à la requête le token et le refresh token de l'utilisateur.
 
