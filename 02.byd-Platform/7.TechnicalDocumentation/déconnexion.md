@@ -8,7 +8,7 @@ La déconnexion de la plateforme se fait en deux étapes.
 
 ## La déconnexion d'un produit
 
-Pour déconnecter l'utilisateur d'un produit il suffit de supprimer sa session et toutes les informations de l'utilisateur du navigateur.
+Pour déconnecter l'utilisateur d'un produit il suffit de supprimer sa session et toutes les informations de l'utilisateur stockées au niveau du navigateur.
 
 Par exemple pour le produit REALITY , on vide le local storage du navigateur afin de supprimer toutes les informations de l'utilisateur et ses données de navigation
 
