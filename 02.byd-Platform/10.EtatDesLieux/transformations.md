@@ -7,7 +7,7 @@ Voici un tableau exhaustif des transformations actuellement proposées sur la Pl
 | Transformation | Input | Requis|
 |:---|:---|:---|
 | **Visualisartion Model3D** | Dossier ZIP | Fichier tileset.json + x fichiers en '.b3dm' |
-| **Visualisation Orthoimage** | Dossier ZIP | Fichier en '.tif', '.aux', '.xml'...
+| **Visualisation Orthoimage** | Dossier ZIP | X fichiers en '.tif', '.aux', '.xml'...
 | **Visualisation Nuage de points** | Dossier ZIP | Fichier tileset.json + x fichiers en '.pnts' |
 | **Visualisation Geojson Reality** | Fichier en '.geojson'|
 | **Visualisation KML Reality** | Fichier en '.kml' ||
