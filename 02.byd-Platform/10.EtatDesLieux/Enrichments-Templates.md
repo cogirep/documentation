@@ -17,86 +17,85 @@
  les informations d'un document contenu dans une ged. Le label "Enrichissement ged" importe peu.
  Il est possible de créer autant d'enrichissements avec un beyond type `document` que l'on veut.
 
- ## Contenu de l'enrichissement MODELGRAPHIC ##
+## Contenu de l'enrichissement MODELGRAPHIC ##
 
     {
-        size: number; // Taille du modèle graphique.
-        color: string; // Couleur du modèle graphique.
-        outlineColor: string; // Couleur du contour du modèle graphique.
-        outlineSize: number; // Taille du contour du modèle graphique.
-        showDistance: number // Distance à laquelle le modèle graphique s'affiche.
-        type: string; // Type de modèle graphique (Points, polygone, line, etc..).
-        geometry: Object; // Contient les coordonnées et le système de référencement du modèle graphique.
+      size: number; // Taille du modèle graphique.
+      color: string; // Couleur du modèle graphique.
+      outlineColor: string; // Couleur du contour du modèle graphique.
+      outlineSize: number; // Taille du contour du modèle graphique.
+      showDistance: number // Distance à laquelle le modèle graphique s'affiche.
+      type: string; // Type de modèle graphique (Points, polygone, line, etc..).
+      geometry: Object; // Contient les coordonnées et le système de référencement du modèle graphique.
     }
 
- ## Contenu de l'enrichissement Diagramme Cesium ##
+## Contenu de l'enrichissement Diagramme Cesium ##
 
     {
-        size: number; // Taille du diagramme cesium.
-        diagramType: 'stackedColumn' | 'circle'; // type du diagramme cesium.
-        data: {
-               type: Array; // données du diagramme.
-               items: {
-                        type: Object;
-                        properties: {
-                                     label: string; // Titre de la donnée.
-                                     value: number; // Valeur de la donnée.
-                                     color: string; // Couleur associée à la donnée.
-                                    }
-                      }
-              }
-        longitude: number; // Longitude du diagramme cesium.
-        latitude: number; // Latitude du diagramme cesium.
-
+      size: number; // Taille du diagramme cesium.
+      diagramType: 'stackedColumn' | 'circle'; // type du diagramme cesium.
+      data: {
+             type: Array; // données du diagramme.
+             items: {
+                      type: Object;
+                      properties: {
+                                   label: string; // Titre de la donnée.
+                                   value: number; // Valeur de la donnée.
+                                   color: string; // Couleur associée à la donnée.
+                                  }
+                    }
+            }
+      longitude: number; // Longitude du diagramme cesium.
+      latitude: number; // Latitude du diagramme cesium.
     }
 
- ## Contenu de l'enrichissement ExternalData_RealWorld ##
+## Contenu de l'enrichissement ExternalData_RealWorld ##
 
-       {
-         URL: string; // Url de la donnée dans Realworld au format URI.
-       }
+     {
+       URL: string; // Url de la donnée dans Realworld au format URI.
+     }
 
- ## Contenu de l'enrichissement ExternalData_DigitalSite ##
+## Contenu de l'enrichissement ExternalData_DigitalSite ##
 
-       {
+     {
+       URL: string; // Url de la donnée dans DigitalSite au format URI.
+     }
+
+## Contenu de l'enrichissement ExternalData_Asset5 ##
+
+     {
+       URL: string; // Url de la donnée dans Realworld au format URI.
+     }
+
+## Contenu de l'enrichissement ExternalData_Satellite ##
+
+     {
+       URL: string; // Url de la donnée dans DigitalSite au format URI.
+     }
+
+ ## Contenu de l'enrichissement ExternalData_ProcessManager ##
+
+      {
+        URL: string; // Url de la donnée dans Realworld au format URI.
+      }
+
+ ## Contenu de l'enrichissement ExternalData_Geoscope ##
+
+      {
+        URL: string; // Url de la donnée dans DigitalSite au format URI.
+      }
+
+  ## Contenu de l'enrichissement ExternalData_Monitoring ##
+
+     {
+        URL: string; // Url de la donnée dans DigitalSite au format URI.
+     }
+
+  ## Contenu de l'enrichissement ExternalData_Asset ##
+
+     {
          URL: string; // Url de la donnée dans DigitalSite au format URI.
-       }
-
-  ## Contenu de l'enrichissement ExternalData_Asset5 ##
-
-       {
-         URL: string; // Url de la donnée dans Realworld au format URI.
-       }
-
-  ## Contenu de l'enrichissement ExternalData_Satellite ##
-
-       {
-         URL: string; // Url de la donnée dans DigitalSite au format URI.
-       }
-
-   ## Contenu de l'enrichissement ExternalData_ProcessManager ##
-
-        {
-          URL: string; // Url de la donnée dans Realworld au format URI.
-        }
-
-   ## Contenu de l'enrichissement ExternalData_Geoscope ##
-
-        {
-          URL: string; // Url de la donnée dans DigitalSite au format URI.
-        }
-
-    ## Contenu de l'enrichissement ExternalData_Monitoring ##
-
-       {
-          URL: string; // Url de la donnée dans DigitalSite au format URI.
-       }
-
-    ## Contenu de l'enrichissement ExternalData_Asset ##
-
-       {
-           URL: string; // Url de la donnée dans DigitalSite au format URI.
-       }
+     }
 
 
  ## Contenu de l'enrichissement Reality_ContextData ##
