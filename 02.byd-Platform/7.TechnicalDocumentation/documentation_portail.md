@@ -36,10 +36,10 @@ La page de connexion du portail peut être personnalisée avec un logo et une im
 
 Le processus type est le suivant :
 
-- Connexion via la page d’authentification du portail [http:// .md]
-- Accès à un produit (via le portail, redirection après authentification ou accès direct) <https://github.com/sxd-platform/byd-all-documentation/blob/develop/02.byd-Platform/7.TechnicalDocumentation/documentation.md>
-- Navigation dans le produit [http:// .md]
-- Déconnexion <https://github.com/sxd-platform/byd-all-documentation/blob/develop/02.byd-Platform/7.TechnicalDocumentation/d%C3%A9connexion.md>
+- Connexion via la page d’authentification du portail <https://github.com/sxd-platform/byd-all-documentation/blob/develop/02.byd-Platform/7.TechnicalDocumentation/connexion.md>
+- Accès à un produit (via le portail, redirection après authentification ou accès direct) <https://github.com/sxd-platform/byd-all-documentation/blob/develop/02.byd-Platform/7.TechnicalDocumentation/acces_produit.md>
+- Navigation dans le produit <https://github.com/sxd-platform/byd-all-documentation/blob/develop/02.byd-Platform/7.TechnicalDocumentation/navigation_produit.md>
+- Déconnexion <https://github.com/sxd-platform/byd-all-documentation/blob/develop/02.byd-Platform/7.TechnicalDocumentation/deconnexion.md>
 
 La cinématique d’ensemble est illustré dans ce diagramme de séquence :
 
