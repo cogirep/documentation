@@ -73,32 +73,32 @@
        URL: string; // Url de la donnée dans DigitalSite au format URI.
      }
 
- ## Contenu de l'enrichissement ExternalData_ProcessManager ##
+## Contenu de l'enrichissement ExternalData_ProcessManager ##
 
       {
         URL: string; // Url de la donnée dans Realworld au format URI.
       }
 
- ## Contenu de l'enrichissement ExternalData_Geoscope ##
+## Contenu de l'enrichissement ExternalData_Geoscope ##
 
       {
         URL: string; // Url de la donnée dans DigitalSite au format URI.
       }
 
-  ## Contenu de l'enrichissement ExternalData_Monitoring ##
+## Contenu de l'enrichissement ExternalData_Monitoring ##
 
      {
         URL: string; // Url de la donnée dans DigitalSite au format URI.
      }
 
-  ## Contenu de l'enrichissement ExternalData_Asset ##
+## Contenu de l'enrichissement ExternalData_Asset ##
 
      {
          URL: string; // Url de la donnée dans DigitalSite au format URI.
      }
 
 
- ## Contenu de l'enrichissement Reality_ContextData ##
+## Contenu de l'enrichissement Reality_ContextData ##
 
      {
         provider?: string; // Propriétaire du flux.
@@ -114,7 +114,7 @@
         specificLegendURL?: string; // Url de la surcharge de la légende au format URI.
      }
 
- ## Contenu de l'enrichissement possédant un beyondType `document` (Nuxeo) ##
+## Contenu de l'enrichissement possédant un beyondType `document` (Nuxeo) ##
 
     {
         uid: string; // Identifiant du document dans la ged.
