@@ -64,37 +64,37 @@
 ## Contenu de l'enrichissement ExternalData_Asset5 ##
 
     {
-      URL: string; // Url de la donnée dans Realworld au format URI.
+      URL: string; // Url de la donnée dans Asset5 au format URI.
     }
 
 ## Contenu de l'enrichissement ExternalData_Satellite ##
 
     {
-      URL: string; // Url de la donnée dans DigitalSite au format URI.
+      URL: string; // Url de la donnée dans Satellite au format URI.
     }
 
 ## Contenu de l'enrichissement ExternalData_ProcessManager ##
 
     {
-      URL: string; // Url de la donnée dans Realworld au format URI.
+      URL: string; // Url de la donnée dans ProcessManager au format URI.
     }
 
 ## Contenu de l'enrichissement ExternalData_Geoscope ##
 
     {
-      URL: string; // Url de la donnée dans DigitalSite au format URI.
+      URL: string; // Url de la donnée dans Geoscope au format URI.
     }
 
 ## Contenu de l'enrichissement ExternalData_Monitoring ##
 
     {
-      URL: string; // Url de la donnée dans DigitalSite au format URI.
+      URL: string; // Url de la donnée dans Monitoring au format URI.
     }
 
 ## Contenu de l'enrichissement ExternalData_Asset ##
 
     {
-      URL: string; // Url de la donnée dans DigitalSite au format URI.
+      URL: string; // Url de la donnée dans Asset au format URI.
     }
 
 
