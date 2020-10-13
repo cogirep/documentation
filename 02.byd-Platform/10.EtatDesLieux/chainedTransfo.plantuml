@@ -1,0 +1,21 @@
+@startuml
+component A [
+Transformation 1
+<#FFFFF>|= Input |= Output |
+| .IFC file | .DAE file |
+]
+component B [
+Transformation 2
+<#FFFFF>|= Input |= Output |
+| .DAE file | tileset.json + .bd3m files |
+]
+component C [
+Chain
+<#FFFFF>|= Result|
+| .IFC -> .DAE -> tileset.json + .b3dm files |
+
+]
+
+A --> C
+B --> C
+@enduml
