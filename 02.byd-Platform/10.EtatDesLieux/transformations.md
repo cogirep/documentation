@@ -21,7 +21,9 @@ Voici un tableau exhaustif des transformations actuellement proposées sur la Pl
 ## Limite
 
 Actuellement, et compte tenu des infrastructures disponibles, une taille maximale de 1Go est préconisée lors de l'import du fichier/dossier. <br/>
-En effet, n'ayant pas connaissance du taux de compression des différentes archives, la taille de 1Go permet d'assurer le fonctionnement des différentes transformations 
+En effet, n'ayant pas connaissance du taux de compression des différentes archives, la taille de 1Go permet d'assurer le fonctionnement des différentes transformations
+
+**Cas particulier** Tout import de fichier devra être réalisé depuis l'interface de la Plateforme. En effet, après quelques tests d'upload direct dans le COS pour des fichiers dépassant la limite recommandée, l'interface ne permet pas d'upload les fichiers tout en respectant la nomenclature utilisée sur le projet, à savoir : `{beyondId}/{revisionId}/{fichier}` (le caractère `/` étant prohibé).
 
 <br/>
 
