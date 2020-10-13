@@ -20,14 +20,14 @@ Voici un tableau exhaustif des transformations actuellement proposées sur la Pl
 
 ## Limite
 
-Actuellement, et compte-tenu des infrastructures disponibles, une taille maximale de 1Go est préconisée lors de l'import du fichier/dossier. <br/>
+Actuellement, et compte tenu des infrastructures disponibles, une taille maximale de 1Go est préconisée lors de l'import du fichier/dossier. <br/>
 En effet, n'ayant pas connaissance du taux de compression des différentes archives, la taille de 1Go permet d'assurer le fonctionnement des différentes transformations 
 
 <br/>
 
 ## Evolutions
 
-### Transformation enchaînées
+### Transformations enchaînées
 
 Le fonctionnement actuel permet de traiter une transformation, c'est-à-dire partir d'un format pour en obtenir un autre exploitable par le module Globe.
 
@@ -48,12 +48,12 @@ Actuellement, la demande de transformation s'effectue lors de l'import d'un fich
 
 Il serait alors possible, à partir d'un atome déjà existant, de demander une transformation.
 
-Cela nécessitera quelques travaux de refactorisation pour permettre de déclencher des demandes de transformations en dehors du processus d'import qui, à date, est le seul élément déclencheur (envoi d'une demande auprès de RabbitMQ)
+Cela nécessitera quelques travaux de refactorisation pour permettre de réaliser des demandes de transformations en dehors du processus d'import qui, à date, est le seul élément déclencheur (envoi d'une demande auprès de RabbitMQ)
 
 ## Résolution nécessaire
 
-- Nous avons pu constater que l'utilisation de la transformation "Visualiation Orthoimage" générée un comportement inattendu. <br/> 
+- Nous avons pu constater que l'utilisation de la transformation "Visualisation Orthoimage" génère un comportement inattendu. <br/> 
 En effet, lors de l'upload des fichiers issus de la transformation sur le COS, le stream se coupe avec pour seul message `stream closed` <br/>
 Il serait nécessaire de vérifier les paramètres utilisés avec MinIO pour éventuellement augmenter le délai avant un timeout. Ceci n'est qu'une piste qui sera nécessaire de vérifier avant de plus amples recherches. <br/>
-*Contournement* : Si cette situation se concrétisait, il serait alors nécessaire de relancer entièrement le microservice `decompress` avant d'envoyer de nouvelles demande de visualisation
+**Contournement** : Si cette situation se concrétisait, il serait alors nécessaire de relancer entièrement le microservice `decompress` avant d'envoyer de nouvelles demandes de visualisation
 
