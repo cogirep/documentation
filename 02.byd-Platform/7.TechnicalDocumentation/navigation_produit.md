@@ -1,7 +1,12 @@
 # Navigation dans le produit
 
 Lors de la navigation de l’utilisateur dans l’application, le token de celui-ci peut arriver à expiration.
-Dans ce cas, le produit doit :
+
+Dans ce cas, le produit doit tenter d'obtenir un refresh_token.
+
+Dnas le cas 
+- 
+
 A noter : le package XXX intègre les fonctionnalité …..
 
 Vous trouverez dans les packages des outils pour vous aider dans tous les cas cités plus haut avec leur documentation
