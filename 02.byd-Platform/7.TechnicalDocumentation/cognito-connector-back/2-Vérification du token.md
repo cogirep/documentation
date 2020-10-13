@@ -3,7 +3,7 @@
 ## Contexte
 
 Lors des échanges entre les différents composants de la plateforme, il faut s’assurer de la validité du token reçu.
-Le package back end permet de valider ce token et de le déchiffrer
+Le package back end permet de valider ce token et de le déchiffrer.
 
 ## Usage
 
@@ -21,7 +21,7 @@ const decodeTokenService = await connectorCognito.decodeToken(publicKey, token);
 
 La méthode prend 2 paramètres :
 
-- publicKey : obligatoire / array, récupérée via la méthode 'getCognitoPublicKey' 
+- publicKey : obligatoire / array, récupérée via la méthode 'getCognitoPublicKey'
 - token : obligatoire / string : récupéré depuis le header de la requête
 
 En cas de succès, la méthode renvoie :
@@ -45,7 +45,7 @@ En cas de succès, la méthode renvoie :
 }
 ```
 
-En cas d'un échec, la méthode renvoie l'une des erreurs suivantes :
+En cas d'échec, la méthode renvoie l'une des erreurs suivantes :
 
 - Si la signature du token est invalide, si le token ne provient pas de la plateforme ou si son format n’est pas le bon :
 

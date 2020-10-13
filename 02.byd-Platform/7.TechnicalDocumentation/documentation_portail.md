@@ -36,10 +36,22 @@ La page de connexion du portail peut être personnalisée avec un logo et une im
 
 Le processus type est le suivant :
 
-- Connexion via la page d’authentification du portail <https://github.com/sxd-platform/byd-all-documentation/blob/develop/02.byd-Platform/7.TechnicalDocumentation/connexion.md>
-- Accès à un produit (via le portail, redirection après authentification ou accès direct) <https://github.com/sxd-platform/byd-all-documentation/blob/develop/02.byd-Platform/7.TechnicalDocumentation/acces_produit.md>
-- Navigation dans le produit <https://github.com/sxd-platform/byd-all-documentation/blob/develop/02.byd-Platform/7.TechnicalDocumentation/navigation_produit.md>
-- Déconnexion <https://github.com/sxd-platform/byd-all-documentation/blob/develop/02.byd-Platform/7.TechnicalDocumentation/deconnexion.md>
+- [Connexion via la page d’authentification du portail](./connexion.md)
+
+<https://github.com/sxd-platform/byd-all-documentation/blob/develop/02.byd-Platform/7.TechnicalDocumentation/connexion.md>
+
+- [Accès à un produit (via le portail, redirection après authentification ou accès direct)](./acces_produit.md)
+
+<https://github.com/sxd-platform/byd-all-documentation/blob/develop/02.byd-Platform/7.TechnicalDocumentation/acces_produit.md>
+
+- [Navigation dans le produit](./navigation_produit.md)
+
+<https://github.com/sxd-platform/byd-all-documentation/blob/develop/02.byd-Platform/7.TechnicalDocumentation/navigation_produit.md>
+
+- [Déconnexion](./deconnexion.md)
+
+<https://github.com/sxd-platform/byd-all-documentation/blob/develop/02.byd-Platform/7.TechnicalDocumentation/deconnexion.md>
+
 
 La cinématique d’ensemble est illustré dans ce diagramme de séquence :
 
@@ -122,6 +134,9 @@ Il met à disposition :
 
 La gestion des droits des utilisateurs dans les produits reste à la charge des produits.
 Il convient donc pour les produits de gérer leur propre base d’utilisateur permettant de faire le lien entre l’utilisateur authentifié via Cognito et ses droits dans le produit.
+
+Cette association peut se faire sur la base de l'e-mail de l'utilisateur disponible dans les informations du jeton (attribut "cognito:username").
+
 Afin, notamment, de faciliter les processus de cycle de vie des utilisateurs et la conformité RGPD, il est recommandé au produit de ne pas dupliquer les informations personnelles des utilisateurs gérés dans Cognito.
 
 |001|Version Initiale|Sixense|

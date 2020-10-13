@@ -12,12 +12,13 @@ Pour cela, le produit vérifie, depuis le local storage, que l'utilisateur poss�
 Il y a 3 cas possibles :
 
 - Le token est présent et valide => l’utilisateur peut continuer sa navigation
-- Le token est présent mais invalide => le token est rafraichi afin que l’utilisateur poursuive sa session de manière transparente
-- Le token est absent ou son rafraichissement est impossible => l’utilisateur est déconnecté du produit courant, du portail puis est redirigé sur la page de connexion
+- Le token est présent mais a expiré => le token est rafraichi afin que l’utilisateur poursuive sa session de manière transparente
+- Le token est absent, invalide ou son rafraichissement est impossible => l’utilisateur est déconnecté du produit courant, du portail puis est redirigé sur la page de connexion
 
 Si l'utilisateur ne dispose pas de token ou que le token ne peux être refresh, le produit doit rediriger l'utilisateur sur le portal comme dit précédemment.
 
-A noter : le package XXX intègre les fonctionnalité …..
+> A noter :
+Le package Node.js (disponible dans le repository : <https://github.com/sxd-platform/byd-cognito-connector-back>) intègre les fonctionnalités de contrôle du token et de récupération de la clé publique associée au compte Cognito de Beyond Platform.
 
 ## Redirection après authentification
 
@@ -32,7 +33,8 @@ Exemple de redirection après connexion vers BEYOND Monitoring :
 https://int-portal.weud-bydkub.eu-de.containers.appdomain.cloud/login?redirect_uri=https:%2F%2Fqa-beyond-monitoring.sixense-group.com%2Flogin
 ```
 
-A noter : le package XXX intègre les fonctionnalité …..
+> A noter :
+Le package Angular "AuthGuard" (disponible dans le repository : <https://github.com/sxd-platform/byd-cognito-connector-front>) intègre la fonctionnalité de récupération des informations transmises par le portail, après authentification de l'utilisateur.
 
 ## Accès direct
 
@@ -41,11 +43,12 @@ L’utilisateur peut également tenter d’accéder directement à son produit.
 Dans cette situation, les cas possibles sont :
 
 - Un token valide est présent dans le local storage de l’application : l’utilisateur accède directement au produit
-- Un token expiré est présent dans le local storage de l’application : le token est rafraichie et l’utilisateur poursuit sa navigation vers le produit de manière transparente
+- Un token expiré est présent dans le local storage de l’application : le token est rafraichi et l’utilisateur poursuit sa navigation vers le produit de manière transparente
 - Aucun token valide n’est présent : l’utilisateur doit être redirigé par le produit vers le portail BEYOND pour y être authentifié. Le produit inclut le paramètre redirect_uri dans l’URL du portail.
 
-A noter : le package "AuthGuard" pour Angular intègre la fonctionnalité
+> A noter :
+Le package Angular "AuthGuard" (disponible dans le repository : <https://github.com/sxd-platform/byd-cognito-connector-front>) intègre la fonctionnalité de contrôle de l'authentification (côté front end).
 
-un descriptif précis de toutes les interactions lors de la connexion est disponible ici <https://github.com/sxd-platform/byd-all-documentation/blob/develop/02.byd-Platform/4.DeploymentDossier/seq_authentication.png>
+un descriptif précis de toutes les interactions lors de la connexion est disponible ici <https://github.com/sxd-platform/byd-all-documentation/blob/develop/02.byd-Platform/2.SpecificationDossier/images/diagrams/seq_authentication.png>
 
 |001|Version Initiale|Sixense|
