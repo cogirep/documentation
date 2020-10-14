@@ -62,18 +62,18 @@ il est toujours possible d'en créer d'autres via l'api des templates d'enrichis
 
 ## 5 - les connectors
 
-Un connecteur est un ensemble de données qui permettent de se connecter à une instance de GED.
+Un connecteur est un ensemble de données qui permet de se connecter à une instance de GED.
 
-Il existe sur QA 2 connectors, ils ont été créer et paramétrés pour fonctionner directement avec l'instance nuxeo de dev pour l'environnement de QA (url de redirection après la connexion , login  ...)
+Il existe sur QA 2 connectors, ils ont été créés et paramétrés pour fonctionner directement avec l'instance nuxeo de dev pour l'environnement de QA (url de redirection après la connexion , login  ...)
 
     nuxeoqa
     Beyond-QA
 
-Il est possible de créer d'autre connector ou de modifier les connectors existants via les APIs du micro service de la GED.
+Il est possible de créer d’autres connecteurs ou de modifier les connecteurs existants via les APIs du micro service de la GED.
 
 <span style="color: #ff0000"> /!\ </span>Nous ne recommandons pas de modifier le nom d'un connecteur si des enrichissements y sont liés.
 
-<span style="color: #ff0000"> /!\ </span> Le clientId doit être créer aussi dans Nuxeo
+<span style="color: #ff0000"> /!\ </span> Le clientId doit être créé aussi dans Nuxeo
 
 Documentation Nuxeo pour créer un client
 > https://doc.nuxeo.com/nxdoc/using-oauth2/#using-the-rest-api
@@ -85,7 +85,7 @@ lien du swagger du micro service GED
 
 Pour associer un document de la ged à une donnée, il suffit de créer un enrichissement de type `document` à celle-ci.
 
-Pour cela, il faut se rendre sur la fiche detaillé de la donnée dans la page data de `reality` et choisir l'action  `Enrich`.
+Pour cela, il faut se rendre sur la fiche détaillée de la donnée dans la page data de `reality` et choisir l'action  `Enrich`.
 
 Sélectionner un enrichissement de type `document` et de remplir correctement les champs associés
 
