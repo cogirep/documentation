@@ -40,7 +40,7 @@ A partir de cette liste, et par un phénomène de rebonds, il sera possible de v
 
 <br/>
 
-![Chained Transformation Diagram](../assets/chainedTransfo.png)
+![Chained Transformation Diagram](./assets/chainedTransfo.png)
 
 <br/>
 
