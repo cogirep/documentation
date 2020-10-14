@@ -88,3 +88,7 @@ Pour associer un document de la ged à une donnée, il suffit de créer un enric
 Pour cela, il faut se rendre sur la fiche detaillé de la donnée dans la page data de `reality` et choisir l'action  `Enrich`.
 
 Sélectionner un enrichissement de type `document` et de remplir correctement les champs associés
+
+    uid: string // uid du doc dans GED
+    title: string // Nom du document
+    connector: string // clientId d'un connecteur déclaré
