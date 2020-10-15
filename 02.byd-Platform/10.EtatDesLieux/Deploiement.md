@@ -163,7 +163,7 @@ La dernière étape consiste à remonter les métriques sur DevOps Insights:
 - Rapport Vulnerability Advisor
 - Statut du build: Pass ou Fail
 
-Le statut du build se base sur un build number et un nom de microservice. Le statut du deploy doit utiliser les mêmes informations pour que cela soit visible, ces deux informations ont donc aussi été aussi copiés dans le repository d’environnement via un fichier version.yaml à la racine du repository.
+Le statut du build se base sur un build number et un nom de microservice. Le statut du deploy doit utiliser les mêmes informations pour que cela soit visible, ces deux informations ont donc aussi été aussi copiées dans le repository d’environnement via un fichier version.yaml à la racine du repository.
 
 # CD
 
