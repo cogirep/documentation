@@ -26,7 +26,10 @@
       outlineSize: number; // Taille du contour du modèle graphique.
       showDistance: number // Distance à laquelle le modèle graphique s'affiche.
       type: string; // Type de modèle graphique (Points, polygone, line, etc..).
-      geometry: Object; // Contient les coordonnées et le système de référencement du modèle graphique.
+      geometry: {            // Contient les coordonnées et le système de référencement du modèle graphique.
+                    type: string, // Pour l'instant nous ne gérons que le type 'Point'.
+                    coordinates: Array // Tableau contenant les coordonnées des points. 
+                }
     }
 
 ## Contenu de l'enrichissement Diagramme Cesium ##
@@ -48,6 +51,10 @@
       longitude: number; // Longitude du diagramme cesium.
       latitude: number; // Latitude du diagramme cesium.
     }
+    
+Voici un exemple d'enrichissement diagramme : 
+ ![](assets/diagram-enrichment-exemple.png)
+
 
 ## Contenu de l'enrichissement ExternalData_RealWorld ##
 
@@ -113,6 +120,10 @@
       format?: string; // Format des tuiles de la couche (JPG, PNG, etc...).
       specificLegendURL?: string; // Url de la surcharge de la légende au format URI.
     }
+    
+La propriété `boundingBox` de cet enrichissement est un tableau de coordonnées, voici un exemple :
+ ![](assets/context-data-bounding-box.png)
+
 
 ## Contenu de l'enrichissement possédant un beyondType `document` (Nuxeo) ##
 
