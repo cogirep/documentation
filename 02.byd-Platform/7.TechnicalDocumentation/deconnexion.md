@@ -1,25 +1,31 @@
-# Déconnexion de la plateforme
+# Déconnexion
 
-**Contexte:**
+## Contexte
 
-La déconnexion de la plateforme se fait en deux étapes.
-- la déconnexion du produit
-- Redirection sur le endpoint **/disconnect** du portail
+La déconnexion de la plateforme se fait en deux étapes :
 
-## La déconnexion d'un produit
+- Déconnexion du produit
+- Déconnexion du portail
 
-Pour déconnecter l'utilisateur d'un produit il suffit de supprimer sa session et toutes les informations de l'utilisateur stockées au niveau du navigateur.
+## Déconnexion d'un produit
 
-Par exemple pour le produit REALITY , on vide le local storage du navigateur afin de supprimer toutes les informations de l'utilisateur et ses données de navigation
+Pour déconnecter l'utilisateur d'un produit il faut supprimer sa session et toutes ses informations stockées dans le navigateur.
 
-Selon les produits et les choix pris, la méthode de déconnexion de l’application peux être différente
+En fonction du produit et des choix d’implémentation, la méthode de déconnexion peut varier.
+
+Par exemple, dans le cas de BEYOND Reality, il est nécessaire de vider le localstorage du navigateur.
 
 ## Déconnexion du portail
 
-Une fois l'utilisateur déconnecté d'un produit, il faut le rediriger sur le endpoint /disconnect du portail.
+Une fois déconnecté d'un produit, le produit doit rediriger l’utilisateur sur le endpoint /disconnect du portail.
 
-Ce endpoint a pour but de supprimer les informations de connexion sur le portail, mais aussi de révoquer tous les "refresh_token" de l'utilisateur en question.
+Ce endpoint permet de :
 
-Il sera donc, une fois que "id_token" expiré sur les autres applications, automatiquement déconnecter entièrement de la plateforme beyond.
+- supprimer les informations de connexion sur le portail,
+- révoquer tous les "refresh_token" de l'utilisateur,
+- rediriger l’utilisateur vers la page de connexion (en positionnant le paramètre redirect_uri).
 
-> Un "id_token" à une durée maximale d'une heure, pendant ce laps de temps, il est encore connecté sur les autres produits.
+> Attention, les tokens en cours sur les autres applications ne sont pas révoqués (durée maximale d'une heure) et l’utilisateur reste connecté sur ces applications.
+La déconnexion complète de la plateforme BEYOND ne sera effective qu’après expiration de ceux-ci.
+
+|001|Version Initiale|Sixense|

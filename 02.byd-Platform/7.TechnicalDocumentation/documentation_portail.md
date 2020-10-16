@@ -2,102 +2,141 @@
 
 ## 1 - Introduction  
 
-Beyond Platform est la solution permettant d’accéder aux différents produits de Sixense répondant à un ensemble de problématiques métier du BTP.
+Le portail BEYOND est une application web permettant à un utilisateur BEYOND de s’authentifier puis de naviguer entre les produits auxquels il a accès.
 
-Le portail est l’application web permettant à un utilisateur de la plateforme d’accéder à différents produits (selon le contexte du client).
+Il assure les fonctionnalités suivantes :
 
-C’est au travers du portail qu’un utilisateur de la plateforme est authentifié.
+- Fédération d’IDentité
+- Authentification
+- Mot de passe oublié (pour les utilisateurs interne)
+- SSO au sein des produits
+- Navigation inter-produit
+- Adresse de contact
+- Mentions légales
+- Déconnexion
 
-Cette documentation a pour but de préciser les étapes permettant d’intégrer un produit dans la plateforme pour la partie authentification des utilisateurs:
+Cette documentation décrit les étapes permettant d’intégrer un nouveau produit dans la plateforme, en particulier sur la partie authentification :
 
-- Configuration de Cognito (ajout d’un fournisseur d’identité - IdP - d’un client)
+- Vue d’ensemble
+- Configuration de Cognito – Déclaration d’un IdP
+- Configuration du portail – Déclaration d’un produit
+- Intégration dans le produit - Intégration des composants
+- Intégration dans le produit – Gestion des droits fins
 
-- Intégration des composants (packages) Front End Angular et Back End Node.js fournis par la plateforme aux produits
+## 2 - Vue d'ensemble
 
-- Configuration du produit dans la plateforme
+La connexion à la plateforme BEYOND se fait par l'intermédiaire du portail pour tous les produits qui la constituent.
+Le portal permet la connexion à deux types d’utilisateurs :
 
-## 2- Gestion des utilisateurs au niveau de Cognito
+- ceux connus de Cognito,
+- ceux connus d’un IDP externe reconnu par Cognito.
 
-Il existe deux manières de s'authentifier sur la plateforme:
+Seuls les utilisateurs connus de la base de données de la plateforme peuvent se connecter.
+La page de connexion du portail peut être personnalisée avec un logo et une image correspondant au produit auquel l'utilisateur veut se connecter.
 
-- Avec un compte utilisateur “interne”, c’est-à-dire géré dans l’instance Cognito de Beyond Platform
+Le processus type est le suivant :
 
-- Via SSO, en intégrant au niveau de Cognito un IdP “externe” (celui dans lequel le client gère les identifiants de ses utilisateurs, intégrable via OIDC).
+- [Connexion via la page d’authentification du portail](./connexion.md)
 
-La création de compte utilisateurs “internes” se fait au moyen du module d’administration de la plateforme (Beyond Manager).
+<https://github.com/sxd-platform/byd-all-documentation/blob/develop/02.byd-Platform/7.TechnicalDocumentation/connexion.md>
 
-Pour l’ajout d’un nouvel IdP, il faut faire la demande IT XXX et une mise à jour de la configuration du portail
+- [Accès à un produit (via le portail, redirection après authentification ou accès direct)](./acces_produit.md)
 
-> https://sixense-platform-solutions.atlassian.net/servicedesk/customer/portal/4/group/27
+<https://github.com/sxd-platform/byd-all-documentation/blob/develop/02.byd-Platform/7.TechnicalDocumentation/acces_produit.md>
 
-Une fois cognito configuré, il faut ajouter le nouvel IdP dans la table idp de notre bdd postgres et lui spécifier un pattern d'email (regex).
+- [Navigation dans le produit](./navigation_produit.md)
 
-> @steven proccess à définir
+<https://github.com/sxd-platform/byd-all-documentation/blob/develop/02.byd-Platform/7.TechnicalDocumentation/navigation_produit.md>
 
-Si le mail de l'utilisateur correspond au pattern de l'IdP externe celui-ci sera automatiquement dirigé sur la page d'authentification de l'IdP en question.
+- [Déconnexion](./deconnexion.md)
 
-## 3 - Connexion et déconnexion d’un utilisateur au sein de la plateforme”
-
-La documentation technique sur la connexion à un produit se trouve ici
-> https://github.com/sxd-platform/byd-all-documentation/blob/develop/02.byd-Platform/7.TechnicalDocumentation/documentation.md
-
-le processus de déconnexion de la plateforme est retrouvable sur cette documentation technique.
-
-> https://github.com/sxd-platform/byd-all-documentation/blob/develop/02.byd-Platform/7.TechnicalDocumentation/d%C3%A9connexion.md
-
-Le diagramme de séquence spécifiant toutes les interactions entre le portail et les différents éléments de la plateforme est disponible sur ce lien.
-
-> https://github.com/sxd-platform/byd-all-documentation/blob/develop/02.byd-Platform/2.SpecificationDossier/images/diagrams/seq_authentication.png
-
-( la documentation sera à update avec la connexion partagée)
-
-## 4 - Composants d’intégration de l’authentification BEYOND Platform mis à disposition des produits
-
-Afin de simplifier l'implémentation dans les applications back-end, nous avons développé un package Nodejs.
-
-> repository: https://github.com/sxd-platform/byd-cognito-connector-back
-
-Celui-ci comprend:
-
-- La récupération de la clé publique cognito
->https://github.com/sxd-platform/byd-all-documentation/blob/develop/02.byd-Platform/7.TechnicalDocumentation/cognito-connector-back/1.R%C3%A9cup%C3%A9ration%20de%20cl%C3%A9%20public%20du%20service%20Cognito%20de%20Sixense.md
-
-- La vérification des tokens cognito :
-> https://github.com/sxd-platform/byd-all-documentation/blob/develop/02.byd-Platform/7.TechnicalDocumentation/cognito-connector-back/2-V%C3%A9rification%20du%20token.md
+<https://github.com/sxd-platform/byd-all-documentation/blob/develop/02.byd-Platform/7.TechnicalDocumentation/deconnexion.md>
 
 
-Afin de simplifier l'implémentation dans les applications front-end , nous avons développé un package angular.
+La cinématique d’ensemble est illustré dans ce diagramme de séquence :
 
-> repository: https://github.com/sxd-platform/byd-cognito-connector-front
+<https://github.com/sxd-platform/byd-all-documentation/blob/develop/02.byd-Platform/2.SpecificationDossier/images/diagrams/seq_authentication.png>
 
-Celui-ci comprend :
+## 3 - Configuration de Cognito – Déclaration d’un IdP
 
-- Auth guard: permettant de gérer la sécurité et l'accès aux pages
-> documentation: https://github.com/sxd-platform/byd-all-documentation/blob/develop/02.byd-Platform/7.TechnicalDocumentation/cognito-connector-front/AuthGuard.md
+Il existe deux typologies d’utilisateurs pouvant s'authentifier sur la plateforme :
 
-- Auth service :
-> https://github.com/sxd-platform/byd-all-documentation/blob/develop/02.byd-Platform/7.TechnicalDocumentation/cognito-connector-front/AuthService.md
+- Des utilisateurs “internes”, gérés dans l’instance Cognito de BEYOND
+- Des utilisateurs ”externes”, gérés dans le système (annuaire ou IdP) d’un client, qui se connectent via SSO. Le raccordement se fait via OIDC.
 
-- La documentation d'installation :
-> https://github.com/sxd-platform/byd-all-documentation/blob/develop/02.byd-Platform/7.TechnicalDocumentation/cognito-connector-front/Setup.md
+La gestion (CRUD) de compte utilisateurs “internes” se fait dans l’application BEYOND Manager.
 
-### 5 - Intégration d’un produit dans le portail de la plateforme
+Le raccordement d’un nouvel IdP à l’instance Cognito se fait en deux étapes :
 
-Pour ajouter un produit au portail il faut insérer un enregistrement dans la table "product" de la base de données Postgresql de BEYOND Platform, avec les informations suivantes sur le produit :
+- La configuration dans Cognito *[Procédure IT à décrire]*,
+- Le référencement de cet IdP dans la table ‘idp’ de la base de données PostgresSQL de BEYOND Portal en lui spécifiant un pattern d'email (regex "^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$" ; par exemple : "****@vinci-contruction.com").
 
-    - label: label du produit
-    - descripion: description du produit
-    - image: image à afficher dans les tuiles du portail
-    - icon: icône à afficher dans les tuiles du portail
-    - url_app: URL du produit
-    - open_tab: doit-on ouvrir le produit dans un nouvel onglet (boolean)
-    - auth_logo: logo pour la page de connexion
-    - auth_background_image: image de fond pour la page de connexion
+Les champs nécessaires pour référencer l'IdP dans la table des IdP sont :
 
-> @steven proccess à définir pour l'ajout en bdd
+- le nom de la compagnie à laquelle est rattaché l'IdP (compagnie déjà enregistrée au niveau de la plate-forme)
+- le pattern d'e-mail reconnu par l'IdP
 
-La page de connexion du portail peut etre personnalisée avec le logo et une image correspondant au produit à partir du quel l'utilisateur veut se connecter
+Ces deux opérations sont assurées par l’IT suite à une demande via le service desk dédié : *[Lien de la demande IT à ajouter]*.
 
-> doc à faire
+Lors de l’authentification, si le mail de l'utilisateur correspond au pattern déclaré, l’utilisateur sera automatiquement dirigé sur la page d'authentification de l'IdP correspondant.
 
-|001|Version Initiale|DELBE Nicolas|
+## 4 - Configuration du portail – Déclaration d’un produit
+
+Pour ajouter un produit à la plate-forme, il faut insérer un enregistrement dans la table "product" de la base de données PostgresSQL de BEYOND Platform.
+
+A noter : la page de connexion du portail est personnalisable avec un logo et une image correspondant au produit auquel l'utilisateur se connecte.
+
+L’insertion en base est réalisée par l’IT suite à une demande via le service desk dédié : *[Lien de la demande IT à ajouter]*.
+Les informations à fournir sont les suivantes :
+
+- label : label du produit
+- description : description du produit affichée dans le portail
+- image : URL de l’image à afficher dans les tuiles du portail
+- icon : URL de l’icône à afficher dans les tuiles du portail
+- url_app : URL du produit
+- open_tab : doit-on ouvrir le produit dans un nouvel onglet (boolean)
+- auth_logo : URL du logo pour la personnalisation de la page de connexion
+- auth_background_image : URL de l’image de fond pour la personnalisation de la page de connexion
+
+La réponse à cette demande inclura les éléments nécessaires à la communication avec Cognito :
+
+- Region (de l'environnement Cognito ciblé)
+- UserPoolId (référence de la base d'utilisateurs internes à Cognito pour Beyond Platform)
+- Clef d’API (permettant l'accès aux APIs de beyond Portail utilisées dans le processus d'authentification)
+
+Il est conseillé de stocker ces valeurs dans des variables d'environnements.
+
+### 5 - Intégration dans le produit - Intégration des composants (librairies)
+
+Afin de faciliter l’implémentation décrite dans les documents cités plus haut (cf Vue d’ensemble), des packages sont mis à disposition.
+
+#### Package Back end
+
+Un package Node.js est disponible dans le repository : <https://github.com/sxd-platform/byd-cognito-connector-back>
+
+Il fournit les services suivants :
+
+- Récupération de la clé publique Cognito <https://github.com/sxd-platform/byd-all-documentation/blob/develop/02.byd-Platform/7.TechnicalDocumentation/cognito-connector-back/1.R%C3%A9cup%C3%A9ration%20de%20cl%C3%A9%20public%20du%20service%20Cognito%20de%20Sixense.md>
+- Vérification des tokens Cognito <https://github.com/sxd-platform/byd-all-documentation/blob/develop/02.byd-Platform/7.TechnicalDocumentation/cognito-connector-back/2-V%C3%A9rification%20du%20token.md>
+
+#### Package Front end
+
+Un package Angular est disponible dans le repository : <https://github.com/sxd-platform/byd-cognito-connector-front>
+
+Son installation est décrite sur la page : <https://github.com/sxd-platform/byd-all-documentation/blob/develop/02.byd-Platform/7.TechnicalDocumentation/cognito-connector-front/Setup.md>
+
+Il met à disposition :
+
+- Auth guard : service Angular permettant de gérer le contrôle d'accès à une application <https://github.com/sxd-platform/byd-all-documentation/blob/develop/02.byd-Platform/7.TechnicalDocumentation/cognito-connector-front/AuthGuard.md>
+- Auth service : service Angular gérant la déconnexion de l’utilisateur <https://github.com/sxd-platform/byd-all-documentation/blob/develop/02.byd-Platform/7.TechnicalDocumentation/cognito-connector-front/AuthService.md>
+
+### 6 - Intégration dans le produit – Gestion des droits fins
+
+La gestion des droits des utilisateurs dans les produits reste à la charge des produits.
+Il convient donc pour les produits de gérer leur propre base d’utilisateur permettant de faire le lien entre l’utilisateur authentifié via Cognito et ses droits dans le produit.
+
+Cette association peut se faire sur la base de l'e-mail de l'utilisateur disponible dans les informations du jeton (attribut "cognito:username").
+
+Afin, notamment, de faciliter les processus de cycle de vie des utilisateurs et la conformité RGPD, il est recommandé au produit de ne pas dupliquer les informations personnelles des utilisateurs gérés dans Cognito.
+
+|001|Version Initiale|Sixense|
