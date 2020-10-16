@@ -1,22 +1,34 @@
 # AuthService
 
-## Contexte
-
 AuthService est un service Angular gérant la session de l’utilisateur.
-Il n’intègre pour le moment que la déconnexion (logout), mais sera complété par la suite avec les méthodes du AuthService des différentes applications.
 
-## Usage
+## Méthodes
 
-```javascript
-logout()
+###logout
+Cette méthode est appelée lorsqu’on souhaite déconnecter l’utilisateur.
+Elle vide le local storage de l’application et redirige l’utilisateur vers le end point `/disconnect` du portail.
+> Le type de retour de la méthode est void.
+
+Le processus complet de la déconnexion est disponible à cette adresse :
+> https://github.com/sxd-platform/byd-all-documentation/blob/develop/02.byd-Platform/7.TechnicalDocumentation/deconnexion.md
+
+#### Implémentation
+
+```typescript
+import {AuthService} from '@sixense/cognito-connector';
+
+@Component({
+  template: '<button (click)="logout()">Logout</button>',
+})
+export class HomeComponent {
+
+    constructor(private authService: AuthService) {}
+
+    public logout(): void {
+      this.authService.logout();
+    }
+
+}
 ```
 
-Redirige l'utilisateur vers la page de déconnexion de Beyond Portal qui vide le local storage et redirige vers la page de connexion.
-
-Retour :
-
-```javascript
-void
-```
-
-|001|Version Initiale|Sixense|
+| 001 | Version Initiale | SIXENSE |

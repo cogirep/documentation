@@ -1,29 +1,18 @@
 # AuthGuard
 
-## Contexte
+Le AuthGuard est un service indiquant au routeur si il doit autoriser la navigation.
 
-Le AuthGuard Angular est un service indiquant au routeur s’il doit autoriser ou non la navigation vers une route selon certains critères.
-
-- Si l’utilisateur est authentifié (un token valide est disponible dans le local storage), il est redirigé vers la page demandée.
-- Si l’utilisateur n’est pas authentifié (le token du local storage est invalide ou inexistant), alors les données en local storage sont supprimées et il est redirigé vers la page de connexion du portail.
+Si l’utilisateur est authentifié, c’est-à-dire qu’un token est présent dans le local storage, la navigation est autorisée.
+Dans le cas contraire l’utilisateur est redirigé sur la page de connexion.
 
 ![](AuthGuard.png)
 
-## Usage
-
-CognitoConnectorModule.forRoot(environment, AuthService)
-
-La méthode prend deux paramètres :
-
-- environment : variables d’environnement contenant les URLs des différents environnements
-- AuthService : Service d’authentification
-
-## Exemple
+## Implémentation
 
 - app.module.ts
+> Module principal de l'application
 
-```javascript
-    // ...
+```typescript
     import { CognitoConnectorModule } from 'cognito-connector';
     import { environment } from '../environments/environment';
     import { AuthService } from './shared/services/auth/auth.service';
@@ -33,7 +22,7 @@ La méthode prend deux paramètres :
         // ...
       ],
       imports: [
-        CognitoConnectorModule.forRoot(environment, AuthService),
+        CognitoConnectorModule.forRoot(environment),
       ],
       providers: [
         // ...
@@ -42,18 +31,36 @@ La méthode prend deux paramètres :
     export class AppModule {}
 ```
 
-- app-routing.module.ts
+##### Paramètres
 
-```javascript
-    // ...
-    const routes: Routes = [
+`environment` : Variables d’environnements contenant les URLs des différents environnements.
+Doit forcément contenir les URLs de Beyond portal et l’application courante sous cette forme:
+
+> Dans l'exemple ci-dessous, localhost devra être remplacé par les vraies URLs.
+```json
+{
+  "sso_redirect": "?redirect_uri=http://localhost:4201/",
+  "portal": "http://localhost:4200/"
+}
+```
+
+- app-routing.module.ts
+> Fichier de gestion des routes.
+
+> Le AuthGuard doit être appliqué sur chaque route que l’on souhaite sécuriser.  
+> Par exemple pour donner l'accès à une donnée sensible ou à une page qui requière une authentification.
+
+```typescript
+import { AuthGuard } from './shared/services/auth/auth.service';
+
+const routes: Routes = [
       {
         path: 'home',
         component: HomeComponent,
         canActivate: [AuthGuard]
       },
     ];
-    
+
     @NgModule({
       imports: [RouterModule.forRoot(routes)],
       exports: [RouterModule],
@@ -61,4 +68,4 @@ La méthode prend deux paramètres :
     export class AppRoutingModule {}
 ```
 
-|001|Version Initiale|Sixense|
+| 001 | Version Initiale | SIXENSE |
