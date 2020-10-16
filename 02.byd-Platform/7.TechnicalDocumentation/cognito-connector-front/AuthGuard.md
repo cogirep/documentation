@@ -33,8 +33,7 @@ Dans le cas contraire l’utilisateur est redirigé sur la page de connexion.
 
 ##### Paramètres
 
-`environment` : Variables d’environnements contenant les URLs des différents environnements.
-Doit forcément contenir les URLs de Beyond portal et l’application courante sous cette forme:
+`environment` : Ce paramètre doit obligatoirement contenir les URLs de Beyond portal et de l’application courante sous la forme suivante :
 
 > Dans l'exemple ci-dessous, localhost devra être remplacé par les vraies URLs.
 ```json
