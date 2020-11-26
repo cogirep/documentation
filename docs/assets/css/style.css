@@ -2,3 +2,7 @@
     /* display: none !important; */
     color: red !important;
 }
+
+.site-footer {
+    display: none !important;
+}
