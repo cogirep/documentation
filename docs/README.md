@@ -129,4 +129,5 @@ Cette association peut se faire sur la base de l'e-mail de l'utilisateur disponi
 
 Afin, notamment, de faciliter les processus de cycle de vie des utilisateurs et la conformité RGPD, il est recommandé au produit de ne pas dupliquer les informations personnelles des utilisateurs gérés dans Cognito.
 
+
 |001|Version Initiale|Sixense|
