@@ -1,0 +1,297 @@
+################################################################################
+################################################################################
+##                     PLATEFORM API    -    PRODUCT MANAGER                    ##
+################################################################################
+################################################################################
+# Remark :                        Swagger 2.0 to ensure compliance with API Connect
+swagger:                            "2.0"
+info:
+  title:                            "Product Manager API"
+  description:                      "The API aims are to provide a control on **Products**"
+  version: 1.0.0
+host:                               "F.Q.D.N_of_the_host"
+consumes:
+  - application/json
+  - multipart/form-data
+produces:
+  - application/json
+basePath:                           "/api/v1"
+schemes:
+  - https
+################################################################################
+
+tags:
+  - name:                           "Products"
+    description:                    "Products management APIs"
+
+################################################################################
+
+paths:
+  #-------------------------------------------------------------------------------#
+  "/products":
+    get:
+      tags:
+        - Products
+      summary:                      "Get products"
+
+      parameters:
+        - in:                     query
+          name:                   type
+          type:                   string
+          enum:                   ['ADMIN', 'PRODUCT']
+          required:               false
+
+        - in:                     query
+          name:                   company-id
+          type:                   string
+          description:            "Company's identifier"
+          required:               false
+
+        - in:                     query
+          name:                   user-id
+          type:                   string
+          description:            "If user-id is requested, company-id query is mandatory"
+          required:               false
+
+
+      responses:
+        "200":
+          description:              Success without queries
+          schema:
+            properties:
+              code:
+                type:               integer
+                example:            200
+              action:
+                type:               string
+                example:            "PRODUCTS_GETALL_SUCCESS"
+              data:
+                type:               array
+                items:
+                  type:             object
+                  properties:
+                    id:
+                      type:         integer
+                      example:      1
+                    code:
+                      type:         string
+                      example:      "2"
+                    label:
+                      type:         string
+                      example:      "Produit"
+                    image:
+                      type:         string
+                      format:       uri
+                      example:      "https://mon-image.co"
+                    icon:
+                      type:         string
+                      format:       uri
+                      example:      "https://mon-icone.co"
+                    url_app:
+                      type:         string
+                      format:       uri
+                      example:      "https://mon-produit.co"
+                    open_tab:
+                      type:         boolean
+                      example:      true
+                    description:
+                      type:         string
+                      example:      "Mon produit"
+                    productType:
+                      type:         string
+                      example:      "PRODUCT"
+
+        "200-BIS":
+          description:              Success with company-id query
+          schema:
+            properties:
+              code:
+                type:               integer
+                example:            200
+              action:
+                type:               string
+                example:            "PRODUCTS_GETALL_SUCCESS"
+              data:
+                type:               array
+                items:
+                  type:             object
+                  properties:
+                    productId:
+                      type:         integer
+                      example:      1
+                    companyId:
+                      type:         integer
+                      example:      1
+                    productType:
+                      type:         string
+                      example:      "ADMIN"
+                    companyProductId:
+                      type:         integer
+                      example:      1
+                    label:
+                      type:         string
+                      example:      "Produit"
+
+        "200-TER":
+          description:              Success with user-id & company-id queries
+          schema:
+            properties:
+              code:
+                type:               integer
+                example:            200
+              action:
+                type:               string
+                example:            "PRODUCTS_GETALL_SUCCESS"
+              data:
+                type:               array
+                items:
+                  type:             object
+                  properties:
+                    id:
+                      type:         integer
+                      example:      1
+                    productTypeId:
+                      type:         integer
+                      example:      1
+                    productType:
+                      type:         string
+                      example:      "ADMIN"
+                    code:
+                      type:         string
+                      example:      "2"
+                    label:
+                      type:         string
+                      example:      "Produit"
+                    description:
+                      type:         string
+                      example:      "Mon produit"
+                    image:
+                      type:         string
+                      format:       uri
+                      example:      "https://mon-image.co"
+                    icon:
+                      type:         string
+                      format:       uri
+                      example:      "https://mon-icone.co"
+                    url_app:
+                      type:         string
+                      format:       uri
+                      example:      "https://mon-produit.co"
+                    open_tab:
+                      type:         boolean
+                      example:      true
+                    is_admin:
+                      type:         boolean
+                      example:      false
+
+
+
+        "500":
+          description:              Internal Server Error
+          schema:
+            properties:
+              errorCode:
+                type:               string
+                example:            "INTERNAL_SERVER_ERROR"
+              code:
+                type:               integer
+                example:            500
+              action:
+                type:               string
+                example:            "PRODUCTS_GETALL_ERROR"
+              message:
+                type:               string
+                example:            "Erreur interne lors de la récupration des produits."
+              languageCode:
+                type:               string
+                example:            "fr-FR"
+
+
+
+  #-------------------------------------------------------------------------------#
+
+  "/products/apikey/{apikeyValue}":
+    get:
+      tags:
+        - Products
+      summary:                      "Retrieve an api key"
+
+      parameters:
+        - in:                     path
+          name:                   apikeyValue
+          type:                   string
+          required:               true
+
+      responses:
+        "200":
+          description:              Success without queries
+          schema:
+            properties:
+              code:
+                type:               integer
+                example:            200
+              action:
+                type:               string
+                example:            "PRODUCTS_GET_APIKEY_SUCCESS"
+              data:
+                type:               object
+                properties:
+                  id:
+                    type:           string
+                    example:        "7"
+                  code:
+                    type:           string
+                    example:        "BYD_REALITY"
+
+        "500":
+          description:              Internal Server Error
+          schema:
+            properties:
+              errorCode:
+                type:               string
+                example:            "INTERNAL_SERVER_ERROR"
+              code:
+                type:               integer
+                example:            500
+              action:
+                type:               string
+                example:            "PRODUCTS_GET_APIKEY_ERROR"
+              message:
+                type:               string
+                example:            "Erreur interne lors de la récupration de la clé d'api"
+              languageCode:
+                type:               string
+                example:            "fr-FR"
+
+
+responses:
+  200Ok:
+    description:                    Successfull
+  201Created:
+    description:                    Created
+  202Accepted:
+    description:                    Accepted
+  203NonAuthoritativeInformation:
+    description:                    Non-Authoritative Information
+  204NoContent:
+    description:                    No Content
+  400BadRequest:
+    description:                    Bad Request
+  401Unauthorized:
+    description:                    Unauthorized
+  403Forbidden:
+    description:                    Forbidden
+  404NotFound:
+    description:                    Not Found
+  409Conflict:
+    description:                    Conflict
+  500InternalServer:
+    description:                    Internal Server Error
+  501NotImplemented:
+    description:                    Not Implemented
+  502BadGateway:
+    description:                    Bad Gateway
+  503ServiceUnavailable:
+    description:                    Service Unavailable
+  504GatewayTimeout:
+    description:                    Gateway Timeout

@@ -1,0 +1,663 @@
+################################################################################
+################################################################################
+##        v   BEYOND REALITY API    -    COMPANY MANGAGEMENT                  ##
+################################################################################
+################################################################################
+# Remark :                        Swagger 2.0 to ensure compliance with API Connect
+swagger:                          "2.0"
+info:
+  title:                          "BYD MANAGER COMPANY API"
+  description:                    "This API aims are to provide a control on **company**"
+  version:                        1.0.0
+
+host:                             "F.Q.D.N_of_the_host"
+consumes:
+  - application/json
+produces:
+  - application/json
+basePath:                         "/api/v1"
+schemes:
+  - https
+################################################################################
+
+tags:
+  - name:                         "Company"
+    description:                  "Company management APIs"
+################################################################################
+
+paths:
+  "/company":
+    get:
+      tags:
+        - Company
+      summary:                    "Get all companies"
+      parameters:
+        - name:                   page
+          type:                   string
+          in:                     query
+          description:            Company page to display(if specified need limit query)
+        - name:                   limit
+          type:                   string
+          in:                     query
+          description:            Limit number of  page of company to display(if specified need page query)
+        - name:                   search
+          type:                   string
+          in:                     query
+          description:            Keyword for searching
+        - name:                   column
+          type:                   string
+          in:                     query
+          description:            Define which column will be used for ordering (if specified need order query)
+        - name:                   order
+          type:                   string
+          in:                     query
+          description:            Define the direction of the ordering (if specified need column query)
+        - name:                   allData
+          type:                   string
+          in:                     query
+          description:            If true, get all data without pagination
+        - name:                   user-id
+          type:                   string
+          in:                     query
+          description:            user id, for getting companies's user
+      description:                "Get all companies"
+      responses:
+        '200':
+          description:            Success
+          schema:
+            properties:
+              code:
+                type:             integer
+                example:          200
+              count:
+                type:             integer
+                example:          10
+              nbPages:
+                type:             integer
+                example:          2
+              data:
+                type:             array
+                items:
+                  type:           object
+                  properties:
+                    id:
+                      type:       integer
+                      example:    2
+                    code:
+                      type:       string
+                      example:    "IBM"
+                    label:
+                      type:       string
+                      example:    "company name"
+                    description:
+                      type:       string
+                      example:    "Very important company"
+                    is_deleted:
+                      type:       boolean
+                      example:    false
+              action:
+                type:             string
+                example:          "COMPANY_GET_SUCCESS"
+
+        '406':
+          description:            Query not valid
+          schema:
+            properties:
+              errorCode:
+                type:             string
+                example:          "QUERY_NOT_VALID"
+              code:
+                type:             integer
+                example:          406
+              action:
+                type:             string
+                example:          "COMPANY_GET_ERROR"
+              message:
+                type:             string
+                example:          "Le format de la reqûete est invalide."
+              languageCode:
+                type:             string
+                example:          "FR-fr"
+
+        '500':
+          description:            Internal server error
+          schema:
+            properties:
+              errorCode:
+                type:             string
+                example:          "INTERNAL_SERVER_ERROR"
+              code:
+                type:             integer
+                example:          500
+              action:
+                type:             string
+                example:          "COMPANY_GET_ERROR"
+              message:
+                type:             string
+                example:          "Erreur interne lors de la récuperation d'une compagnie."
+              languageCode:
+                type:             string
+                example:          "FR-fr"
+
+    post:
+      tags:
+        - Company
+      summary:                    "Create a new company"
+      parameters:
+        - name:                   body
+          in:                     body
+          schema:
+            required:
+              - label
+              - description
+            properties:
+              label:
+                type:             string
+                example:          "company name"
+              description:
+                type:             string
+                example:          "very important company"
+      description:                "Create a new company"
+      responses:
+        '200':
+          description:            Success
+          schema:
+            properties:
+              action:
+                type:             string
+                example:          "COMPANY_CREATE_SUCCESS"
+              message:
+                type:             string
+                example:          "SUCCESS"
+              data:
+                type:             array
+                items:
+                  type:           object
+                  properties:
+                    id:
+                      type:       integer
+                      example:    2
+                    code:
+                      type:       string
+                      example:    '390080a1-f52f-4e5b-ae8d-f003b21c29c8'
+                    label:
+                      type:       string
+                      example:    "company name"
+                    description:
+                      type:       string
+                      example:    "Very important company"
+                    is_deleted:
+                      type:       boolean
+                      example:    false
+
+        '406':
+          description:            Body not valid
+          schema:
+            properties:
+              errorCode:
+                type:             string
+                example:          "BODY_NOT_VALID"
+              code:
+                type:             integer
+                example:          406
+              action:
+                type:             string
+                example:          "COMPANY_CREATE_ERROR"
+              message:
+                type:             string
+                example:          "Le format de la reqûete est invalide."
+              languageCode:
+                type:             string
+                example:          "FR-fr"
+
+        '409':
+          description:            Company already exist
+          schema:
+            properties:
+              errorCode:
+                type:             string
+                example:          "COMPANY_ALREADY_EXIST"
+              code:
+                type:             integer
+                example:          409
+              action:
+                type:             string
+                example:          "COMPANY_CREATE_ERROR"
+              message:
+                type:             string
+                example:          'Cette compagnie est déjà enregistrée.'
+              languageCode:
+                type:             string
+                example:          "FR-fr"
+
+        '500':
+          description:            Internal server error
+          schema:
+            properties:
+              errorCode:
+                type:             string
+                example:          "INTERNAL_SERVER_ERROR"
+              code:
+                type:             integer
+                example:          500
+              action:
+                type:             string
+                example:          "COMPANY_CREATE_ERROR"
+              message:
+                type:             string
+                example:          "Erreur interne lors de la récuperation d'une compagnie."
+              languageCode:
+                type:             string
+                example:          "FR-fr"
+
+  #------------------------------------------------------------------------------------#
+
+  "/company/{code}":
+    get:
+      tags:
+        - Company
+      summary:                    "Get one company"
+      parameters:
+        - name:                   code
+          type:                   string
+          required:               true
+          description:            "company's identifier"
+          in:                     path
+
+      responses:
+        '200':
+          description:            Success
+          schema:
+            properties:
+              action:
+                type:             string
+                example:          "COMPANY_GETONE_SUCCESS"
+              data:
+                type:             object
+                properties:
+                  id:
+                    type:         integer
+                    example:      2
+                  code:
+                    type:         string
+                    example:      "IBM"
+                  label:
+                    type:         string
+                    example:      "company name"
+                  description:
+                    type:         string
+                    example:      "Very important company"
+                  is_deleted:
+                    type:         boolean
+                    example:      false
+
+        '404':
+          description:            Not Found
+          schema:
+            properties:
+              code:
+                type:             number
+                example:          404
+              action:
+                type:             string
+                example:          "COMPANY_GETONE_ERROR"
+              errorCode:
+                type:             string
+                example:          "COMPANY_NOT_FOUND"
+              message:
+                type:             string
+                example:          "L'objet n'existe pas ou n'est pas accessible."
+              languageCode:
+                type:             string
+                example:          "fr-FR"
+
+        '500':
+          description:            Internal Server Error
+          schema:
+            properties:
+              code:
+                type:             number
+                example:          500
+              action:
+                type:             string
+                example:          "COMPANY_GETONE_ERROR"
+              errorCode:
+                type:             string
+                example:          "INTERNAL_SERVER_ERROR"
+              message:
+                type:             string
+                example:          "Erreur interne lors de la récuperation d'une compagnie."
+              languageCode:
+                type:             string
+                example:          "fr-FR"
+
+    put:
+      tags:
+        - Company
+      summary:                    "Update a company"
+      description:                "Update a company"
+
+      parameters:
+        - name:                   code
+          in:                     path
+          type:                   string
+          required:               true
+          description:            company's identifier
+        - name:                   body
+          in:                     body
+          schema:
+            required:
+              - label
+              - description
+              - products
+            properties:
+              label:
+                type:             string
+                example:          "company name"
+              description:
+                type:             string
+                example:          "very important company"
+              products:
+                type:             array
+                items:
+                  required:
+                    - id
+                    - code
+                  properties:
+                    id:
+                      type: integer
+                      format: int64
+                      example: 1
+                    code:
+                      type: string
+                      example: 'REALITY'
+                    label:
+                      type: string
+                      example: 'REALITY'
+                    description:
+                      type: string
+                      example: ''
+                    image:
+                      type: string
+                      example: 'https://reality.com/image'
+                    icon:
+                      type: string
+                      example: 'https://reality.com/icon'
+                    url_app:
+                      type: string
+                      example: 'https://reality.com'
+
+      responses:
+        '200':
+          description:            "Success"
+          schema:
+            properties:
+              code:
+                type:             number
+                example:          200
+              action:
+                type:             string
+                example:          'COMPANY_UPDATE_SUCCESS'
+              message:
+                type:             string
+                example:          "SUCCESS"
+              data:
+                type:             object
+                properties:
+                  id:
+                    type:         integer
+                    example:      2
+                  code:
+                    type:         string
+                    example:      "IBM"
+                  label:
+                    type:         string
+                    example:      "company name"
+                  description:
+                    type:         string
+                    example:      "Very important company"
+                  is_deleted:
+                    type:         boolean
+                    example:      false
+        '404':
+          description:            Company doesn't exist
+          schema:
+            properties:
+              code:
+                type:             integer
+                example:          404
+              errorCode:
+                type:             string
+                example:          'COMPANY_NOT_FOUND'
+              action:
+                type:             string
+                example:          'COMPANY_UPDATE_ERROR'
+              message:
+                type:             string
+                example:          "L'objet n'existe pas ou n'est pas accessible."
+              languageCode:
+                type:             string
+                example:          'fr-FR'
+
+        '500':
+          description:            Server Error
+          schema:
+            properties:
+              code:
+                type:             integer
+                example:          500
+              errorCode:
+                type:             string
+                example:          'INTERNAL_SERVOR_ERROR'
+              action:
+                type:             string
+                example:          'COMPANY_UPDATE_ERROR'
+              message:
+                type:             string
+                example:          "Erreur interne lors de la modification d'une compagnie."
+              languageCode:
+                type:             string
+                example:          'fr-FR'
+
+    delete:
+      tags:
+        - Company
+      summary:                    "Soft delete a company"
+      description:                "Soft delete a company"
+
+      parameters:
+        - name:                   code
+          in:                     path
+          type:                   string
+          required:               true
+          description:            company's identifier
+
+      responses:
+        '200':
+          description:            "Success"
+          schema:
+            properties:
+              type:
+                type:             string
+                example:          'COMPANY_DELETE_SUCCESS'
+              message:
+                type:             string
+                example:          "SUCCESS"
+              code:
+                type:             number
+                example:          200
+        '404':
+          description:            Company doesn't exist
+          schema:
+            properties:
+              code:
+                type:             integer
+                example:          404
+              errorCode:
+                type:             string
+                example:          'NO_CONTENT'
+              action:
+                type:             string
+                example:          'COMPANY_DELETE_ERROR'
+              message:
+                type:             string
+                example:          "L'objet n'existe pas ou n'est pas accessible."
+              languageCode:
+                type:             string
+                example:          'fr-FR'
+
+        '500':
+          description:            Server Error
+          schema:
+            properties:
+              code:
+                type:             integer
+                example:          500
+              errorCode:
+                type:             string
+                example:          'INTERNAL_SERVOR_ERROR'
+              action:
+                type:             string
+                example:          'COMPANY_DELETE_ERROR'
+              message:
+                type:             string
+                example:          "Erreur interne lors de la mofification d'une compagnie."
+              languageCode:
+                type:             string
+                example:          'fr-FR'
+
+    #------------------------------------------------------------------------------------#
+
+  "/company/{code}/products":
+    get:
+      tags:
+        - Company
+      summary:                    "Get company's products"
+      parameters:
+        - name:                   code
+          type:                   string
+          required:               true
+          description:            "company's identifier"
+          in:                     path
+
+      responses:
+        '200':
+          description:            "Success"
+          schema:
+            properties:
+              action:
+                type:             string
+                example:          'COMPANY_GETPRODUCTS_SUCCESS'
+              code:
+                type:             number
+                example:          200
+              company:
+                type:             object
+                properties:
+                  code:
+                    type:         integer
+                    example:      200
+                  data:
+                    type:         object
+                    properties:
+                      id:
+                        type:       integer
+                        example:      1
+                      code:
+                        type:       string
+                        example:    "12345-deg-ER"
+                      label:
+                        type:       string
+                        example:    "Company"
+                      descritption:
+                        type:       string
+                        example:    "My Company"
+                      is_deleted:
+                        type:       boolean
+                        example:    false
+
+              data:
+                type:             array
+                items:
+                  type:           object
+                  properties:
+                    productId:
+                      type:     integer
+                      example:  1
+                    label:
+                      type:     string
+                      example:  "Product"
+        '404':
+          description:            Company doesn't exist
+          schema:
+            properties:
+              code:
+                type:             integer
+                example:          404
+              errorCode:
+                type:             string
+                example:          'COMPANY_NOT_FOUND'
+              action:
+                type:             string
+                example:          'COMPANY_GETPRODUCT_ERROR'
+              message:
+                type:             string
+                example:          "L'objet n'existe pas ou n'est pas accessible."
+              languageCode:
+                type:             string
+                example:          'fr-FR'
+
+        '500':
+          description:            Server Error
+          schema:
+            properties:
+              code:
+                type:             integer
+                example:          500
+              errorCode:
+                type:             string
+                example:          'INTERNAL_SERVOR_ERROR'
+              action:
+                type:             string
+                example:          'COMPANY_GETPRODUCT_ERROR'
+              message:
+                type:             string
+                example:          "Erreur interne lors de la récuperation des produits."
+              languageCode:
+                type:             string
+                example:          'fr-FR'
+
+################################################################################
+
+
+responses:
+  200Ok:
+    description:                  Successfull
+  201Created:
+    description:                  Created
+  202Accepted:
+    description:                  Accepted
+  203NonAuthoritativeInformation:
+    description:                  Non-Authoritative Information
+  204NoContent:
+    description:                  No Content
+  400BadRequest:
+    description:                  Bad Request
+  401Unauthorized:
+    description:                  Unauthorized
+  403Forbidden:
+    description:                  Forbidden
+  404NotFound:
+    description:                  Not Found
+  409Conflict:
+    description:                  Conflict
+  500InternalServer:
+    description:                  Internal Server Error
+  501NotImplemented:
+    description:                  Not Implemented
+  502BadGateway:
+    description:                  Bad Gateway
+  503ServiceUnavailable:
+    description:                  Service Unavailable
+  504GatewayTimeout:
+    description:                  Gateway Timeout
