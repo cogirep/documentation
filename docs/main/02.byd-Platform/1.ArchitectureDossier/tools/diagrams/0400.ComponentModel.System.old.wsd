@@ -1,0 +1,65 @@
+@startuml component-model-system-level-old
+
+header
+    <b>BEYOND Platform</b> - Diagramme de composants
+end header
+
+!include ../../../../tools/C4-PlantUML/C4.puml
+!include ../../../../tools/C4-PlantUML/C4_Context.puml
+!include ../../../../tools/C4-PlantUML/C4_Container.puml
+!include ../../../../tools/C4-PlantUML/C4_Component.puml
+
+
+actor EndUSer <<Internal Person>>
+'Person(EndUSer, "End user")
+Person(AdminBYDPTF, "Administrator\n(BYD Platform)")
+Person(AdminBYDAPP, "Administrator\nBYD Application")
+Person(AdminBYDAPPREA, "Administrator\nBYD Reality")
+
+
+System_Boundary(BYDPTFM, "BEYOND PLATFORM") {
+    System(BYDPORTAL, "BYD PORTAL", "Beyond Portal"){
+    }
+    System(BYDMGR, "BYD MANAGER", "Administration"){
+    }
+    System(BYDDF, "BYD DATA FACTORY", "Common Data"){
+    }
+    System(BYDDFMGR, "BYD DATA FACTORY MANAGER", "Data Administration"){
+    }
+    System(BYDREALITY, "BYD REALITY", "BYD Application"){
+    }
+    System(BYDREAMGR, "BYD REALITY MANAGER", "BYD Reality Administration"){
+    }
+    System(BYDAPP, "BYD APPLICATION", "BYD Application (Generic)"){
+    }
+    System(BYDAPPMGR, "BYD APPLICATION MANAGER", "BYD Application Administration"){
+    }
+    System(BYDIDP, "BYD IAM", "Identity & access management"){
+    }
+
+}
+
+System_Ext(IdP, "External Identity Providers", "SSO")
+
+' Relations
+' - with users
+Rel(EndUSer, BYDPORTAL, "Uses", "HTTPS")
+Rel(AdminBYDPTF, BYDMGR, "Uses", "HTTPS")
+Rel(AdminBYDPTF, BYDDFMGR, "Uses", "HTTPS")
+Rel(AdminBYDAPP, BYDAPPMGR, "Uses", "HTTPS")
+Rel(AdminBYDAPPREA, BYDREAMGR, "Uses", "HTTPS")
+Rel(EndUSer, BYDREALITY, "Uses", "HTTPS")
+Rel(EndUSer, BYDAPP, "Uses", "HTTPS")
+
+' - between services
+Rel(BYDPORTAL, BYDIDP, "Uses")
+Rel(BYDREALITY, BYDPORTAL, "Uses")
+Rel(BYDAPP, BYDPORTAL, "Uses")
+Rel(BYDREALITY, BYDDF, "Uses")
+Rel(BYDAPP, BYDDF, "Uses")
+Rel(BYDMGR, BYDPORTAL, "Uses")
+Rel(BYDDFMGR, BYDPORTAL, "Uses")
+' - between systems and external systems
+Rel(BYDIDP, IdP, "Uses", "OIDC/OAuth")
+
+@enduml

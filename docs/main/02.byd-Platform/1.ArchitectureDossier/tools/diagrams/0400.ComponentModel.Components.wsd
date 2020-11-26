@@ -1,0 +1,174 @@
+@startuml component-model-components
+
+header
+    <b>BEYOND Platform</b> - Diagramme de composants
+end header
+
+!includeurl https://raw.githubusercontent.com/skleanthous/C4-PlantumlSkin/master/build/output/c4.puml
+'included files = 106+102+59+56 = 323 lines
+!include ../../../../tools/C4-PlantUML/C4.puml
+!include ../../../../tools/C4-PlantUML/C4_Context.puml
+!include ../../../../tools/C4-PlantUML/C4_Container.puml
+!include ../../../../tools/C4-PlantUML/C4_Component.puml
+
+skinparam Arrow {
+    Color #000000
+    FontColor #000000
+'    Color #666666
+'    FontColor #666666
+    FontSize 12
+}
+
+'!define SYSTEM_BG_COLOR #FFFFFF
+
+actor "Administrator\n(BYD Reality)" as AdminBydAppRtyInt <<Internal Person>>
+actor "Administrator (Delegate)\n(BYD Reality)" as AdminBydAppRtyExt <<External Person>>
+actor "End User" as EndUSer <<External Person>>
+actor "Administrator\n(BYD Platform)" as AdminBydPtfInt <<Internal Person>>
+actor "Administrator (Delegate)\n(BYD Platform)" as AdminBydPtfExt <<External Person>>
+
+System_Boundary(BydPlatform, "BEYOND PLATFORM") {
+    System(BydPortal, "BYD PORTAL", "Beyond Portal"){
+        Container(BydPortalFrontEnd, "BYD PORTAL\nFrontEnd", "Angular") {
+        }
+        Container(BydMgrFrontEnd, "BYD MGR\nFrontEnd", "Angular") {
+        }
+        System(BydPortalServices, "BYD PORTAL\nServices") {
+            Container(BydPortalSVCUsrAuth, "BYD PORTAL\nUser Authentication", "Node.js"){
+            }
+            Container(BydPortalSVCUsrMgt, "BYD PORTAL\nUser Management", "Node.js"){
+            }
+            Container(BydPortalSVCCompanyMgt, "BYD PORTAL\nCompany Management", "Node.js"){
+            }
+            Container(BydPortalSVCProductMgt, "BYD PORTAL\nProduct Management", "Node.js"){
+            }
+        }
+         ContainerDb(BydPortalDB, "BYD PORTAL\nDB", "PostgreSQL"){
+        }
+    }
+    System(BydReality, "BEYOND REALITY"){
+        Container(BydRtyFrontEnd, "BYD REALITY\nFrontEnd", "Angular") {
+        }
+        Container(BydRtyMgrFrontEnd, "BYD REALITY MANAGER\nFrontEnd", "Angular") {
+        }
+        System(BydRtyServices, "BYD REALITY\nServices"){
+            Container(BydRtySVCUsrMgt, "BYD REALITY\nUser Management", "Node.js"){
+            }
+            Container(BydRtySVCIdCardMgt, "BYD REALITY\nIdCard Management", "Node.js"){
+            }
+        }
+        ContainerDb(BydRtyDB, "BYD REALITY\nDB", "PostgreSQL"){
+        }
+    }
+    System(BydDf, "BEYOND DATA FACTORY"){
+        Container(BydDfMgrFrontEnd, "BYD DF MNGR\nFrontEnd", "Angular") {
+        }
+        System(BydDfServices, "BYD DF\nServices") {
+            Container(BydDfSvcIdCard, "BYD DF Id Card", "Node.js") {
+            }
+            Container(BydDfSvcTransfoMgr, "BYD DF\nTransformation Manager", "Node.js") {
+            }
+            Container(BydDfSvcTransfoDispatcher, "BYD DF\nTransformation Dispatcher", "Node.js") {
+            }
+            Container(BydDfSvcTransfoQueue, "BYD DF\nTransformation Queue", "RabbitMQ") {
+            }
+            Container(BydDfSvcTransfoConsumer, "BYD DF\nTransformation Consumer", "Node.js") {
+            }
+            Container(BydDfSvcTransfoService, "BYD DF\nTransformation Service", "Node.js") {
+            }
+        }
+        ContainerDb(BydDfCOS, "BYD DF File Storage", "Cloud Object Storage") {
+        }
+        ContainerDb(BydDfDB, "BYD DF\nDB", "MongoDB") {
+        }
+        'ContainerDb(BydDfDBGeo, "BYD DF\nGeo Spatial DB", "PostgreSQL + PostGIS")
+    }
+    System(BydIdP, "BEYOND IDP", "Identity Provider\n(internal)"){
+        Container(BydIaM, "BEYOND IAM", "AWS Cognito") {
+        }
+        ContainerDb(BydIaMDB, "BEYOND IAM\nDB", "AWS Cognito User Pool")
+    }
+
+}
+
+System_Ext(IdP, "External Identity Providers", "SSO")
+System_Ext(FME, "External Transformations Provider")
+
+' Relations
+' - between systems
+Lay_R(BydReality,BydPortal)
+Lay_R(BydPortal,BydIaM)
+Lay_D(BydRtyDB,BydDf)
+Lay_L(BydPlatform,IdP)
+Lay_D(BydPlatform,FME)
+Lay_D(BydDfServices,BydDfDB)
+Lay_D(BydDfServices,BydDfCOS)
+Lay_D(BydMgrFrontEnd,BydPortalSVCUsrAuth)
+Lay_D(BydPortalSVCUsrAuth,BydPortalSVCUsrMgt)
+Lay_D(BydPortalSVCUsrAuth,BydPortalSVCCompanyMgt)
+Lay_D(BydPortalSVCUsrAuth,BydPortalSVCProductMgt)
+
+
+' - with users
+Rel_D(AdminBydPtfInt, BydMgrFrontEnd, "Uses", "HTTPS")
+Rel_D(AdminBydPtfExt, BydMgrFrontEnd, "Uses", "HTTPS")
+Rel_D(AdminBydPtfInt, BydDfMgrFrontEnd, "Uses", "HTTPS")
+Rel_D(AdminBydPtfExt, BydDfMgrFrontEnd, "Uses", "HTTPS")
+Rel_D(EndUSer, BydPortalFrontEnd, "Uses", "HTTPS")
+Rel_D(EndUSer, BydRtyFrontEnd, "Uses", "HTTPS")
+Rel_D(AdminBydAppRtyInt, BydRtyMgrFrontEnd, "Uses", "HTTPS")
+Rel_D(AdminBydAppRtyExt, BydRtyMgrFrontEnd, "Uses", "HTTPS")
+
+Lay_L(AdminBydPtfExt,AdminBydPtfInt)
+
+' - between pages
+'Rel(BydMgrFrontEnd, BydPortalFrontEnd, "Redirects")
+'Rel(BydRtyFrontEnd, BydPortalFrontEnd, "Redirects")
+'Rel(BydRtyMGRFrontEnd, BydPortalFrontEnd, "Redirects")
+'Rel(BydDfMgrFrontEnd, BydPortalFrontEnd, "Redirects")
+
+' - between pages and services
+Rel_D(BydPortalFrontEnd, BydPortalSVCUsrMgt, "Uses", "HTTPS")
+Rel_D(BydMgrFrontEnd, BydPortalSVCUsrMgt, "Uses", "HTTPS")
+Rel_D(BydPortalFrontEnd, BydPortalSVCUsrAuth, "Uses", "HTTPS")
+Rel_D(BydMgrFrontEnd, BydPortalSVCUsrAuth, "Uses", "HTTPS")
+'Rel_D(BydMgrFrontEnd, BydPortalSVCCompanyMgt, "Uses", "HTTPS")
+'Rel_D(BydMgrFrontEnd, BydPortalSVCProductMgt, "Uses", "HTTPS")
+Rel_D(BydRtyFrontEnd, BydRtySVCUsrMgt, "Uses", "HTTPS")
+Rel_D(BydRtyFrontEnd, BydRtySVCIdCardMgt, "Uses", "HTTPS")
+Rel_D(BydRtyMgrFrontEnd, BydRtySVCUsrMgt, "Uses", "HTTPS")
+Rel_D(BydDfMgrFrontEnd, BydDfSvcIdCard, "Uses", "HTTPS")
+Rel_D(BydDfMgrFrontEnd, BydDfSvcTransfoMgr, "Uses", "HTTPS")
+
+'Rel(BydDfMgrFrontEnd, BydIaM, "Uses", "HTTPS")
+'Rel(BydRtyFrontEnd, BydIaM, "Uses", "HTTPS")
+'Rel(BydMgrFrontEnd, BydIaM, "Uses", "HTTPS")
+
+' - between services
+Rel_L(BydPortalSVCUsrAuth, BydIaM, "uses")
+Rel_D(BydPortalSVCUsrMgt, BydPortalDB, "Uses")
+Rel_D(BydPortalSVCCompanyMgt, BydPortalDB, "Uses")
+Rel_D(BydPortalSVCProductMgt, BydPortalDB, "Uses")
+Rel_D(BydRtySVCUsrMgt, BydRtyDB, "Uses")
+Rel_L(BydRtySVCUsrMgt, BydPortalSVCUsrMgt, "Uses")
+Rel_D(BydRtySVCIdCardMgt, BydDfSvcIdCard, "Uses")
+Rel_D(BydRtySVCIdCardMgt, BydDfSvcTransfoMgr, "Uses")
+Rel_D(BydRtySVCIdCardMgt, BydDfSvcTransfoDispatcher, "Uses")
+Rel_D(BydDfSvcTransfoDispatcher, BydDfSvcTransfoQueue, "Uses")
+Rel_U(BydDfSvcTransfoConsumer,BydDfSvcTransfoQueue, "Listens")
+Rel_D(BydDfSvcTransfoConsumer, BydDfSvcTransfoService, "Uses")
+Lay_R(BydRtySVCUsrMgt,BydRtySVCIdCardMgt)
+
+' - between services and containers
+Rel_D(BydDfSvcIdCard, BydDfDB, "Uses")
+'Rel_D(BydDfSvcIdCard, BydDfDBGeo, "Uses")
+Rel_D(BydDfSvcIdCard, BydDfCOS, "Uses")
+Rel_D(BydDfSvcTransfoService, BydDfCOS, "Uses")
+Rel_D(BydIaM, BydIaMDB, "Uses", "JDBC")
+
+' - between services and systems
+Rel_L(BydIaM, IdP, "USes", "OIDC")
+Rel_R(BydDfSvcTransfoService, FME, "USes", "OIDC")
+
+
+@enduml

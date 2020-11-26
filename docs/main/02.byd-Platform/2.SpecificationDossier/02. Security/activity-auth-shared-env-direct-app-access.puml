@@ -1,0 +1,53 @@
+@startuml
+header
+<b>Beyond Platform</b>
+Authentication process in shared environment
+App direct access
+end header
+skinparam defaultTextAlignment center
+
+start
+note left
+Assumptions:
+User is authenticated on BYD Portal
+User accesses directly to BYD App 1 in another tab
+(no ID token is passed from BYD Portal to BYD App 1)
+end note
+if (\nIs there already one ID token in App 1 local storage?\n) then
+  -[#green]-> **YES**;
+  if (\nIs <b>shared env</b> (value: True) available local storage?\n) then
+    -[#green]-> **YES**;
+    :Compare ID token from local storage with user info in central cache;
+    note left
+      Call Micro Service SSO
+      to retrieve a user ID Token with:
+      - user-agent
+      - IP address
+      to be equal to current device
+    end note
+    if (\nIs the user with ID token in local storage still connected to BYD Portal?\n) then
+      -[#green]-> **YES**;
+      :Access page content;
+      stop;
+    else
+      -[#red]-> **NO**;
+      :Redirect User to Authentication Page;
+      stop;
+  endif
+  else
+    -[#red]-> **NO**;
+    :Access page content;
+    note left
+      Asumption is that the current
+      is the one he claims to be...
+    end note
+
+    stop;
+  endif
+else
+  -[#red]-> **NO**;
+  :Redirect User to Authentication Page;
+  stop;
+endif
+
+@enduml

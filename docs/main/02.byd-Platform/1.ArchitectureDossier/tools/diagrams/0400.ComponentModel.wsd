@@ -1,0 +1,157 @@
+@startuml component-model
+
+header
+    <b>BEYOND Platform</b> - Diagramme de composants
+end header
+
+'!include /Users/fredericfadda/ffa-dev/C4-PlantUML/C4.puml
+!include ../../../../tools/C4-PlantUML/C4.puml
+!include ../../../../tools/C4-PlantUML/C4_Context.puml
+!include ../../../../tools/C4-PlantUML/C4_Container.puml
+!include ../../../../tools/C4-PlantUML/C4_Component.puml
+
+Person(EndUSer, "End user")
+Person(AdminIAM, "Administrator\n(users)")
+Person(AdminBYDPTF, "Administrator\n(BYD configuration)")
+Person(AdminDF, "Administrator\n(business)")
+
+System_Boundary(BYDPTFM, "BEYOND PLATFORM") {
+    System(BYDMGR, "BYD MANAGER", "Administration & supervision"){
+        Container(BYDMGRFrontEnd, "BYD MGR\nFrontEnd", "Angular") {
+            Component(BYDHomePage, "Home Page", "HMI")
+            Component(BYDMgrPage, "Beyond Manager Page", "HMI")
+            Component(BYDIAMMgrPage, "Beyond IAM Mgt Page", "HMI")
+        }
+        Container(BYDMGRBackEnd, "BYD MGR\nBackEnd", "Node.js") {
+            Component(BYDIAMMgr, "Beyond IAM Mgr", "Service")
+        }
+    }
+    System(BYDDFMGR, "BYD DATA FACTORY MANAGER", "Administration"){
+        Container(BYDDFMGRFrontEnd, "BYD DF MNGR\nFrontEnd", "Angular") {
+            Component(BYDDFDataAccessMgrPage, "Data Access Manager", "HMI")
+            Component(BYDDFIDCardMgrPage, "ID Card Manager", "HMI")
+            Component(BYDDFEnrichmentMgrPage, "ID Card Enrichment Manager", "HMI")
+            Component(BYDDFTagMgrPage, "Tag Manager", "HMI")
+            Component(BYDDFAssociationMgrPage, "Association Manager", "HMI")
+            Component(BYDDFTransfoMgrPage, "Transformation Manager", "HMI")
+
+        }
+    }
+    System(BYDDF, "BEYOND DATA FACTORY"){
+        Container(BYDDFId, "BYD DF Identifier", "Node.js") {
+            Component(BYDDFIdCardMgr, "ID Card CRUD", "Service")
+            Component(BYDDFIdCardEnrichMgr, "ID Card Enrichment CRUD", "Service")
+            Component(BYDDFIdCardTagMgr, "public Tags CRUD", "Service")
+            Component(BYDDFAssociationMgr, "Association CRUD", "Service")
+
+        }
+        Container(BYDDFTransfoManager, "BYD DF Transformation Mgr", "Node.js") {
+            Component(BYDDFTransfoMgr, "BYD DF Transformation Mgr", "Service")
+        }
+        Container(BYDDFTransfoRqHandler, "BYD DF Transformation Request Handler", "Node.js") {
+            Component(BYDDFTransfoHandler, "BYD DF Transformation Handler", "Service")
+        }
+        Container(BYDDFTransfoService, "BYD DF Transformation Service", "Node.js") {
+            Component(BYDDFTransfoListener, "BYD DF Transformation Listener", "Service")
+            Component(BYDDFTransfoSvc_1, "BYD DF Transformation Service X", "Service")
+        }
+        Container(BYDDFTransfoQueue, "BYD DF Transformation Queuing", "RabbitMQ") {
+            Component(BYDDFTransfoQueueMgr, "BYD DF Transformation Queue Dispatcher", "Service")
+        }
+        Container(BYDDFDataFeeder, "BYD DF Data File Feeder", "Node.js") {
+            Component(BYDDFDataFeederUpload, "File upload", "Service")
+            Component(BYDDFDataFeederStorage, "File Storage", "Service")
+        }
+        Container(BYDDFCOS, "BYD DF File Storage", "Cloud Object Storage") {
+            Component(BYDDFCOSSvc, "COS API", "Service")
+            Component(BYDDFCOSBucketRaw, "Raw Bucket", "Bucket")
+            Component(BYDDFCOSBucketSecured, "Safe Bucket", "Bucket")
+            Component(BYDDFCOSBucketTransfo_1, "Bucket Transfo 1", "Bucket")
+        }
+        ContainerDb(BYDDFDBGEO, "BYD DF\nGeo Spatial DB", "PostgreSQL + PostGIS")
+
+        ContainerDb(BYDDFDB, "BYD DF\nDB", "MongoDB"){
+            Component(BYDDFIDCards, "Id Cards", "collection")
+            Component(BYDDFIDCardsEnrichments, "Id Cards Enrichments", "collection")
+            Component(BYDDFIDCardsTags, "Public Tags Reference", "collection")
+            Component(BYDDFAssociation, "Associations", "collection")
+        }
+    }
+    System(BYDREALITY, "BEYOND REALITY"){
+        Container(BYDRTYFrontEnd, "BYD REALITY\nFrontEnd", "Angular") {
+            Component(BYDRTY3DPage, "3D renderer", "HMI")
+        }
+        Container(BYDRTYService, "BYD REALITY\nService", "Node.js"){
+            Component(BYDRTY3DSvc, "3D renderer service", "Cesium")
+            Component(BYDRTYSecuritySvc, "Security service", "js")
+        }
+        ContainerDb(BYDRTYDB, "BYD REALITY\nDB", "PostgreSQL"){
+            Component(BYDRTYUSR, "User fine grain access", "schema")
+        }
+    }
+    System(BYDIDP, "BEYOND IDENTITY & ACCESS MANAGER", "Identity & access management") {
+        Container(BYDIAM, "BEYOND IAM", "AWS Cognito") {
+            Component(BYDIAMLoginPage, "Login Page", "HMI")
+            Component(BYDIAMAuthenticate, "Authentication Service", "Service")
+            Component(BYDIAMFederate, "Federation Service", "Service")
+            Component(BYDIAMUserMgr, "User Manager APIs", "Service")
+
+        }
+        ContainerDb(BYDIAMDB, "BEYOND IAM\nDB", "AWS Cognito User Pool")
+    }
+}
+System_Ext(IdP, "External Identity Providers", "SSO")
+
+' Relations
+' - with users
+Rel(AdminIAM, BYDHomePage, "Uses", "HTTPS")
+Rel(AdminBYDPTF, BYDHomePage, "Uses", "HTTPS")
+Rel(AdminDF, BYDHomePage, "Uses", "HTTPS")
+Rel(EndUSer, BYDHomePage, "Uses", "HTTPS")
+' - between pages
+Rel(BYDHomePage, BYDMgrPage, "Includes")
+Rel(BYDHomePage, BYDDFDataAccessMgrPage, "Includes")
+Rel(BYDHomePage, BYDRTY3DPage, "Includes")
+Rel(BYDHomePage, BYDIAMMgrPage, "Includes")
+' - between pages and services
+Rel(BYDMgrPage, BYDIAMAuthenticate, "Uses", "HTTPS")
+Rel(BYDDFDataAccessMgrPage, BYDIAMAuthenticate, "Uses", "HTTPS")
+Rel(BYDDFDataAccessMgrPage, BYDDFIdCardMgr, "Uses", "HTTPS")
+Rel(BYDDFIDCardMgrPage, BYDDFIdCardMgr, "Uses", "HTTPS")
+Rel(BYDDFIDCardMgrPage, BYDDFDataFeederUpload, "Uses", "HTTPS")
+Rel(BYDDFIDCardMgrPage, BYDDFTransfoHandler, "Uses", "HTTPS")
+Rel(BYDDFEnrichmentMgrPage, BYDDFIdCardEnrichMgr, "Uses", "HTTPS")
+Rel(BYDDFTagMgrPage, BYDDFIdCardTagMgr, "Uses", "HTTPS")
+Rel(BYDIAMMgrPage, BYDIAMMgr, "Uses", "HTTPS")
+Rel(BYDRTY3DPage, BYDRTY3DSvc, "Uses", "HTTPS")
+Rel(BYDDFAssociationMgrPage, BYDDFAssociationMgr, "Uses", "HTTPS")
+' - between services
+Rel(BYDIAMAuthenticate, BYDIAMFederate, "Uses")
+Rel(BYDDFDataFeederUpload, BYDDFDataFeederStorage, "Uses")
+Rel(BYDDFDataFeederStorage, BYDDFCOSSvc, "Uses")
+Rel(BYDDFCOSSvc, BYDDFCOSBucketRaw, "Uses")
+Rel(BYDDFCOSSvc, BYDDFCOSBucketSecured, "Uses")
+Rel(BYDDFCOSSvc, BYDDFCOSBucketTransfo_1, "Uses")
+Rel(BYDDFIdCardMgr, BYDDFTransfoHandler, "Uses")
+Rel(BYDDFIdCardEnrichMgr, BYDDFIdCardMgr, "Uses")
+Rel(BYDDFTransfoHandler, BYDDFTransfoQueueMgr, "Uses")
+Rel(BYDDFTransfoListener, BYDDFTransfoQueueMgr, "Uses")
+Rel(BYDDFTransfoListener, BYDDFTransfoSvc_1, "Uses")
+Rel(BYDDFTransfoSvc_1, BYDDFCOSSvc, "Uses")
+Rel(BYDRTY3DSvc, BYDRTYSecuritySvc, "Uses")
+Rel(BYDRTY3DSvc, BYDDFIdCardMgr, "Uses")
+Rel(BYDRTY3DSvc, BYDDFIdCardEnrichMgr, "Uses")
+Rel(BYDRTY3DSvc, BYDDFCOSSvc, "Uses")
+Rel(BYDIAMMgr, BYDIAMUserMgr, "Uses")
+' - between services and containers
+Rel(BYDIAM, BYDIAMDB, "Uses", "JDBC")
+Rel(BYDRTYSecuritySvc, BYDRTYUSR, "Uses", "JDBC")
+' - between services and data collections
+Rel(BYDDFIdCardMgr, BYDDFIDCards, "Uses")
+Rel(BYDDFIdCardEnrichMgr, BYDDFIDCardsEnrichments, "Uses")
+Rel(BYDDFIdCardTagMgr, BYDDFIDCardsTags, "Uses")
+Rel(BYDDFAssociationMgr, BYDDFAssociation, "Uses")
+' - between services and systems
+Rel(BYDIAMFederate, IdP, "USes", "OIDC")
+
+@enduml

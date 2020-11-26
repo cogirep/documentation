@@ -1,0 +1,307 @@
+@startuml Beyond Manager data model
+
+title
+
+Beyond Core : Plateform
+
+BY-1890, BY-2079
+BY-2050, BY-2006, BY-2045, BY-1979, BY-2025
+
+end title
+
+' hide the spot
+' hide circle
+
+' avoid problems with angled crows feet
+' skinparam linetype ortho
+
+
+' https://gist.github.com/QuantumGhost/0955a45383a0b6c0bc24f9654b3cb561
+
+' uncomment the line below if you're using computer with a retina display
+' skinparam dpi 300
+!define Table(name,desc) class name as "desc" << (T,#FFAAAA) >>
+' we use bold for primary key
+' green color for unique
+' and underscore for not_null
+!define primary_key(x) <b>x</b>
+!define foreign_key(x) <b>x</b>
+!define unique(x) <color:green>x</color>
+!define not_null(x) <u>x</u>
+' other tags available:
+' <i></i>
+' <back:COLOR></color>, where color is a color name or html color code
+' (#FFAACC)
+' see: http://plantuml.com/classes.html#More
+hide methods
+hide stereotypes
+
+' disposition du diagramme
+Table(product, "product") {
+  primary_key(pk_id) BIGSERIAL
+  ---
+  foreign_key(pk_fk_productTypeId) BIGINT
+  foreign_key(pk_fk_businessCodeId) BIGINT
+  ---
+  not_null(unique(code)) TEXT
+  not_null(unique(label)) TEXT
+  description JSONB
+  image TEXT
+  icon TEXT
+  authLogo TEXT
+  authBackgroundImage TEXT
+  not_null(unique(urlApp)) TEXT
+  openTab BOOLEAN
+  not_null(status) BINGINT
+}
+note top of product
+  hypothèses :
+  - un produit est opérationnel (DigitalSite)
+    ou d'administration (MyAdminSite) ou 'technique' (tbd)
+  - on ne peut supprimer un produit relié à une compagnie
+  - image est l'image sur la tuile correspondant au produit sur Beyond Portal
+  - authLogo et authBackgroundImage sont utilisées sur la page d'authentification (BY-2355)
+  - image, icone, authLogo et authBackgroundImage sont des URLs gérées par le produit
+  - l'URL de base du produit est unique pour différencier les produits
+
+  code : identifiant technique pour
+    les logs, les traces d'audit
+
+  Todo : multilinguisme sur la description
+end note
+
+Table(company, "company") {
+  primary_key(pk_id) BIGSERIAL
+  ---
+  not_null(unique(code)) TEXT
+  not_null(unique(label)) TEXT
+  not_null(description) TEXT
+  not_null(isDeleted) BOOLEAN <default: false>
+  'not_null(isSuperAdmin) BOOLEAN <default: false>
+}
+note top of company
+  Code : identifiant technique pour
+  les logs, les trace d'audit
+
+  Todo : gérer une hiérarchie de compagnie
+end note
+
+Table(idp, "idp") {
+  primary_key(pk_id) BIGSERIAL
+  ---
+  foreign_key(pk_fk_companyid) BIGINT
+  ---
+  not_null(unique(name)) TEXT
+  not_null(paternEmail) TEXT
+}
+
+Table(account, "account") {
+primary_key(pk_id) BIGSERIAL
+---
+foreign_key(pk_fk_companyid) BIGINT
+'foreign_key(pk_fk_idpid) BIGINT
+---
+not_null(unique(email)) TEXT
+not_null(firstname) TEXT
+not_null(lastname) TEXT
+unique(providerUserId) TEXT
+not_null(status) BINGINT
+'not_null(isAdminBYD) BOOLEAN
+}
+note top of account
+  En tant qu'utilisateur
+  Je suis rattaché à une et une seule compagnie
+
+  Todo :
+  Ajouter les préférences utilisateur
+  au niveau global BYD PLATFORM
+end note
+
+Table(companyProduct, "company_product") {
+  primary_key(companyProduct_id) BIGSERIAL
+  ---
+  foreign_key(pk_fk_companyid) BIGINT
+  foreign_key(pk_fk_productid) BIGINT
+  ---
+  not_null(status) BINGINT
+}
+note left of companyProduct
+  un produit est rattaché à une compagnie
+  par un Admin BYD
+end note
+
+Table(accountProduct, "account_product") {
+  foreign_key(pk_fk_companyProduct_id) BIGINT
+  foreign_key(pk_fk_accountid) BIGINT
+}
+note left of accountProduct
+  BY-2045 : Délégation d'administration
+  Si le produit est de type administration,
+  Alors l'utilisateur visualise le lien vers ce produit
+  dans BYD MGR
+end note
+
+Table(productType, "product_type") {
+  primary_key(pk_id) BIGSERIAL
+  ---
+  not_null(unique(type)) TEXT
+}
+note bottom of productType
+  Précise la nature d'un produit :
+  - produit (exposé dans le portail)
+  - produit d'administration
+  - produit "technique" (à préciser)
+end note
+
+Table(businessCode, "business_code") {
+  primary_key(pk_id) BIGSERIAL
+  ---
+  not_null(unique(businessCode)) TEXT
+  not_null(description) TEXT
+}
+note bottom of businessCode
+  Code de regroupement de produits
+  à des fins commerciales
+end note
+
+Table(role, "roleBydManager") {
+  primary_key(pk_id) BIGSERIAL
+  ---
+  not_null(unique(label)) TEXT
+  not_null(description) TEXT
+  not_null(status) BINGINT
+}
+note right of role
+  Il ne s'agit que des des rôles dans
+  BEYOND MANAGER & PORTAL
+  - Admin BYD,
+  - Admin Délégué,
+  - Utilisateur
+  
+  En tant qu'administrateur BYD je peux :
+  - créer des produits
+  - créer des compagnies
+  - créer des utilisateurs
+  - créer des IdP
+  - créer d'autres Admin BYD
+  - donner les droits d'administration délégué sur une compagnie
+
+  En tant qu'administrateur délégué d'une compagnie, je peux :
+  - créer des compagnies filles (-> hiérarchie)
+  - créer des utilisateurs rattaché à cette compagnie
+  - donner les droits d'administration délégué sur cette compagnie
+end note
+
+Table(permission, "permission") {
+  primary_key(pk_id) BIGSERIAL
+  ---
+  not_null(unique(code)) TEXT
+  not_null(unique(label)) TEXT
+  not_null(description) TEXT
+  not_null(status) BINGINT
+}
+
+Table(rolePermission, "role_permission") {
+  foreign_key(pk_fk_roleid) BIGINT
+  foreign_key(pk_fk_permissionid) BIGINT
+  ---
+  not_null(status) BINGINT
+}
+
+Table(companyRoleAccount, "company_role_account") {
+  foreign_key(pk_fk_accountid) BIGINT
+  foreign_key(pk_fk_companyid) BIGINT
+  foreign_key(pk_fk_roleid) BIGINT
+  ---
+  not_null(status) BINGINT
+}
+note top of companyRoleAccount
+  Un utilisateur a un rôle par compagnie
+  dans BEYOND MANAGER
+
+  corolaire : SIXENSE est une compagnie
+  qui est la seule à utiliser le rôle
+  Admin BYD
+end note
+
+
+Table(apikey, "apikey") {
+  primary_key(pk_id) BIGSERIAL
+  foreign_key(fk_product) BIGINT
+  ---
+  not_null(code) TEXT
+  not_null(apikey_name) TEXT
+  not_null(apikey_value) TEXT
+  not_null(role) TEXT
+  not_null(created_at) TIMESTAMPTZ
+  not_null(created_by) BIGINT
+  not_null(updated_at) TIMESTAMPTZ
+  not_null(updated_by) BIGINT
+  not_null(status) BINGINT
+}
+note bottom of apikey
+  Une clé d'api peut être utilisée par un produit qui 
+  a un rôle soit de fournisseur d'api, soit de client 
+  d'api
+
+  Par exemple: 
+  - Beyond Manager sera fournisseur du service de gestion 
+  des utilisateur ; on doit générer la clé d'api correspondante
+  - Beyond Manager pourrait utiliser des api de MailJet ; 
+  il sera client de MailJet, la clé d'api fournie sera insérée
+  dans cette table
+
+le champ 'code' permet de faire la correspondance entre 
+le code applicatif utilisant la clé d'api et la définition
+de la clé dans cette table
+
+Lorsque la clé d'api est générée côté BEYOND (rôle "provider" du 
+service) le champ apikey_name aura comme valeur le code du 
+produit + le nom du microservice
+Par exemple: 
+  BYD-RTY-RTYMGR
+end note
+
+product -right[hidden]- account
+'idp -right[hidden]- account
+account -right[hidden]- company
+company -right[hidden]- role
+
+idp "0..N" }o-up-|| "1" company: A company may be\nassociated with\n(external) Identity Provider(s)
+'idp "1" |o-up-o{ "0..N" account: An account may\nhave only one idp
+
+' relationships
+product "1" ||-down-o{ "0..N" companyProduct: A product may be \nassociated with many companies
+product }o-down-|| "1" productType: A product has one type
+product }o-left-|| "1" businessCode: A product has one business code
+company "1" ||-down-o{ "0..N" companyProduct: A company may\nhave many products
+product "1" ||-down-o{ "0..N" apikey: A product may\nhave many apikey
+
+account "1" ||-down--o{ "0..N" accountProduct: An account may\nhave access to many products\nattached to a company
+accountProduct "0..N" }o-down-|| "1" companyProduct: A product attached to a company may\nbelong to many accounts
+
+' company
+company "1" ||-left-o{ "0..N" account: An account is linked to\none company
+
+
+company "1" ||-up-o{ "0..N" companyRoleAccount
+account "1" ||-up-o{ "0..N" companyRoleAccount
+role "1" ||-up-o{ "0..N" companyRoleAccount
+
+role "1" ||-down-o{ "0..N" rolePermission
+rolePermission "0..N" }o-down-|| "1" permission
+
+
+legend bottom
+  Zero or One	|o--
+  Exactly One	||--
+  Zero or Many	}o--
+  One or Many	}|--
+  -=-=-=-=-=-=-=-
+  primary_key("primary key")
+  foreign_key("foreign key")
+  unique(unique)
+  not_null("not null")
+endlegend
+
+@enduml

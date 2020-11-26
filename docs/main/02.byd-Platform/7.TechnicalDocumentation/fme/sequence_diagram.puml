@@ -1,0 +1,75 @@
+@startuml
+actor Utilisateur as u
+entity Reality as r
+entity Idcard as i
+entity Consumer as c
+entity Transformation as t
+entity COS as s3
+entity FME as f
+database database as db
+
+== Demande de transformation ==
+
+u -> r: Upload un fichier via Reality
+r -> i: Appel MS Idcard pour réaliser l'upload
+i -> s3: Stockage du fichier
+i -> c: Création du job dans RabbitMQ 
+i -> r: Confirme la prise en compte
+r -> u: Popup de confirmation
+c -> t: Demande de transformation
+t -> db: Stock le job de transformation (Not Started)
+note left
+    Pour identifier le job, on stockerait le BeyondID et le RevisionID 
+    de l'idcard, le nom du fichier, le type de transformation demandée 
+    et son statut (Not Started)
+end note
+
+t -> f: Vérification du serveur (UP)
+note left
+    Comme le serveur FME peut être éteint, il faut vérifier sa
+    disponibilité avant tout traitement
+end note
+
+
+alt "FME Down"
+    t -> t: Cron job toutes les 30 minutes (configurable)
+    note left
+        Autre option, un admin fait un appel Postman pour indiquer que 
+        le serveur FME est démarré
+    end note
+    hnote over t : async
+else "FME UP"
+    t <-> s3: Téléchargement du fichier sur S3
+    t -> f: Upload du fichier sur FME
+    t -> db: Mise à jour du statut de la transformation (Send)
+    t -> t: Supprimer le fichier tmp (sur le MS)
+    t -> f: Demande de transformation
+    t -> db: Mise à jour du statut de la transformation (Queued)
+    t -> t: Cron job pour vérifier l'avancement de la transformation
+    
+    loop 5 minutes (configurable)
+        hnote over t : async
+        t -> f: Vérification du statut de la transformation
+        alt "Transformation terminée avec succès"
+            t -> t: Stop du cron job
+            t -> f: Récupère les fichiers en sortie
+            t -> s3: Stock les fichiers transformés
+            t -> t: Supprimer les fichiers tmp (sur le MS)
+            t -> f: Supprimer les fichiers (input et output)
+            t -> i: Création de l'atome (si nécessaire)
+            t -> i: Creation de l'enrichissement
+            t -> i: Création de l'association (si nécessaire)
+            t -> db: Mise à jour du statut de la transformation (Finished)
+            note left
+                Autre option, supprimer la ligne en base de données.
+            end note
+        else "Transformation non terminée"
+            t -> t: Réactive le cron job
+        else "Transformation en erreur"
+            t -> f: Supprimer les fichiers (input et output ?)
+            t -> db: Mise à jour du statut de la transformation (Error)
+        end
+    end
+end
+
+@enduml

@@ -1,0 +1,27 @@
+@startuml system-context-initial
+header
+<b>BEYOND Platform</b> - Diagramme de contexte
+end header
+
+!include ../../../../tools/C4-PlantUML/C4.puml
+!include ../../../../tools/C4-PlantUML/C4_Context.puml
+
+( \n\n BEYOND PLATEFORME\n\n  ) as SYSTEM
+
+:Utilisateur final: as ACTOR4 <<human>>
+:Administrateur d'utilisateur: as ACTOR1 <<human>>
+:Administrateur technique: as ACTOR2 <<human>>
+:Administrateur 'Metier': as ACTOR3 <<human>>
+:Utilisateur anonyme: as ACTOR5 <<human>>
+:Identity Provider: as SYSTEM1<<system>>
+
+ACTOR1  ---|>SYSTEM
+ACTOR2  ---|>SYSTEM
+ACTOR5  --|>SYSTEM
+ACTOR4  --|>SYSTEM
+ACTOR3  ---|>SYSTEM
+
+SYSTEM ---|> SYSTEM1
+
+
+@enduml

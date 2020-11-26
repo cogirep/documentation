@@ -1,0 +1,62 @@
+@startuml
+  actor Client as c
+  collections Server as s
+  entity "AuthGuard \nMiddleware" as m
+  
+  database "Postgre" as pg
+  entity "Cognito API" as auth
+  entity "Controller" as co
+
+  c -> s: Send request with headers
+  
+  group Validation
+
+    s --> m
+
+    m --> pg: Check api key
+    pg --> m: Return result of sql request
+    
+    alt api key errors
+      m --> s
+      s -> c !! : Response a 401 error (or 500)
+    end
+
+    m --> auth: retrieve cognito public key
+    alt cognito errors
+      auth --> m: Can't retrieve cognito public key
+      m --> s
+      s -> c !! : Response a 500 error
+    end
+    auth --> m:  give public key
+    m --> m: check token (decode token \nwith cognito public key)
+    alt token errors
+      m --> s
+      s -> c !! : Response a 401 error \n(eg: invalid or expirate token)
+    end
+
+    m --> pg: check user exists
+    pg --> m: Return result of sql request
+    alt user errors
+      m --> s
+      s -> c !! : Response a 404 error (or 500)
+    end
+  end
+
+  group User rights
+    m --> pg: retrieve user's rights
+    pg --> m: Return result of sql request
+
+    alt rights errors
+      m --> s
+      s -> c !! : Response a 500 error
+    end
+  end
+
+  m --> co: call next()
+
+  co --> co: Processing
+  co --> s
+  s -> c: Response
+
+
+@enduml

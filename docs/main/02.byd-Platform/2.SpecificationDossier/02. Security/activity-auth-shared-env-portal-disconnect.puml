@@ -1,0 +1,43 @@
+@startuml activity-auth-shared-env-portal-disconnect
+header
+<b>Beyond Platform</b>
+Disconnection process in shared environment
+end header
+skinparam defaultTextAlignment center
+|BYD App 1|
+start
+note left
+  Assumptions:
+  User is authenticated on BYD Portal
+  User wants to disconnect from BYD App 1
+end note
+:Remove BYD App 1 data from local storage;
+if (\nIs <b>shared env</b> (value: True) available in BYD App 1 local storage?\n) then
+  -[#green]-> **YES**;
+  :Add attribute <b>shared env</b> (value: True) to /disconnect request;
+  note left
+    Add <b>shared env</b> option
+    necessary to clean server side information
+  end note
+endif
+:Redirect User to BYD Portal (/disconnect);
+|BYD Portal|
+:Remove User tokens in Cognito;
+note left
+  Call Cognito API GlobalSignOut
+end note
+if (\nIs <b>shared env</b> option value True?\n) then
+  -[#green]-> **YES**;
+  ' :Remove user information in central cache;
+  :Black list user token in central cache;
+  note left
+    Call Micro Service byd-manager-user
+    To black list in a cache (REDIS) the user ID token
+    Use a TTL of 1 hour on REDIS for the token black listing
+  end note
+endif
+:Remove BYD Portal data from local storage;
+
+stop
+
+@enduml
