@@ -1,1 +1,1 @@
-![diagramme de séquence](./seq_authentication.png)
+[![diagramme de séquence](./seq_authentication.png)](./seq_authentication.png)
