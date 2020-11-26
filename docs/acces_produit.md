@@ -49,6 +49,6 @@ Dans cette situation, les cas possibles sont :
 > A noter :
 Le package Angular "AuthGuard" (disponible dans le repository : <https://github.com/sxd-platform/byd-cognito-connector-front>) intègre la fonctionnalité de contrôle de l'authentification (côté front end).
 
-un descriptif précis de toutes les interactions lors de la connexion est disponible ici <https://github.com/sxd-platform/byd-all-documentation/blob/develop/02.byd-Platform/2.SpecificationDossier/images/diagrams/seq_authentication.png>
+un descriptif précis de toutes les interactions lors de la connexion est disponible [ici](./main/02.byd-Platform/2.SpecificationDossier/images/diagrams/seq_authentication.png).
 
 |001|Version Initiale|Sixense|
