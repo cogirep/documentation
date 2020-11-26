@@ -8,7 +8,7 @@ Il assure les fonctionnalités suivantes :
 
 - Fédération d’IDentité
 - Authentification
-- Mot de passe oublié (pour les utilisateurs interne)
+- Mot de passe oublié (pour les utilisateurs internes)
 - SSO au sein des produits
 - Navigation inter-produit
 - Adresse de contact
