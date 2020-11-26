@@ -106,7 +106,7 @@ Un package Node.js est disponible dans le repository : <https://github.com/sxd-p
 
 Il fournit les services suivants :
 
-- [Récupération de la clé publique Cognito](./cognito-connector-back/1.R%C3%A9cup%C3%A9ration%20de%20cl%C3%A9%20public%20du%20service%20Cognito%20de%20Sixense.md)
+- [Récupération de la clé publique Cognito](./cognito-connector-back/1.RecuperationdeclepubliqueduserviceCognitodeSixense.md)
 - [Vérification des tokens Cognito](./cognito-connector-back/2-V%C3%A9rification%20du%20token.md)
 
 #### Package Front end
