@@ -126,9 +126,9 @@ La gestion des droits des utilisateurs dans les produits reste à la charge des 
 Il convient donc pour les produits de gérer leur propre base d’utilisateurs permettant de faire le lien entre l’utilisateur authentifié via Cognito et ses droits dans le produit.
 
 Les swaggers suivants sont utiles pour assurer le lien avec les utilisateurs BEYOND :
-- [Gestion des utilisateurs] (./swagger/byd-manager-user-swagger.yaml)
-- [Gestion des compagnies] (./swagger/byd-manager-company-swagger.yaml)
-- [Gestion des produits] (./swagger/byd-manager-product-swagger.yaml)
+- [Gestion des utilisateurs](./swagger/byd-manager-user-swagger.yaml)
+- [Gestion des compagnies](./swagger/byd-manager-company-swagger.yaml)
+- [Gestion des produits](./swagger/byd-manager-product-swagger.yaml)
 
 Cette association peut se faire sur la base de l'e-mail de l'utilisateur disponible dans les informations du jeton (attribut "cognito:username").
 
