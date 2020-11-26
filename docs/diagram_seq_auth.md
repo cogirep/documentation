@@ -1,0 +1,1 @@
+![diagramme de séquence](./02.byd-Platform/2.SpecificationDossier/images/diagrams/seq_authentication.png)

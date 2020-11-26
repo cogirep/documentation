@@ -45,7 +45,7 @@ Le processus type est le suivant :
 - [Déconnexion](./deconnexion.md)
 
 
-La cinématique d’ensemble est illustrée [dans ce diagramme de séquence](./02.byd-Platform/2.SpecificationDossier/images/diagrams/seq_authentication.png)
+La cinématique d’ensemble est illustrée [dans ce diagramme de séquence](./diagram_seq_auth.md)
 
 ## 3 - Configuration de Cognito – Déclaration d’un IdP
 
