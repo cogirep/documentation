@@ -107,7 +107,7 @@ Un package Node.js est disponible dans le repository : <https://github.com/sxd-p
 Il fournit les services suivants :
 
 - [Récupération de la clé publique Cognito](./cognito-connector-back/1.RecuperationdeclepubliqueduserviceCognitodeSixense.md)
-- [Vérification des tokens Cognito](./cognito-connector-back/2-V%C3%A9rification%20du%20token.md)
+- [Vérification des tokens Cognito](./cognito-connector-back/2-Verificationdutoken.md)
 
 #### Package Front end
 
@@ -124,6 +124,11 @@ Il met à disposition :
 
 La gestion des droits des utilisateurs dans les produits reste à la charge des produits.
 Il convient donc pour les produits de gérer leur propre base d’utilisateurs permettant de faire le lien entre l’utilisateur authentifié via Cognito et ses droits dans le produit.
+
+Les swaggers suivants sont utiles pour assurer le lien avec les utilisateurs BEYOND :
+- [Gestion des utilisateurs](./swagger/byd-manager-user-swagger.yaml)
+- [Gestion des compagnies](./swagger/byd-manager-company-swagger.yaml)
+- [Gestion des produits](./swagger/byd-manager-product-swagger.yaml)
 
 Cette association peut se faire sur la base de l'e-mail de l'utilisateur disponible dans les informations du jeton (attribut "cognito:username").
 
