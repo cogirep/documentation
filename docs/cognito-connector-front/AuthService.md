@@ -9,8 +9,8 @@ Cette méthode est appelée lorsqu’on souhaite déconnecter l’utilisateur.
 Elle vide le local storage de l’application et redirige l’utilisateur vers le end point `/disconnect` du portail.
 > Le type de retour de la méthode est void.
 
-Le processus complet de la déconnexion est disponible à cette adresse :
-> https://github.com/sxd-platform/byd-all-documentation/blob/develop/02.byd-Platform/7.TechnicalDocumentation/deconnexion.md
+Le processus complet de la déconnexion est disponible [à cette adresse](./../deconnexion.md)
+
 
 #### Implémentation
 
