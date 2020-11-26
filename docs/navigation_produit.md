@@ -9,6 +9,6 @@ Dans ce cas, le produit doit tenter d'obtenir un refresh_token Cognito auprès d
 
 > A noter :
 La récupération du refresh token se fait dans le code applicatif du produit au moyen de l'API "/token" (POST) mise à disposition des produits par le portail.
-Le descriptid (Swagger) de l'API est disponible ici : <https://github.com/sxd-platform/byd-all-sso/blob/53cb539c663c682f0d4a33cab82ce1ec30664b16/docs/swagger.yaml#L397>
+Le descriptid (Swagger) de l'API est disponible sur [cette page](./swagger/byd-all-sso-swagger.yaml).
 
 |001|Version Initiale|Sixense|
