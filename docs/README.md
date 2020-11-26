@@ -133,7 +133,7 @@ Il met à disposition :
 ### 6 - Intégration dans le produit – Gestion des droits fins
 
 La gestion des droits des utilisateurs dans les produits reste à la charge des produits.
-Il convient donc pour les produits de gérer leur propre base d’utilisateur permettant de faire le lien entre l’utilisateur authentifié via Cognito et ses droits dans le produit.
+Il convient donc pour les produits de gérer leur propre base d’utilisateurs permettant de faire le lien entre l’utilisateur authentifié via Cognito et ses droits dans le produit.
 
 Cette association peut se faire sur la base de l'e-mail de l'utilisateur disponible dans les informations du jeton (attribut "cognito:username").
 
