@@ -1,0 +1,139 @@
+@startuml
+actor Client
+participant "User\nNotification" as Notif order 1
+participant Integration order 2
+participant "IDcard\nManager" as IDcard order 3
+participant Keycloack order 4
+participant IDP order 5
+participant "User\nManagement" as UsrMngt order 6
+collections "Buckets\n(COS)" as COS order 7
+database MongoDB order 8
+participant "Transf. Message \nProducer" as RabbitProducer order 9
+collections "Async. Queues\n(Rabbit MQ)" as Rabbit order 10
+collections "Transf. Message\nConsumer" as RabbitConsumer order 11
+collections "Transfo. \nService" as Transf order 13
+Client -> Integration : initiate upload
+activate Integration #888888
+group Authentification, may have already taken place
+Integration -> Keycloack : auth.
+Keycloack -> Client : SSO
+Client -> IDP : redirect
+IDP -> Client : id / prod
+Client -> IDP : submit id
+IDP --> Keycloack : ok
+Keycloack --> Integration : ok
+end
+Integration -> UsrMngt : check user rights
+activate UsrMngt #888888
+UsrMngt -> Integration : return rights (transfo A, B, ...)
+deactivate UsrMngt
+Integration -> Client : form to insert file
+Client -> Integration : upload file + transfo X
+Integration -> Integration: TODO
+
+group Identity Card Creation
+Integration -> IDcard: Create Identity
+activate IDcard #888888
+IDcard -> IDcard : Validation
+activate IDcard
+IDcard -> IDcard: Check data integrity
+IDcard -> IDcard : Validate uniqueness
+IDcard -> MongoDB : check Identity uniqueness
+activate MongoDB #888888
+MongoDB --> IDcard : Ok
+deactivate MongoDB
+deactivate IDcard
+IDcard -> IDcard : Create Identity Card
+activate IDcard 
+IDcard -> IDcard: create identity object
+IDcard -> COS : PUT file [RAW BUCKET]
+activate COS #888888
+COS --> IDcard : Ok
+deactivate COS
+IDcard -> MongoDB : PUT Identity Card Object
+activate MongoDB #888888
+MongoDB --> IDcard : Ok
+deactivate MongoDB
+deactivate IDcard
+IDcard --> Integration: Ok
+deactivate IDcard 
+end
+
+Integration --> Notif : file received
+
+group Transformation Job creation, routing
+Integration -> RabbitProducer : append job (IDcard + transfo X)
+activate RabbitProducer #888888
+RabbitProducer -> RabbitProducer : create job object
+RabbitProducer -> Rabbit : append job to transf X 
+activate Rabbit #888888
+Rabbit --> RabbitProducer : Aknowledgement
+RabbitProducer --> Integration : Job Unique ID
+deactivate RabbitProducer
+Integration --> Notif: Transfo X Scheduled
+deactivate Integration
+Rabbit -> Rabbit: route job to queue
+activate Rabbit
+Rabbit -> RabbitConsumer: push job
+deactivate Rabbit
+activate RabbitConsumer #888888
+RabbitConsumer -> Transf: call transformation engine
+activate Transf #888888
+Transf -> Transf : append job
+Transf --> RabbitConsumer : OK
+deactivate Transf
+RabbitConsumer --> Rabbit : Aknowledgement
+deactivate RabbitConsumer
+deactivate Rabbit
+deactivate Rabbit
+end
+
+
+group Transform
+activate Transf #888888
+Transf -> Transf: Start
+activate Transf
+Transf -> Transf: Validate file format support
+Transf -> COS: Get File
+activate COS #888888
+COS --> Transf: File
+deactivate COS
+Transf -> Transf: Transform
+
+
+
+group Identity Card Creation
+Transf -> IDcard: Create Identity Card for new transformed file
+activate IDcard #888888
+IDcard -> IDcard : Validation
+activate IDcard
+IDcard -> IDcard: Check data integrity
+IDcard -> IDcard : Validate uniqueness
+IDcard -> MongoDB : check file hash uniqueness
+activate MongoDB #888888
+MongoDB --> IDcard : Ok
+deactivate MongoDB
+deactivate IDcard
+IDcard -> IDcard : Create Identity Card
+activate IDcard 
+IDcard -> IDcard: create identity object
+IDcard -> COS : PUT file [RAW BUCKET]
+activate COS #888888
+COS --> IDcard : Ok
+deactivate COS
+IDcard -> MongoDB : PUT Identity Card Object
+activate MongoDB #888888
+MongoDB --> IDcard : Ok
+deactivate MongoDB
+deactivate IDcard
+IDcard --> Transf: Ok - IDcard
+deactivate IDcard 
+end
+
+Transf -> RabbitProducer: task notification: terminated 
+RabbitProducer -> Rabbit: append notification
+deactivate Transf
+deactivate Transf
+
+end
+@enduml

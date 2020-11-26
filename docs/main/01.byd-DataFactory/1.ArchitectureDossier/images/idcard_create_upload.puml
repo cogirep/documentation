@@ -1,0 +1,91 @@
+@startuml idcard_create_upload
+
+title
+
+Beyond Datafactory : Créer un idcard avec upload d'un fichier
+
+end title
+
+|#AntiqueWhite| Front |
+start
+->  **Hypothèse:** \n  - Utilisateur authentifié \n  - Profil Utilisateur BEYOND:  \n    - importer\n    - accéder \n \n **Prérequis:** \n Pour lancer une transformation:  \n    - [DATA-TYPE001]: Fichiers autorisés : \n      - Fichier .LAS ou .LAZ - Nuage de points \n      - Fichier .DAE - 3D Model \n      - Fichier .GEOJSON - Geojson \n      - Fichier .JSON - Json 2 yaml \n      - Fichier .ZIP - Visu-Pointcloud ou Visu-Orthoimage ou Visu-3D Model ou Transformation orthoimage;
+
+-Ouverture de l'interface \n d'upload de fichier dans Datafactory \n\n Seuls les fichiers paramétrés dans \n **[DATA-TYPE001]** peuvent être remontés \n
+-Saisie des paramètres de l'IDCARD \n - Label \n - Groupe propriétaire (calculé) \n - Groupe consommateur (optionnel) \n - Latitude (optionnel) \n - Longitude (optionnel)
+-Sélection d'**UN** fichier sur le poste de l'utilisateur
+-Sélectionner une transformation dans la liste
+-Cliquer sur le bouton\n**Importer des données**
+
+| Back |
+note right
+  api "POST **/files/**"
+end note
+if ( \n Vérifier les droits \n **import** \n)
+    -[#red]-> Non ;
+    -Retour du code erreur \n **401: UNAUTHORIZED**
+    stop
+endif
+
+-Upload d'un fichier du client vers le microservice
+
+partition "Transformation \ndemandée" {
+    if ( \n Archive *.zip \n ) then (Oui)
+        if ( \n Visualisation **POINTCLOUD** ou **3DMODEL** \n fichier **tileset.json**  est présent dans l'archive \n ) then (Non) 
+            -Supprimer le fichier reçu
+            -Retour du code erreur \n **400: Wrong transformation requested**
+            stop
+        elseif ( \n Visualisation **ORTHOIMAGE** \n fichier **tileset.json**  est présent dans l'archive \n ) then (Oui) 
+            -Supprimer le fichier reçu
+            -Retour du code erreur \n **400: Wrong transformation requested**
+            stop
+        endif
+    else (Non)
+    endif
+}
+
+-Upload sur le Cloud Object Storage (COS)
+
+partition "Création de \nl'idcard" {
+    -Génération du BEYONDID et du REVISIONID
+    -Création de l'idcard
+    if ( \n Ecriture OK \n )
+        -[#green]-> Oui ;
+        -Retour du code \n **200: SUCCESS**
+    else
+        -[#red]-> Non ;
+        -Retour du code erreur \n **500: INTERNAL_ERROR**
+    endif
+}
+
+partition "Transformation demandée" {
+    if ( \n Visualisation POINTCLOUD \n Visualisation ORTHO \n Visualisation 3DMODEL \n Visualisation GEOJSON \n ) then (Oui)
+        if ( Archive *.zip ) then (Oui)
+            -Décompresser l'archive
+            -Upload sur le COS
+        else (Non)
+        endif
+        -Ajout d'un enrichissement
+    elseif (Transformation JSON2YML) then (Oui)
+        -Lancer la transfo JSON2YML
+    elseif (Transformation POINTCLOUD) then (Oui)
+        -Lancer la transfo POINTCLOUD
+        -Ajout d'un enrichissement
+    elseif (Transformation 3DMODEL) then (Oui)
+        -Lancer la transfo 3DMODEL
+        -Ajout d'un enrichissement
+    elseif (Transformation ORTHOIMAGE) then (Oui)
+        -Lancer la transfo ORTHOIMAGE
+        -Ajout d'un enrichissement
+    else (Non)
+    endif
+}
+stop
+
+legend 
+**Légende**
+
+**Retour du code erreur** : Permet la remontée d'un message d'erreur (localisée) à l'utilisateur.
+
+endlegend
+
+@enduml

@@ -1,0 +1,66 @@
+{
+  "objectId": "ABC", //mongoID
+  "revisionId": "XYZ", //versionID
+  "createdAt": "2019-09-15T15:53:01Z", //object Timestamp
+  "beyondId": "ASSO_2019-12-02_HJJKHJKHK", //UUID
+  "ownerId": "SXD", //tenantID
+  "createdBy": "WXC", //userID
+  "ValidityStartsAt": "2019-05-02T00:00:00Z", //Data qualification
+  "ValidityEndsAt": "2019-07-11T23:59:59Z", //Data qualification
+  "status": "VBN", //statusID
+  "languageCode": "FR",
+  "labels": [
+    {
+      "languageCode": "FR",
+      "label": "Transformation Cesium"
+    },
+    {
+      "languageCode": "EN",
+      "label": "Cesium Transformation"
+    }
+  ],
+  "tags": {
+    "public": [
+      {
+        "annotationID": "BSY" //tagID
+      },
+      {
+        "annotationID": "CSZ" //tagID
+      }
+    ],
+    "private": [
+      "La transformation Exemple",
+      "Mon annotation"
+    ]
+  },
+  "members": [
+    {
+      "beyondID": "AAA",
+      "revisionID": "AAA-1"
+    },
+    {
+      "beyondID": "BBB",
+      "revisionID": "BBB-1"
+    },
+    {
+      "beyondID": "CCC",
+      "revisionID": "CCC-1"
+    },
+    {
+      "beyondID": "DDD",
+      "revisionID": "DDD-1"
+    },
+    {
+      "beyondID": "EEE",
+      "revisionID": "EEE-1"
+    },
+    {
+      "beyondID": "FFF",
+      "revisionID": "FFF-1"
+    },
+    {
+      "beyondID": "GGG",
+      "revisionID": "GGG-1"
+    }
+  ]
+}

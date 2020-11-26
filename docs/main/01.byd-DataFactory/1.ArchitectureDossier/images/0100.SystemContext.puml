@@ -1,0 +1,29 @@
+@startuml
+header
+<b>BEYOND Platform / Data Factory </b> - Diagramme de contexte
+end header
+
+( \n\n BEYOND - **Data Factory + Manager**\n\n  ) as SYSTEM
+
+:Administrateur technique: as ACTOR2 <<human>>
+:Utilisateur final: as ACTOR4 <<human>>
+:Utilisateur anonyme: as ACTOR5 <<human>>
+:Administrateur 'Métier': as ACTOR3 <<human>>
+
+:CUSTOMER - **Data and Service Providers**: as SYSTEM3<<system>>
+:CUSTOMER - **Data and Service Consumers**: as SYSTEM4<<system>>
+:** BEYOND - APPS**: as SYSTEM5 <<system>>
+
+ACTOR2  ---|>SYSTEM
+ACTOR5  --|>SYSTEM
+ACTOR4  --|>SYSTEM
+ACTOR3  ---|>SYSTEM
+
+
+SYSTEM <|--- SYSTEM3
+SYSTEM <|-- SYSTEM4
+SYSTEM <|--- SYSTEM5
+
+
+
+@enduml

@@ -1,0 +1,30 @@
+@startuml
+header
+<b>BEYOND- Platform: Architecture.
+end header
+
+Rectangle "BEYOND-Platform " as Platform #lightgrey {
+Rectangle "BEYOND-Services" as Module001
+
+Rectangle "BEYOND-Data Factory" as Serveur #lightgrey{
+Rectangle "Services" as Serv001 #white {
+}
+
+Rectangle "Stockage des données" as datastore #white{
+database "Données métier \n  **POSTGRE/POSTGIS**" as data
+file "Tuiles \n géographiques - **OSM**" as tiles
+}
+
+}
+
+
+
+
+}
+
+
+Module001 --Serveur
+
+Serv001 -- datastore
+
+@enduml

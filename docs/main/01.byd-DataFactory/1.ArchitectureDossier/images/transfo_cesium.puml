@@ -1,0 +1,59 @@
+@startuml transfo_cesium
+
+title
+
+Beyond : Traitement d'une transformation Cesium
+
+end title
+
+|#AntiqueWhite| RabbitMQ |
+start
+->  **Hypothèse:** \n  - Utilisateur authentifié \n  - Profil Utilisateur BEYOND:  \n    - transformer;
+
+-Transformation en attente\n        dans RabbitMQ
+
+| Back |
+note right
+  api "PUT **/transformation/**"
+end note
+if (Body de la tâche) then (**KO**)
+  :Retour code erreur \n **406 Body not compliant**;
+  stop
+else (**OK**)
+  :Envoi en queue interne;
+endif
+
+partition "Transformation" {
+    if (Vérification de la transformation demandée) then
+     : PointCloud ou 3DMODEL;
+    else
+     : Orthoimage;
+       if (Présence fichier d'entrée (tiff...)) then (**no**)
+        :Log erreur Cesium;
+        stop
+       endif
+    endif 
+
+    if (Execution de la transformation) then (**KO**)
+     :Log erreur Cesium;
+     stop
+    elseif (Envoi fichier dans le COS correspondant) then(**KO**) 
+     :Log erreur;
+     stop
+    endif
+
+    if (Création de l'idCard) then(**KO**)
+     :Log erreur;
+    elseif (Création de l'enrichissement) then (**KO**)
+     :Log erreur;
+    elseif (Création de l'association) then (**KO**)
+     :Log erreur; 
+    endif 
+    note left
+      Si erreur,
+      aucun rollback
+    end note
+    -Suppression fichiers temporaires
+}
+
+@enduml

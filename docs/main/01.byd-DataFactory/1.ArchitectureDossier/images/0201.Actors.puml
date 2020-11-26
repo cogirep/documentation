@@ -1,0 +1,27 @@
+@startuml
+header
+<b>BEYOND Plateforme</b>- Modèle de cas d'utilisation - Acteurs
+end header
+
+
+
+
+Rectangle "SOLUTIONS" as SYSTEMES  {
+    
+Package "Fournisseur du Service"  as SRVPROVUSR #LightSteelBlue{
+:** BEYOND - APPS**/BEYOND Manager: as SYSTEM6 <<system>>
+}
+
+Package "Tenant/Client du Service "  as CLIENTSYS{
+ 
+:** BEYOND - APPS**: as SYSTEM5 <<system>>
+:CUSTOMER - **Data and Service Providers**: as SYSTEM3<<system>>
+
+:CUSTOMER - **Data and Service Consumers**: as SYSTEM4<<system>>
+
+}
+
+
+}
+
+@enduml

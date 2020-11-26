@@ -1,0 +1,116 @@
+{
+  "$schema": "0803.Tag.Reference.schema.json",
+  "$id": "Tag.Reference.schema.json",
+  "type": "object",
+  "title": "Tag schema",
+  "definitions": {
+    "Tag": {
+      "properties": {
+        "_id": {
+          "$id": "#/properties/_id",
+          "type": "string",
+          "title": "The _id Schema",
+          "default": "",
+          "examples": [
+            "561515454"
+          ],
+          "pattern": "^(.*)$"
+        },
+        "createdAt": {
+          "$id": "#/properties/createdAt",
+          "type": "string",
+          "title": "The Createdat Schema",
+          "default": "",
+          "examples": [
+            "1545454"
+          ],
+          "pattern": "^(.*)$"
+        },
+        "revisionId": {
+          "$id": "#/properties/revisionId",
+          "type": "string",
+          "title": "The Revisionid Schema",
+          "default": "",
+          "examples": [
+            "215154"
+          ],
+          "pattern": "^(.*)$"
+        },
+        "status": {
+          "$id": "#/properties/status",
+          "type": "string",
+          "title": "The Status Schema",
+          "default": "",
+          "examples": [
+            "ACTIF"
+          ],
+          "pattern": "^(.*)$"
+        },
+        "properties": {
+          "$id": "#/properties/properties",
+          "type": "object",
+          "title": "The Properties Schema",
+          "required": [
+            "key"
+          ],
+          "properties": {
+            "key": {
+              "$id": "#/properties/properties/properties/key",
+              "type": "string",
+              "title": "The Key Schema",
+              "default": "",
+              "examples": [
+                "value"
+              ],
+              "pattern": "^(.*)$"
+            }
+          }
+        },
+        "labels": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": true,
+            "minItems": 1,
+            "properties": {
+              "languageCode": {
+                "type": "string",
+                "required": true,
+                "description": "Codification de la langue d'un label au format locale: language-REGION (ISO 639-1 + ISO 3166): par ex fr-FR"
+              },
+              "label": {
+                "type": "string",
+                "required": true
+              }
+            }
+          }
+        },
+        "visibility": {
+          "type": "string",
+          "enum": [
+            "public",
+            "private"
+          ],
+          "description": "is it a public (visible by all) or private (visible by owner Tenant only) Tag"
+        },
+        "TagType": {
+          "type": "string",
+          "enum": [
+            "business",
+            "technical"
+          ],
+          "description": "The type of Tag"
+        }
+      },
+      "required": [
+        "_id",
+        "createdAt",
+        "revisionId",
+        "status",
+        "properties",
+        "visibility",
+        "TagType"
+      ]
+    }
+  }
+}
