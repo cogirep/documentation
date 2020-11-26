@@ -6,7 +6,6 @@ il est possible de récuperer la liste de tous les utilisateurs présent dans co
 ## Api cognito
 Nous avons utilisé l'api cognito "**listUsers**" pour récupérer les utilisateurs.
 
-lien vers iune page main [la page](./../main/02.byd-Platform/3.DecisionDossier/readme.md)
 
 **prérequis**:
 - Utilisation du package **aws-sdk** (version: **2.660.0**) pour appeler les apis cognito
