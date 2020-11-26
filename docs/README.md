@@ -38,24 +38,14 @@ Le processus type est le suivant :
 
 - [Connexion via la page d’authentification du portail](./connexion.md)
 
-<https://github.com/sxd-platform/byd-all-documentation/blob/develop/02.byd-Platform/7.TechnicalDocumentation/connexion.md>
-
 - [Accès à un produit (via le portail, redirection après authentification ou accès direct)](./acces_produit.md)
-
-<https://github.com/sxd-platform/byd-all-documentation/blob/develop/02.byd-Platform/7.TechnicalDocumentation/acces_produit.md>
 
 - [Navigation dans le produit](./navigation_produit.md)
 
-<https://github.com/sxd-platform/byd-all-documentation/blob/develop/02.byd-Platform/7.TechnicalDocumentation/navigation_produit.md>
-
 - [Déconnexion](./deconnexion.md)
 
-<https://github.com/sxd-platform/byd-all-documentation/blob/develop/02.byd-Platform/7.TechnicalDocumentation/deconnexion.md>
 
-
-La cinématique d’ensemble est illustré dans ce diagramme de séquence :
-
-<https://github.com/sxd-platform/byd-all-documentation/blob/develop/02.byd-Platform/2.SpecificationDossier/images/diagrams/seq_authentication.png>
+La cinématique d’ensemble est illustrée [dans ce diagramme de séquence](./02.byd-Platform/2.SpecificationDossier/images/diagrams/seq_authentication.png)
 
 ## 3 - Configuration de Cognito – Déclaration d’un IdP
 
@@ -116,19 +106,19 @@ Un package Node.js est disponible dans le repository : <https://github.com/sxd-p
 
 Il fournit les services suivants :
 
-- Récupération de la clé publique Cognito <https://github.com/sxd-platform/byd-all-documentation/blob/develop/02.byd-Platform/7.TechnicalDocumentation/cognito-connector-back/1.R%C3%A9cup%C3%A9ration%20de%20cl%C3%A9%20public%20du%20service%20Cognito%20de%20Sixense.md>
-- Vérification des tokens Cognito <https://github.com/sxd-platform/byd-all-documentation/blob/develop/02.byd-Platform/7.TechnicalDocumentation/cognito-connector-back/2-V%C3%A9rification%20du%20token.md>
+- [Récupération de la clé publique Cognito](./cognito-connector-back/1.R%C3%A9cup%C3%A9ration%20de%20cl%C3%A9%20public%20du%20service%20Cognito%20de%20Sixense.md)
+- [Vérification des tokens Cognito](./cognito-connector-back/2-V%C3%A9rification%20du%20token.md)
 
 #### Package Front end
 
 Un package Angular est disponible dans le repository : <https://github.com/sxd-platform/byd-cognito-connector-front>
 
-Son installation est décrite sur la page : <https://github.com/sxd-platform/byd-all-documentation/blob/develop/02.byd-Platform/7.TechnicalDocumentation/cognito-connector-front/Setup.md>
+Son installation est décrite [sur cette page](./cognito-connector-front/Setup.md).
 
 Il met à disposition :
 
-- Auth guard : service Angular permettant de gérer le contrôle d'accès à une application <https://github.com/sxd-platform/byd-all-documentation/blob/develop/02.byd-Platform/7.TechnicalDocumentation/cognito-connector-front/AuthGuard.md>
-- Auth service : service Angular gérant la déconnexion de l’utilisateur <https://github.com/sxd-platform/byd-all-documentation/blob/develop/02.byd-Platform/7.TechnicalDocumentation/cognito-connector-front/AuthService.md>
+- [Auth guard](./cognito-connector-front/AuthGuard.md) : service Angular permettant de gérer le contrôle d'accès à une application  
+- [Auth service](./cognito-connector-front/AuthService.md) : service Angular gérant la déconnexion de l’utilisateur  
 
 ### 6 - Intégration dans le produit – Gestion des droits fins
 
