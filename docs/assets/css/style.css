@@ -1,6 +1,5 @@
-#forkme_banner {
-    /* display: none !important; */
-    color: red !important;
+.page-header .btn {
+    display: none !important;
 }
 
 .site-footer {
