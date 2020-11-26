@@ -1,0 +1,730 @@
+################################################################################
+################################################################################
+##        v   BEYOND REALITY API    -   SSO MANGAGEMENT                       ##
+################################################################################
+################################################################################
+# Remark :                        Swagger 2.0 to ensure compliance with API Connect
+swagger:                          "2.0"
+info:
+  title:                          "SSO API"
+  description:                    "This API aims are to provide a control on **SSO**"
+  version:                        1.0.0
+
+host:                             "F.Q.D.N_of_the_host"
+consumes:
+  - application/json
+produces:
+  - application/json
+schemes:
+  - https
+################################################################################
+
+tags:
+  - name:                         "SSO"
+    description:                  "SSO management APIs"
+################################################################################
+
+paths:
+  '/external':
+    post:
+      tags:
+        - SSO
+      summary:                    "login route for external user"
+      parameters:
+        - name:                     state
+          in:                       body
+          schema:
+            required:
+              - state
+              - code
+            properties:
+              state:
+                type:               string
+                description:        redirect application
+              code:
+                type:               string
+                description:        code for Oauth2 connection
+
+      responses:
+        '200':
+          description:              Success
+          schema:
+            properties:
+              code:
+                type:               integer
+                example:            200
+              action:
+                type:               string
+                example:            'LOGIN_GET_SUCCESS'
+              token:
+                type:               string
+              redirect_uri:
+                type:               string
+              refresh_token:
+                type:               string
+
+        '406':
+          description:              Body not valid
+          schema:
+            properties:
+              errorCode:
+                type:               string
+                example:            'BODY_NOT_VALID'
+              code:
+                type:               integer
+                example:            406
+              action:
+                type:               string
+                example:            'LOGIN_GET_ERROR'
+              message:
+                type:               string
+                example:            'Le format de la reqûete est invalide.'
+              langageCode:
+                type:               string
+                example:            'FR-fr'
+
+        '404':
+          description:              User not found
+          schema:
+            properties:
+              errorCode:
+                type:               string
+                example:            'USER_NOT_FOUND'
+              code:
+                type:               integer
+                example:            404
+              action:
+                type:               string
+                example:            'LOGIN_GET_ERROR'
+              message:
+                type:               string
+                example:            "l'utilisateur n'est pas reconnue de la plateforme"
+              langageCode:
+                type:               string
+                example:            'FR-fr'
+
+        '500':
+          description:              Internal server error
+          schema:
+            properties:
+              errorCode:
+                type:               string
+                example:            'INTERNAL_SERVER_ERROR'
+              code:
+                type:               integer
+                example:            500
+              action:
+                type:               string
+                example:            'LOGIN_GET_ERROR'
+              message:
+                type:               string
+                example:            "Erreur interne lors de la connexion."
+              langageCode:
+                type:               string
+                example:            'FR-fr'
+
+  #------------------------------------------------------------------------------#
+
+  '/logout':
+    post:
+      tags:
+        - SSO
+      summary:                    "logout route"
+      parameters:
+        - name:                     state
+          in:                       body
+          schema:
+            required:
+              - token
+            properties:
+              token:
+                type:               string
+                description:        token
+
+      responses:
+        '200':
+          description:              Success
+          schema:
+            properties:
+              action:
+                type:               string
+                example:            'LOGOUT_POST_SUCCESS'
+              code:
+                type:               integer
+                example:            200
+              message:
+                type:               string
+                example:            'SUCCESS'
+        '406':
+          description:              Body not valid
+          schema:
+            properties:
+              errorCode:
+                type:               string
+                example:            'BODY_NOT_VALID'
+              code:
+                type:               integer
+                example:            406
+              action:
+                type:               string
+                example:            'LOGOUT_POST_ERROR'
+              message:
+                type:               string
+                example:            'Le format de la reqûete est invalide.'
+              langageCode:
+                type:               string
+                example:            'FR-fr'
+
+  #------------------------------------------------------------------------------#
+
+  '/local':
+    post:
+      tags:
+        - SSO
+      summary:                    "login route for local user"
+      parameters:
+        - name:                     state
+          in:                       body
+          schema:
+            required:
+              - email
+              - password
+              - redirect_uri
+            properties:
+              email:
+                type:               string
+                description:        user email
+              password:
+                type:               string
+                description:        user password
+              redirect_uri:
+                type:               string
+                description:        application redirect uri
+
+      responses:
+        '200':
+          description:              Success
+          schema:
+            properties:
+              code:
+                type:               integer
+                example:            200
+              action:
+                type:               string
+                example:            'LOGIN_POST_SUCCESS'
+              token:
+                type:               string
+              redirect_uri:
+                type:               string
+              refresh_token:
+                type:               string
+
+        '401':
+          description:              Email or password not valid
+          schema:
+            properties:
+              errorCode:
+                type:               string
+                example:            'EMAIL_PASSWORD_NOT_VALID'
+              code:
+                type:               integer
+                example:            401
+              action:
+                type:               string
+                example:            'LOGIN_POST_ERROR'
+              message:
+                type:               string
+                example:            'email ou mot de passe erroné'
+              langageCode:
+                type:               string
+                example:            'FR-fr'
+
+        '406':
+          description:              Body not valid
+          schema:
+            properties:
+              errorCode:
+                type:               string
+                example:            'BODY_NOT_VALID'
+              code:
+                type:               integer
+                example:            406
+              action:
+                type:               string
+                example:            'LOGIN_POST_ERROR'
+              message:
+                type:               string
+                example:            'Le format de la reqûete est invalide.'
+              langageCode:
+                type:               string
+                example:            'FR-fr'
+
+        '404':
+          description:              User not found
+          schema:
+            properties:
+              errorCode:
+                type:               string
+                example:            'USER_NOT_FOUND'
+              code:
+                type:               integer
+                example:            404
+              action:
+                type:               string
+                example:            'LOGIN_POST_ERROR'
+              message:
+                type:               string
+                example:            "l'utilisateur n'est pas reconnue de la plateforme"
+              langageCode:
+                type:               string
+                example:            'FR-fr'
+
+        '500':
+          description:              Internal server error
+          schema:
+            properties:
+              errorCode:
+                type:               string
+                example:            'INTERNAL_SERVER_ERROR'
+              code:
+                type:               integer
+                example:            500
+              action:
+                type:               string
+                example:            'LOGIN_POST_ERROR'
+              message:
+                type:               string
+                example:            "Erreur interne lors de la connexion."
+              langageCode:
+                type:               string
+                example:            'FR-fr'
+
+  #------------------------------------------------------------------------------#
+
+  '/pattern':
+    post:
+      tags:
+        - SSO
+      summary:                    "check user pattern to see if he need to be logged with an external sso"
+      parameters:
+        - name:                     state
+          in:                       body
+          schema:
+            required:
+              - email
+              - redirect_uri
+            properties:
+              email:
+                type:               string
+                description:        user email
+              redirect_uri:
+                type:               string
+                description:        application redirect uri
+
+      responses:
+        '200':
+          description:              Success
+          schema:
+            properties:
+              code:
+                type:               integer
+                example:            200
+              redirect_uri:
+                type:               string
+
+        '406':
+          description:              Body not valid
+          schema:
+            properties:
+              errorCode:
+                type:               string
+                example:            'BODY_NOT_VALID'
+              code:
+                type:               integer
+                example:            406
+              action:
+                type:               string
+                example:            'IDP_GET_ERROR'
+              message:
+                type:               string
+                example:            'Le format de la reqûete est invalide.'
+              langageCode:
+                type:               string
+                example:            'FR-fr'
+
+        '404':
+          description:              application not found
+          schema:
+            properties:
+              errorCode:
+                type:               string
+                example:            'APPLICATION_NOT_FOUND'
+              code:
+                type:               integer
+                example:            404
+              action:
+                type:               string
+                example:            'IDP_GET_ERROR'
+              message:
+                type:               string
+                example:            "l'utilisateur n'est pas reconnue de la plateforme"
+              langageCode:
+                type:               string
+                example:            'FR-fr'
+
+        '500':
+          description:              Internal server error
+          schema:
+            properties:
+              errorCode:
+                type:               string
+                example:            'INTERNAL_SERVER_ERROR'
+              code:
+                type:               integer
+                example:            500
+              action:
+                type:               string
+                example:            'IDP_GET_ERROR'
+              message:
+                type:               string
+                example:            "Erreur interne lors de la connexion."
+              langageCode:
+                type:               string
+                example:            'FR-fr'
+
+  #------------------------------------------------------------------------------#
+
+  '/token':
+    post:
+      tags:
+        - SSO
+      summary:                    "verify token signature"
+      parameters:
+        - name:                     state
+          in:                       body
+          schema:
+            required:
+              - token
+              - refresh_token
+              - redirect_uri
+            properties:
+              token:
+                type:               string
+                example:            token
+              refresh_token:
+                type:               string
+                example:            refresh_token
+              redirect_uri:
+                type:               string
+                example:            application redirect uri
+
+      responses:
+        '200':
+          description:              Success
+          schema:
+            properties:
+              code:
+                type:               integer
+                example:            200
+              action:
+                type:               string
+                example:            'TOKEN_POST_SUCCESS'
+              message:
+                type:               string
+                example:            'SUCCESS'
+              token:
+                type:               string
+              redirect_uri:
+                type:               string
+              newToken:
+                type:               string
+
+        '401':
+          description:              Token expired
+          schema:
+            properties:
+              errorCode:
+                type:               string
+                example:            'TOKEN_EXPIRED'
+              code:
+                type:               integer
+                example:            401
+              action:
+                type:               string
+                example:            'TOKEN_POST_ERROR'
+              message:
+                type:               string
+                example:            'le token a expiré'
+              langageCode:
+                type:               string
+                example:            'FR-fr'
+
+        '406':
+          description:              Body not valid
+          schema:
+            properties:
+              errorCode:
+                type:               string
+                example:            'BODY_NOT_VALID'
+              code:
+                type:               integer
+                example:            406
+              action:
+                type:               string
+                example:            'TOKEN_POST_ERROR'
+              message:
+                type:               string
+                example:            'Le format de la reqûete est invalide.'
+              langageCode:
+                type:               string
+                example:            'FR-fr'
+
+        '404':
+          description:              application not found
+          schema:
+            properties:
+              errorCode:
+                type:               string
+                example:            'APPLICATION_NOT_FOUND'
+              code:
+                type:               integer
+                example:            404
+              action:
+                type:               string
+                example:            'TOKEN_POST_ERROR'
+              message:
+                type:               string
+                example:            "l'application n'est pas reconnue de la plateforme"
+              langageCode:
+                type:               string
+                example:            'FR-fr'
+
+        '500':
+          description:              Internal server error
+          schema:
+            properties:
+              errorCode:
+                type:               string
+                example:            'INTERNAL_SERVER_ERROR'
+              code:
+                type:               integer
+                example:            500
+              action:
+                type:               string
+                example:            'TOKEN_POST_ERROR'
+              message:
+                type:               string
+                example:            "Erreur interne lors de la connexion."
+              langageCode:
+                type:               string
+                example:            'FR-fr'
+
+  #------------------------------------------------------------------------------#
+
+  '/challenge':
+    post:
+      tags:
+        - SSO
+      summary:                    "cognito challenge: first connection, update password"
+      parameters:
+        - name:                     state
+          in:                       body
+          schema:
+            required:
+              - email
+              - password
+            properties:
+              email:
+                type:               string
+                example:            user email
+              password:
+                type:               string
+                example:            user pasword
+              newPassword:
+                type:               string
+                example:            new user password
+              challenge:
+                type:               string
+                example:            cognito challenge
+
+      responses:
+        '200':
+          description:              Success
+          schema:
+            properties:
+              code:
+                type:               integer
+                example:            200
+              action:
+                type:               string
+                example:            'LOGINCHALLENGE_POST_SUCCESS'
+              message:
+                type:               string
+                example:            'SUCCESS'
+
+        '401':
+          description:              Email or password invalid
+          schema:
+            properties:
+              errorCode:
+                type:               string
+                example:            'EMAIL_PASSWORD_NOT_VALID'
+              code:
+                type:               integer
+                example:            401
+              action:
+                type:               string
+                example:            'LOGINCHALLENGE_POST_ERROR'
+              message:
+                type:               string
+                example:            'email ou mot de passe erroné'
+              langageCode:
+                type:               string
+                example:            'FR-fr'
+
+        '406':
+          description:              Body not valid
+          schema:
+            properties:
+              errorCode:
+                type:               string
+                example:            'BODY_NOT_VALID'
+              code:
+                type:               integer
+                example:            406
+              action:
+                type:               string
+                example:            'LOGINCHALLENGE_POST_ERROR'
+              message:
+                type:               string
+                example:            'Le format de la reqûete est invalide.'
+              langageCode:
+                type:               string
+                example:            'FR-fr'
+
+        '500':
+          description:              Internal server error
+          schema:
+            properties:
+              errorCode:
+                type:               string
+                example:            'INTERNAL_SERVER_ERROR'
+              code:
+                type:               integer
+                example:            500
+              action:
+                type:               string
+                example:            'LOGINCHALLENGE_POST_ERROR'
+              message:
+                type:               string
+                example:            "Erreur interne lors de la connexion."
+              langageCode:
+                type:               string
+                example:            'FR-fr'
+
+  #------------------------------------------------------------------------------#
+
+  '/resetpassword':
+    post:
+      tags:
+        - SSO
+      summary:                      "reset password"
+      parameters:
+        - name:                     state
+          in:                       body
+          schema:
+            required:
+              - email
+            properties:
+              email:
+                type:               string
+                example:            'email@test.com'
+
+      responses:
+        '200':
+          description:              Success
+          schema:
+            properties:
+              code:
+                type:               integer
+                example:            200
+              action:
+                type:               string
+                example:            'FORGOT_PASSWORD_SUCCESS'
+              message:
+                type:               string
+                example:            'SUCCESS'
+
+
+        '406':
+          description:              Body not valid
+          schema:
+            properties:
+              errorCode:
+                type:               string
+                example:            'BODY_NOT_VALID'
+              code:
+                type:               integer
+                example:            406
+              action:
+                type:               string
+                example:            'FORGOT_PASSWORD_ERROR'
+              message:
+                type:               string
+                example:            'Le format de la reqûete est invalide.'
+              langageCode:
+                type:               string
+                example:            'FR-fr'
+
+        '500':
+          description:              Internal server error
+          schema:
+            properties:
+              errorCode:
+                type:               string
+                example:            'INTERNAL_SERVER_ERROR'
+              code:
+                type:               integer
+                example:            500
+              action:
+                type:               string
+                example:            'FORGOT_PASSWORD_ERROR'
+              message:
+                type:               string
+                example:            "Erreur interne lors de la connexion."
+              langageCode:
+                type:               string
+                example:            'FR-fr'
+
+
+responses:
+  200Ok:
+    description:                  Successfull
+  201Created:
+    description:                  Created
+  202Accepted:
+    description:                  Accepted
+  203NonAuthoritativeInformation:
+    description:                  Non-Authoritative Information
+  204NoContent:
+    description:                  No Content
+  400BadRequest:
+    description:                  Bad Request
+  401Unauthorized:
+    description:                  Unauthorized
+  403Forbidden:
+    description:                  Forbidden
+  404NotFound:
+    description:                  Not Found
+  409Conflict:
+    description:                  Conflict
+  500InternalServer:
+    description:                  Internal Server Error
+  501NotImplemented:
+    description:                  Not Implemented
+  502BadGateway:
+    description:                  Bad Gateway
+  503ServiceUnavailable:
+    description:                  Service Unavailable
+  504GatewayTimeout:
+    description:                  Gateway Timeout
